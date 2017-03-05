@@ -1,0 +1,44 @@
+#!/bin/bash
+
+INSTALL_DIR=$2
+NEBULA_DIR=$3
+
+python2 $NEBULA_DIR'/modules/goglib_get_banner_2.py' \
+'realms_of_arkania_blade_of_destiny' \
+'https://images-3.gog.com/18ff34c6e72133e56223f826000881e7227424e18ad2e61dbe54c59d1c6c05b3.jpg' \
+$HOME'/.games_nebula/images/goglib_banners'
+
+mv $INSTALL_DIR'/realms_of_arkania_blade_of_destiny/tmp/app' \
+$INSTALL_DIR'/realms_of_arkania_blade_of_destiny/game'
+rm -R -f $INSTALL_DIR'/realms_of_arkania_blade_of_destiny/tmp'
+
+cp -R $INSTALL_DIR'/realms_of_arkania_blade_of_destiny/game/__support/save/'* \
+$INSTALL_DIR'/realms_of_arkania_blade_of_destiny/game/'
+
+echo '#!/bin/bash
+INSTALL_DIR=$1
+NEBULA_DIR=$2
+rm $HOME/.games_nebula/games/.dosbox/realms_of_arkania_blade_of_destiny
+mkdir -p $HOME/.games_nebula/games/.dosbox
+ln -s $INSTALL_DIR/realms_of_arkania_blade_of_destiny \
+$HOME/.games_nebula/games/.dosbox/realms_of_arkania_blade_of_destiny
+python $NEBULA_DIR/launcher_dosbox.py realms_of_arkania_blade_of_destiny' > \
+$INSTALL_DIR'/realms_of_arkania_blade_of_destiny/start.sh'
+chmod +x $INSTALL_DIR'/realms_of_arkania_blade_of_destiny/start.sh'
+
+echo "[autoexec]
+mount C $HOME/.games_nebula/games/.dosbox/realms_of_arkania_blade_of_destiny
+c:
+cd game
+cls
+intro
+bladem
+exit" > $INSTALL_DIR'/realms_of_arkania_blade_of_destiny/dosbox_game.conf'
+
+echo "[autoexec]
+mount C $HOME/.games_nebula/games/.dosbox/realms_of_arkania_blade_of_destiny
+c:
+cd game
+cls
+sound.bat
+exit" > $INSTALL_DIR'/realms_of_arkania_blade_of_destiny/dosbox_settings.conf'

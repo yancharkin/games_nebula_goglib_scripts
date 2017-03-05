@@ -1,0 +1,28 @@
+#!/bin/bash
+
+INSTALL_DIR=$2
+NEBULA_DIR=$3
+
+python2 $NEBULA_DIR'/modules/goglib_get_banner_2.py' \
+'tropico' \
+'https://images-3.gog.com/0d63f0e95dd114db651e80935f6e47accdc1af32733ff4a8be8d7eceee3c0d6e.jpg' \
+$HOME'/.games_nebula/images/goglib_banners'
+
+mv $INSTALL_DIR'/tropico/tmp/app' $INSTALL_DIR'/tropico/game'
+rm -R -f $INSTALL_DIR'/tropico/tmp'
+
+echo -e '#!/bin/bash
+NEBULA_DIR=$2
+python $NEBULA_DIR/launcher_wine.py tropico Tropico.EXE' > \
+$INSTALL_DIR'/tropico/start.sh'
+chmod +x $INSTALL_DIR'/tropico/start.sh'
+
+echo -e '#!/bin/bash
+INSTALL_DIR=$1
+WINEPREFIX_DIR=$3
+rm $WINEPREFIX_DIR/drive_c/Games/tropico
+mkdir -p $WINEPREFIX_DIR/drive_c/Games
+ln -s $INSTALL_DIR/tropico/game \
+$WINEPREFIX_DIR/drive_c/Games/tropico' > \
+$INSTALL_DIR'/tropico/additions.sh'
+chmod +x $INSTALL_DIR'/tropico/additions.sh'

@@ -1,0 +1,33 @@
+#!/bin/bash
+
+INSTALL_DIR=$2
+
+mv $INSTALL_DIR'/little_big_adventure_2/tmp/app' $INSTALL_DIR'/little_big_adventure_2/game'
+rm -R -f $INSTALL_DIR'/little_big_adventure_2/tmp'
+
+echo '#!/bin/bash
+INSTALL_DIR=$1
+NEBULA_DIR=$2
+rm $HOME/.games_nebula/games/.dosbox/little_big_adventure_2
+mkdir -p $HOME/.games_nebula/games/.dosbox
+ln -s $INSTALL_DIR/little_big_adventure_2/game \
+$HOME/.games_nebula/games/.dosbox/little_big_adventure_2
+python $NEBULA_DIR/launcher_dosbox.py little_big_adventure_2' > \
+$INSTALL_DIR'/little_big_adventure_2/start.sh'
+chmod +x $INSTALL_DIR'/little_big_adventure_2/start.sh'
+
+echo "[autoexec]
+mount C $HOME/.games_nebula/games/.dosbox/little_big_adventure_2
+imgmount d $HOME/.games_nebula/games/.dosbox/little_big_adventure_2/LBA2.DAT -t iso
+c:
+cls
+lba2.EXE
+exit" > $INSTALL_DIR'/little_big_adventure_2/dosbox_game.conf'
+
+echo "[autoexec]
+mount C $HOME/.games_nebula/games/.dosbox/little_big_adventure_2
+imgmount d $HOME/.games_nebula/games/.dosbox/little_big_adventure_2/LBA2.DAT -t iso
+c:
+cls
+setup.EXE
+exit" > $INSTALL_DIR'/little_big_adventure_2/dosbox_settings.conf'

@@ -1,0 +1,7 @@
+#!/bin/bash
+
+INSTALL_DIR=$2
+
+mv $INSTALL_DIR'/dex/tmp/data/noarch/'* $INSTALL_DIR'/dex/'
+rm -R -f $INSTALL_DIR'/dex/tmp'
+chmod +x $INSTALL_DIR'/dex/start.sh'

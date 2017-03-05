@@ -1,0 +1,20 @@
+#!/bin/bash
+
+INSTALL_DIR=$2
+
+mv $INSTALL_DIR'/eschalon_book_iii/tmp/data/noarch/'* $INSTALL_DIR'/eschalon_book_iii/'
+rm -R -f $INSTALL_DIR'/eschalon_book_iii/tmp'
+mv $INSTALL_DIR'/eschalon_book_iii/start.sh' $INSTALL_DIR'/eschalon_book_iii/start_gog.sh'
+
+echo -e '#!/bin/bash
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+#export LD_LIBRARY_PATH="/lib:/usr/lib:/usr/local/lib:$LD_LIBRARY_PATH:$DIR/lib"
+cd "$DIR/game"
+"./eschalon_book_3"' > $INSTALL_DIR'/eschalon_book_iii/start_gn.sh'
+chmod +x $INSTALL_DIR'/eschalon_book_iii/start_gn.sh'
+
+echo -e '#!/bin/bash
+NEBULA_DIR=$2
+python $NEBULA_DIR/launcher_native.py eschalon_book_iii' > \
+$INSTALL_DIR'/eschalon_book_iii/start.sh'
+chmod +x $INSTALL_DIR'/eschalon_book_iii/start.sh'

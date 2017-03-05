@@ -1,0 +1,273 @@
+#!/bin/bash
+
+DOWNLOAD_DIR=$1
+INSTALL_DIR=$2
+
+mv $INSTALL_DIR'/neverwinter_nights_diamond_edition/tmp/game' \
+$INSTALL_DIR'/neverwinter_nights_diamond_edition/game'
+mv $INSTALL_DIR'/neverwinter_nights_diamond_edition/tmp/support/app/'* \
+$INSTALL_DIR'/neverwinter_nights_diamond_edition/game/'
+mv $INSTALL_DIR'/neverwinter_nights_diamond_edition/tmp/support/binkw32_ati' \
+$INSTALL_DIR'/neverwinter_nights_diamond_edition/game/'
+rm -R -f $INSTALL_DIR'/neverwinter_nights_diamond_edition/tmp'
+
+mkdir -p $DOWNLOAD_DIR'/_distr'
+
+if [ ! -f $DOWNLOAD_DIR'/_distr/directx_feb2010_redist.exe' ]; then
+	curl -L -o $DOWNLOAD_DIR'/_distr/directx_feb2010_redist.exe' -C - \
+	'https://download.microsoft.com/download/E/E/1/EE17FF74-6C45-4575-9CF4-7FC2597ACD18/directx_feb2010_redist.exe'
+fi
+
+if [ ! -f $DOWNLOAD_DIR'/_distr/directx_Jun2010_redist.exe' ]; then
+	curl -L -o $DOWNLOAD_DIR'/_distr/directx_Jun2010_redist.exe'  -C - \
+	'https://download.microsoft.com/download/8/4/A/84A35BF1-DAFE-4AE8-82AF-AD2AE20B6B14/directx_Jun2010_redist.exe'
+fi
+
+mkdir -p $HOME'/.cache/winetricks/directx9'
+if [ ! -f $HOME'/.cache/winetricks/directx9/directx_feb2010_redist.exe' ]; then
+	cp $DOWNLOAD_DIR'/_distr/directx_feb2010_redist.exe' $HOME'/.cache/winetricks/directx9/'
+fi
+
+if [ ! -f $HOME'/.cache/winetricks/directx9/directx_Jun2010_redist.exe' ]; then
+	cp $DOWNLOAD_DIR'/_distr/directx_Jun2010_redist.exe' $HOME'/.cache/winetricks/directx9/'
+fi
+
+echo -e '#!/bin/bash
+NEBULA_DIR=$2
+python $NEBULA_DIR/launcher_wine.py neverwinter_nights_diamond_edition nwmain.exe' > \
+$INSTALL_DIR'/neverwinter_nights_diamond_edition/start.sh'
+chmod +x $INSTALL_DIR'/neverwinter_nights_diamond_edition/start.sh'
+
+echo -e '#!/bin/bash
+INSTALL_DIR=$1
+WINE_DIR=$2
+WINEPREFIX_DIR=$3
+
+if [ $WINE_DIR == "wine" ]; then
+	export WINELOADER=$WINE_DIR
+	export WINEPREFIX=$WINEPREFIX_DIR
+else
+	export WINE=$WINE_DIR/bin/wine
+	export WINELOADER=$WINE_DIR/bin/wine
+	export WINESERVER=$WINE_DIR/bin/wineserver
+	export WINEDLLPATH=$WINE_DIR/lib
+	export WINEPREFIX=$WINEPREFIX_DIR
+fi
+
+cd $INSTALL_DIR/neverwinter_nights_diamond_edition/game
+$WINELOADER nwn.exe' > $INSTALL_DIR'/neverwinter_nights_diamond_edition/settings.sh'
+chmod +x $INSTALL_DIR'/neverwinter_nights_diamond_edition/settings.sh'
+
+echo -e '#!/bin/bash
+INSTALL_DIR=$1
+WINE_DIR=$2
+WINEPREFIX_DIR=$3
+
+if [ $WINE_DIR == "wine" ]; then
+	export WINELOADER=$WINE_DIR
+	export WINEPREFIX=$WINEPREFIX_DIR
+else
+	export WINE=$WINE_DIR/bin/wine
+	export WINELOADER=$WINE_DIR/bin/wine
+	export WINESERVER=$WINE_DIR/bin/wineserver
+	export WINEDLLPATH=$WINE_DIR/lib
+	export WINEPREFIX=$WINEPREFIX_DIR
+fi
+
+$WINELOADER reg add "HKEY_LOCAL_MACHINE\Software\BioWare\NWN\Neverwinter" \
+/v "Version" /t REG_SZ /d "1.69" /f
+
+winetricks --gui d3dx9
+
+rm $WINEPREFIX_DIR/drive_c/Games/neverwinter_nights_diamond_edition
+mkdir -p $WINEPREFIX_DIR/drive_c/Games
+ln -s $INSTALL_DIR/neverwinter_nights_diamond_edition/game \
+$WINEPREFIX_DIR/drive_c/Games/neverwinter_nights_diamond_edition' > \
+$INSTALL_DIR'/neverwinter_nights_diamond_edition/additions.sh'
+chmod +x $INSTALL_DIR'/neverwinter_nights_diamond_edition/additions.sh'
+
+# Install native linux client
+if [ ! -f $DOWNLOAD_DIR'/_distr/neverwinter_nights_diamond_edition/'* ]; then
+    zenity --question \
+    --title "Neverwinter Nights" \
+    --text "Download and install native Linux version (Needs to download ~500MB)?" \
+    --ok-label "Yes" --cancel-label "No"
+else
+     zenity --question \
+    --title "Neverwinter Nights" \
+    --text "Install native Linux version?" \
+    --ok-label "Yes" --cancel-label "No"   
+fi
+
+if [ $? == 0 ]; then
+    
+    mkdir -p $DOWNLOAD_DIR'/_distr/neverwinter_nights_diamond_edition/'
+    cd $DOWNLOAD_DIR'/_distr/neverwinter_nights_diamond_edition/'
+    
+    LINK_SDL='http://ftp.debian.org/debian/pool/main/libs/libsdl1.2/libsdl1.2debian_1.2.15-10+b1_i386.deb'
+    LINK_SDL_MIXER='http://ftp.debian.org/debian/pool/main/s/sdl-mixer1.2/libsdl-mixer1.2_1.2.12-11+b1_i386.deb'
+    LINK_LIBX11='http://ftp.debian.org/debian/pool/main/libx/libx11/libx11-6_1.6.2-3_i386.deb'
+    LINK_LIBGLU='http://ftp.debian.org/debian/pool/main/libg/libglu/libglu1-mesa_9.0.0-2_i386.deb'
+    LINK_LIBXCURSOR='http://ftp.debian.org/debian/pool/main/libx/libxcursor/libxcursor1_1.1.14-1+b1_i386.deb'
+    LINK_LIBOPENAL='http://ftp.debian.org/debian/pool/main/o/openal-soft/libopenal1_1.15.1-5_i386.deb'
+    
+    LINK_NWMOVIES='https://github.com/nwnlinux/nwmovies/archive/master.zip'
+    LINK_BINK='http://www.radgametools.com/down/Bink/BinkLinuxPlayer.7z'
+    
+    # Uncomment links that works (best) for you:
+    LINK_CLIENT129='ftp://ftp.dvo.ru/pub/distfiles/nwclient129.tar.gz'
+    #LINK_CLIENT129='ftp://ftp.twaren.net/pub/BSD/FreeBSD/ports/distfiles/linux-nwnclient/nwclient129.tar.gz'
+    LINK_CLIENT169_XP2='ftp://ftp.dvo.ru/pub/distfiles/English_linuxclient169_xp2.tar.gz'
+    #LINK_CLIENT169_XP2='https://neverwintervault.org/sites/all/modules/pubdlcnt/pubdlcnt.php?file=https://neverwintervault.org/sites/neverwintervault.org/files/english_linuxclient169_xp2.tar_.gz&nid=117'
+    
+    ### Downloading ###
+    if [ ! -f './libsdl1.2debian_1.2.15-10+b1_i386.deb' ]; then
+        curl -L -O $LINK_SDL && \
+        curl -L -O $LINK_SDL_MIXER && \
+        curl -L -O $LINK_LIBX11 && \
+        curl -L -O $LINK_LIBGLU && \
+        curl -L -O $LINK_LIBXCURSOR && \
+        curl -L -O $LINK_LIBOPENAL \
+        | zenity --progress --title "Neverwinter Nights" --text \
+        "Downloading libs..." --auto-close --no-cancel --pulsate
+    fi
+    
+    if [ ! -f './nwmovies.zip' ]; then
+        curl -L -o './nwmovies.zip' $LINK_NWMOVIES && \
+        curl -L -O $LINK_BINK \
+        | zenity --progress --title "Neverwinter Nights" --text \
+        "Downloading tools..." --auto-close --no-cancel --pulsate
+    fi
+    
+    if [ ! -f './nwclient129.tar.gz' ]; then
+        curl -L -o './nwclient129.tar.gz' -C - \
+         $LINK_CLIENT129 | zenity --progress --title "Neverwinter Nights" --text \
+        "Downloading nwclient129.tar.gz..." --auto-close --no-cancel --pulsate
+    fi
+    if [ ! -f './english_linuxclient169_xp2.tar.gz' ]; then
+        curl -L -o './english_linuxclient169_xp2.tar.gz' -C - \
+        $LINK_CLIENT169_XP2 | zenity --progress --title "Neverwinter Nights" --text \
+        "Downloading english_linuxclient169_xp2.tar.gz..." --auto-close --no-cancel --pulsate
+    fi
+
+    ### Unpacking ###
+    tar -zxvf './nwclient129.tar.gz' -C \
+    $INSTALL_DIR'/neverwinter_nights_diamond_edition/game' \
+    | zenity --progress --title "Neverwinter Nights" --text \
+    "Extracting nwclient129.tar.gz..." --auto-close --no-cancel --pulsate
+     
+    tar -zxvf './english_linuxclient169_xp2.tar.gz' -C \
+    $INSTALL_DIR'/neverwinter_nights_diamond_edition/game' \
+    | zenity --progress --title "Neverwinter Nights" --text \
+    "Extracting english_linuxclient169_xp2.tar.gz..." --auto-close --no-cancel --pulsate
+    
+    mkdir -p $INSTALL_DIR'/neverwinter_nights_diamond_edition/game/tmp'
+    
+    mv $INSTALL_DIR'/neverwinter_nights_diamond_edition/game/lib' \
+    $INSTALL_DIR'/neverwinter_nights_diamond_edition/game/lib.bak'
+    mkdir $INSTALL_DIR'/neverwinter_nights_diamond_edition/game/lib'
+
+    7z x -aoa './libglu1-mesa_9.0.0-2_i386.deb' \
+    -o$INSTALL_DIR'/neverwinter_nights_diamond_edition/game/tmp'
+    7z x -aoa $INSTALL_DIR'/neverwinter_nights_diamond_edition/game/tmp/data.tar' \
+    -o$INSTALL_DIR'/neverwinter_nights_diamond_edition/game/tmp'
+    mv $INSTALL_DIR'/neverwinter_nights_diamond_edition/game/tmp/usr/lib/i386-linux-gnu/libGLU.so.1' \
+    $INSTALL_DIR'/neverwinter_nights_diamond_edition/game/lib/libGLU.so'
+
+    7z x -aoa './libopenal1_1.15.1-5_i386.deb' \
+    -o$INSTALL_DIR'/neverwinter_nights_diamond_edition/game/tmp'
+    7z x -aoa $INSTALL_DIR'/neverwinter_nights_diamond_edition/game/tmp/data.tar' \
+    -o$INSTALL_DIR'/neverwinter_nights_diamond_edition/game/tmp'
+    mv $INSTALL_DIR'/neverwinter_nights_diamond_edition/game/tmp/usr/lib/i386-linux-gnu/libopenal.so.1' \
+    $INSTALL_DIR'/neverwinter_nights_diamond_edition/game/lib/libopenal.so'
+
+    7z x -aoa './libsdl-mixer1.2_1.2.12-11+b1_i386.deb' \
+    -o$INSTALL_DIR'/neverwinter_nights_diamond_edition/game/tmp'
+    7z x -aoa $INSTALL_DIR'/neverwinter_nights_diamond_edition/game/tmp/data.tar' \
+    -o$INSTALL_DIR'/neverwinter_nights_diamond_edition/game/tmp'
+    mv $INSTALL_DIR'/neverwinter_nights_diamond_edition/game/tmp/usr/lib/i386-linux-gnu/libSDL_mixer-1.2.so.0' \
+    $INSTALL_DIR'/neverwinter_nights_diamond_edition/game/lib/libSDL_mixer-1.2.so'
+
+    7z x -aoa './libsdl1.2debian_1.2.15-10+b1_i386.deb' \
+    -o$INSTALL_DIR'/neverwinter_nights_diamond_edition/game/tmp'
+    7z x -aoa $INSTALL_DIR'/neverwinter_nights_diamond_edition/game/tmp/data.tar' \
+    -o$INSTALL_DIR'/neverwinter_nights_diamond_edition/game/tmp'
+    mv $INSTALL_DIR'/neverwinter_nights_diamond_edition/game/tmp/usr/lib/i386-linux-gnu/libSDL-1.2.so.0.11.4' \
+    $INSTALL_DIR'/neverwinter_nights_diamond_edition/game/lib/libSDL-1.2.so'
+
+    7z x -aoa './libx11-6_1.6.2-3_i386.deb' \
+    -o$INSTALL_DIR'/neverwinter_nights_diamond_edition/game/tmp'
+    7z x -aoa $INSTALL_DIR'/neverwinter_nights_diamond_edition/game/tmp/data.tar' \
+    -o$INSTALL_DIR'/neverwinter_nights_diamond_edition/game/tmp'
+    mv $INSTALL_DIR'/neverwinter_nights_diamond_edition/game/tmp/usr/lib/i386-linux-gnu/libX11.so.6.3.0' \
+    $INSTALL_DIR'/neverwinter_nights_diamond_edition/game/lib/libX11.so'
+
+    7z x -aoa './libxcursor1_1.1.14-1+b1_i386.deb' \
+    -o$INSTALL_DIR'/neverwinter_nights_diamond_edition/game/tmp'
+    7z x -aoa $INSTALL_DIR'/neverwinter_nights_diamond_edition/game/tmp/data.tar' \
+    -o$INSTALL_DIR'/neverwinter_nights_diamond_edition/game/tmp'
+    mv $INSTALL_DIR'/neverwinter_nights_diamond_edition/game/tmp/usr/lib/i386-linux-gnu/libXcursor.so.1.0.2' \
+    $INSTALL_DIR'/neverwinter_nights_diamond_edition/game/lib/libXcursor.so'
+
+    7z x -aoa './nwmovies.zip' \
+    -o$INSTALL_DIR'/neverwinter_nights_diamond_edition/game/tmp'
+    tar -zxvf $INSTALL_DIR'/neverwinter_nights_diamond_edition/game/tmp/nwmovies-master/nwmovies-v4-public.20090223.080954.tar.gz' -C \
+    $INSTALL_DIR'/neverwinter_nights_diamond_edition/game/'
+    
+    7z x -aoa './BinkLinuxPlayer.7z' 'BinkPlayer' \
+    -o$INSTALL_DIR'/neverwinter_nights_diamond_edition/game/nwmovies'
+    chmod +x $INSTALL_DIR'/neverwinter_nights_diamond_edition/game/nwmovies/BinkPlayer'
+
+    rm -r -f $INSTALL_DIR'/neverwinter_nights_diamond_edition/game/tmp'
+
+    #~ cd $INSTALL_DIR'/neverwinter_nights_diamond_edition/game'
+    #~ xterm -fg green -bg black -fn 10x20 -e './fixinstall'
+    
+echo "[Display Options]
+AllowWindowedMode=1
+FullScreen=0" > \
+$INSTALL_DIR'/neverwinter_nights_diamond_edition/game/nwn.ini'
+
+echo '#!/bin/sh
+INSTALL_DIR=$1
+GAME_DIR="$INSTALL_DIR/neverwinter_nights_diamond_edition/game"
+export SDL_MOUSE_RELATIVE=0
+export SDL_VIDEO_X11_DGAMOUSE=0
+export __GL_FSAA_MODE=4
+export LD_PRELOAD="$GAME_DIR/nwmovies.so"
+export LD_LIBRARY_PATH="$GAME_DIR/lib:$GAME_DIR/miles:$LD_LIBRARY_PATH"
+cd "$GAME_DIR"
+./nwmain $@' > $INSTALL_DIR'/neverwinter_nights_diamond_edition/start_linux.sh'
+chmod +x $INSTALL_DIR'/neverwinter_nights_diamond_edition/start_linux.sh'
+
+mv $INSTALL_DIR'/neverwinter_nights_diamond_edition/start.sh' \
+$INSTALL_DIR'/neverwinter_nights_diamond_edition/start_wine.sh'
+
+echo '#!/bin/bash
+INSTALL_DIR=$1
+NEBULA_DIR=$2
+VER=$(zenity --list \
+--hide-header \
+--title "Neverwinter Nights" \
+--text "Select version:" \
+--column "Version" "Linux version (Native)" \
+"Windows version (WINE)")
+if [ "$VER" == "Linux version (Native)" ]; then
+if [ -f "$INSTALL_DIR/neverwinter_nights_diamond_edition/game/.nvmovies_init" ]; then 
+"$INSTALL_DIR/neverwinter_nights_diamond_edition/start_linux.sh" \
+"$INSTALL_DIR"
+else
+touch "$INSTALL_DIR/neverwinter_nights_diamond_edition/game/.nvmovies_init" 
+"$INSTALL_DIR/neverwinter_nights_diamond_edition/start_linux.sh" \
+"$INSTALL_DIR"
+"$INSTALL_DIR/neverwinter_nights_diamond_edition/start_linux.sh" \
+"$INSTALL_DIR"
+fi
+fi
+if [ "$VER" == "Windows version (WINE)" ]; then
+"$INSTALL_DIR/neverwinter_nights_diamond_edition/start_wine.sh" \
+"$INSTALL_DIR" "$NEBULA_DIR"
+fi' > $INSTALL_DIR'/neverwinter_nights_diamond_edition/start.sh'
+chmod +x $INSTALL_DIR'/neverwinter_nights_diamond_edition/start.sh'
+    
+fi

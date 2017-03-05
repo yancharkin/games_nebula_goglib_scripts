@@ -1,0 +1,22 @@
+#!/bin/bash
+
+INSTALL_DIR=$2
+
+mv $INSTALL_DIR'/deus_ex/tmp/app' $INSTALL_DIR'/deus_ex/game'
+rm -R -f $INSTALL_DIR'/deus_ex/tmp'
+
+echo -e '#!/bin/bash
+NEBULA_DIR=$2
+python $NEBULA_DIR/launcher_wine.py deus_ex System/DeusEx.exe
+xgamma -gamma 1' > $INSTALL_DIR'/deus_ex/start.sh'
+chmod +x $INSTALL_DIR'/deus_ex/start.sh'
+
+echo -e '#!/bin/bash
+INSTALL_DIR=$1
+WINEPREFIX_DIR=$3
+rm $WINEPREFIX_DIR/drive_c/Games/deus_ex
+mkdir -p $WINEPREFIX_DIR/drive_c/Games
+ln -s $INSTALL_DIR/deus_ex/game \
+$WINEPREFIX_DIR/drive_c/Games/deus_ex' > \
+$INSTALL_DIR'/deus_ex/additions.sh'
+chmod +x $INSTALL_DIR'/deus_ex/additions.sh'

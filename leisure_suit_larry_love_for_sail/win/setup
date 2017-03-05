@@ -1,0 +1,64 @@
+#!/bin/bash
+
+INSTALL_DIR=$2
+
+mv $INSTALL_DIR'/leisure_suit_larry_love_for_sail/tmp/app' \
+$INSTALL_DIR'/leisure_suit_larry_love_for_sail/game'
+rm -R -f $INSTALL_DIR'/leisure_suit_larry_love_for_sail/tmp'
+
+echo -e '#!/bin/bash
+NEBULA_DIR=$2
+python $NEBULA_DIR/launcher_wine.py leisure_suit_larry_love_for_sail SIERW5.EXE' > \
+$INSTALL_DIR'/leisure_suit_larry_love_for_sail/start.sh'
+chmod +x $INSTALL_DIR'/leisure_suit_larry_love_for_sail/start.sh'
+
+echo -e '#!/bin/bash
+INSTALL_DIR=$1
+WINE_DIR=$2
+WINEPREFIX_DIR=$3
+
+if [ $WINE_DIR == "wine" ]; then
+	export WINELOADER=$WINE_DIR
+	export WINEPREFIX=$WINEPREFIX_DIR
+else
+	export WINE=$WINE_DIR/bin/wine
+	export WINELOADER=$WINE_DIR/bin/wine
+	export WINESERVER=$WINE_DIR/bin/wineserver
+	export WINEDLLPATH=$WINE_DIR/lib
+	export WINEPREFIX=$WINEPREFIX_DIR
+fi
+
+rm $WINEPREFIX/drive_c/Games/larry7
+mkdir -p $WINEPREFIX/drive_c/Games
+ln -s $INSTALL_DIR/leisure_suit_larry_love_for_sail/game \
+$WINEPREFIX/drive_c/Games/larry7' > \
+$INSTALL_DIR'/leisure_suit_larry_love_for_sail/additions.sh'
+chmod +x $INSTALL_DIR'/leisure_suit_larry_love_for_sail/additions.sh'
+
+echo -e "[Windows]
+borderpixels=0
+minSubmits=8
+resSfx=C:\Games\larry7
+resAud=C:\Games\larry7
+leadSubmits=4
+maxSubmits=32
+winG=false
+confirmdac=true
+sciMinK=3200
+useDirectDraw=false
+movieDir=C:\Games\larry7\Movie\\
+patchDir=C:\Games\larry7;C:\Games\larry7\PATCHES\\
+useaudio=true
+wwidth=640
+VideoSpeed=300
+resMap=C:\Games\larry7
+sciMaxK=5400
+usemidi=false
+wheight=480
+allowresize=false
+cacheSize2=750
+useDirectSound=false
+audio=C:\Games\larry7\Music\\
+cacheSize3=350
+title=Leisure Suit Larry in 'Love For Sail!'" > \
+$INSTALL_DIR'/leisure_suit_larry_love_for_sail/game/RESOURCE.WIN'

@@ -1,0 +1,42 @@
+#!/bin/bash
+
+INSTALL_DIR=$2
+
+mv $INSTALL_DIR'/treasure_adventure_game/tmp/app' $INSTALL_DIR'/treasure_adventure_game/game'
+rm -R -f $INSTALL_DIR'/treasure_adventure_game/tmp'
+
+echo -e '#!/bin/bash
+NEBULA_DIR=$2
+python $NEBULA_DIR/launcher_wine.py treasure_adventure_game treasure_adventure_game_1.0.exe' > \
+$INSTALL_DIR'/treasure_adventure_game/start.sh'
+chmod +x $INSTALL_DIR'/treasure_adventure_game/start.sh'
+
+echo -e '#!/bin/bash
+INSTALL_DIR=$1
+WINE_DIR=$2
+WINEPREFIX_DIR=$3
+
+if [ $WINE_DIR == "wine" ]; then
+	export WINELOADER=$WINE_DIR
+	export WINEPREFIX=$WINEPREFIX_DIR
+else
+	export WINE=$WINE_DIR/bin/wine
+	export WINELOADER=$WINE_DIR/bin/wine
+	export WINESERVER=$WINE_DIR/bin/wineserver
+	export WINEDLLPATH=$WINE_DIR/lib
+	export WINEPREFIX=$WINEPREFIX_DIR
+fi
+
+cd $INSTALL_DIR/treasure_adventure_game/game
+$WINELOADER setup.exe' > $INSTALL_DIR'/treasure_adventure_game/settings.sh'
+chmod +x $INSTALL_DIR'/treasure_adventure_game/settings.sh'
+
+echo -e '#!/bin/bash
+INSTALL_DIR=$1
+WINEPREFIX_DIR=$3
+rm $WINEPREFIX_DIR/drive_c/Games/treasure_adventure_game
+mkdir -p $WINEPREFIX_DIR/drive_c/Games
+ln -s $INSTALL_DIR/treasure_adventure_game/game \
+$WINEPREFIX_DIR/drive_c/Games/treasure_adventure_game' > \
+$INSTALL_DIR'/treasure_adventure_game/additions.sh'
+chmod +x $INSTALL_DIR'/treasure_adventure_game/additions.sh'

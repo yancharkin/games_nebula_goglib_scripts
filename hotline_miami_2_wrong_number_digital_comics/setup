@@ -1,0 +1,25 @@
+#!/bin/bash
+
+DOWNLOAD_DIR=$1
+INSTALL_DIR=$2
+
+lgogdownloader --download --exclude 4,16 --game 'hotline_miami_2_wrong_number_digital_comics'
+
+unzip -o $DOWNLOAD_DIR'/hotline_miami_2_wrong_number_digital_comics/extras/hlm_2_comics_linux.zip' \
+-d $INSTALL_DIR'/hotline_miami_2_wrong_number_digital_comics'
+
+mv $INSTALL_DIR'/hotline_miami_2_wrong_number_digital_comics/hlm_2_comics_linux/'* \
+$INSTALL_DIR'/hotline_miami_2_wrong_number_digital_comics/'
+
+chmod +x $INSTALL_DIR'/hotline_miami_2_wrong_number_digital_comics/linux32/hlm2comics'
+chmod +x $INSTALL_DIR'/hotline_miami_2_wrong_number_digital_comics/linux64/hlm2comics'
+
+rm -R $INSTALL_DIR'/hotline_miami_2_wrong_number_digital_comics/hlm_2_comics_linux'
+
+echo -e '#!/bin/bash
+if [ $(uname -m) == "x86_64" ]; then\n'\
+"	$INSTALL_DIR/hotline_miami_2_wrong_number_digital_comics/linux64/hlm2comics
+else
+	$INSTALL_DIR/hotline_miami_2_wrong_number_digital_comics/linux32/hlm2comics
+fi" >  $INSTALL_DIR'/hotline_miami_2_wrong_number_digital_comics/start.sh'
+chmod +x $INSTALL_DIR'/hotline_miami_2_wrong_number_digital_comics/start.sh'

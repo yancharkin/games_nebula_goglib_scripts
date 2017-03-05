@@ -1,0 +1,9 @@
+#!/bin/bash
+
+INSTALL_DIR=$2
+
+mv $INSTALL_DIR'/cayne/tmp/data/noarch/'* \
+$INSTALL_DIR'/cayne/'
+rm -R -f $INSTALL_DIR'/cayne/tmp'
+
+chmod +x $INSTALL_DIR'/cayne/start.sh'

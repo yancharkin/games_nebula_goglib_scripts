@@ -1,0 +1,66 @@
+#!/bin/bash
+
+DOWNLOAD_DIR=$1
+INSTALL_DIR=$2
+
+mv $INSTALL_DIR'/leisure_suit_larry_love_for_sail/tmp/app' \
+$INSTALL_DIR'/leisure_suit_larry_love_for_sail/game'
+rm -R -f $INSTALL_DIR'/leisure_suit_larry_love_for_sail/tmp'
+
+mkdir -p $DOWNLOAD_DIR'/_distr/leisure_suit_larry_love_for_sail'
+if [ ! -f $DOWNLOAD_DIR'/_distr/leisure_suit_larry_love_for_sail/dos_binaries.zip' ]; then
+    curl -L -o $DOWNLOAD_DIR'/_distr/leisure_suit_larry_love_for_sail/dos_binaries.zip' -C - \
+    'http://www.sierrahelp.com/forums/download/file.php?id=3748&sid=3b766caff456bb3911775dae8ca201ad'
+fi
+7z x -aoa -o$INSTALL_DIR'/leisure_suit_larry_love_for_sail/game' \
+$DOWNLOAD_DIR'/_distr/leisure_suit_larry_love_for_sail/dos_binaries.zip'
+
+echo '#!/bin/bash
+INSTALL_DIR=$1
+NEBULA_DIR=$2
+rm $HOME/.games_nebula/games/.dosbox/leisure_suit_larry_love_for_sail
+mkdir -p $HOME/.games_nebula/games/.dosbox
+ln -s $INSTALL_DIR/leisure_suit_larry_love_for_sail/game \
+$HOME/.games_nebula/games/.dosbox/leisure_suit_larry_love_for_sail
+python $NEBULA_DIR/launcher_dosbox.py leisure_suit_larry_love_for_sail' > \
+$INSTALL_DIR'/leisure_suit_larry_love_for_sail/start.sh'
+chmod +x $INSTALL_DIR'/leisure_suit_larry_love_for_sail/start.sh'
+
+echo "[autoexec]
+@echo off
+mount C $HOME/.games_nebula/games/.dosbox/leisure_suit_larry_love_for_sail
+c:
+cls
+sier.exe
+cls
+exit" > $INSTALL_DIR'/leisure_suit_larry_love_for_sail/dosbox_game.conf'
+
+echo "videoDrv   = VESA.DRV
+soundDrv   = MIDNONE.DRV
+audioDrv   = DACBLAST.DRV
+joyDrv     = NO
+directory  = .\
+minCPU     = 486
+minDOS     = 572
+mode       = real
+minEMS     = 200
+CD         = yes
+CPU        = 0
+VideoSpeed = 0
+CPUSpeed   = 0
+CDROM      = 0
+mouseDrv   = NONE
+memoryDrv  = NONE
+language   = 1
+audioSize  = 112k
+minMemory  = 1600k
+brightness = 0
+cmd        = LSL7DOS
+
+audio      = .\music 
+resSfx     = .\ 
+resAud     = .\ 
+resMap     = .\ 
+patchDir   = .\; .\patches\ 
+movieDir   = .\movie" > \
+$INSTALL_DIR'/leisure_suit_larry_love_for_sail/game/RESOURCE.CFG'

@@ -1,0 +1,37 @@
+#!/bin/bash
+
+INSTALL_DIR=$2
+
+mv $INSTALL_DIR'/realms_of_arkania_3/tmp/app' $INSTALL_DIR'/realms_of_arkania_3/game'
+rm -R -f $INSTALL_DIR'/realms_of_arkania_3/tmp'
+
+cp -R $INSTALL_DIR'/realms_of_arkania_3/game/__support/save/GAMES/'* \
+$INSTALL_DIR'/realms_of_arkania_3/game/GAMES/'
+
+echo '#!/bin/bash
+INSTALL_DIR=$1
+NEBULA_DIR=$2
+rm $HOME/.games_nebula/games/.dosbox/realms_of_arkania_3
+mkdir -p $HOME/.games_nebula/games/.dosbox
+ln -s $INSTALL_DIR/realms_of_arkania_3/game \
+$HOME/.games_nebula/games/.dosbox/realms_of_arkania_3
+python $NEBULA_DIR/launcher_dosbox.py realms_of_arkania_3' > \
+$INSTALL_DIR'/realms_of_arkania_3/start.sh'
+chmod +x $INSTALL_DIR'/realms_of_arkania_3/start.sh'
+
+echo "[autoexec]
+mount C $HOME/.games_nebula/games/.dosbox/realms_of_arkania_3
+c:
+imgmount d $HOME/.games_nebula/games/.dosbox/realms_of_arkania_3/game.inst -fs iso
+cls
+RIVA
+exit" > $INSTALL_DIR'/realms_of_arkania_3/dosbox_game.conf'
+
+echo "[autoexec]
+mount C $HOME/.games_nebula/games/.dosbox/realms_of_arkania_3
+c:
+imgmount d $HOME/.games_nebula/games/.dosbox/realms_of_arkania_3/game.inst -fs iso
+cd data
+cls
+setup.exe
+exit" > $INSTALL_DIR'/realms_of_arkania_3/dosbox_settings.conf'

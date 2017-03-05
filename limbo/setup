@@ -1,0 +1,41 @@
+#!/bin/bash
+
+INSTALL_DIR=$2
+
+mv $INSTALL_DIR'/limbo/tmp/app' $INSTALL_DIR'/limbo/game'
+rm -R -f $INSTALL_DIR'/limbo/tmp'
+
+echo -e '#!/bin/bash
+NEBULA_DIR=$2
+python $NEBULA_DIR/launcher_wine.py limbo LIMBO.exe' > $INSTALL_DIR'/limbo/start.sh'
+chmod +x $INSTALL_DIR'/limbo/start.sh'
+
+echo -e '#!/bin/bash
+INSTALL_DIR=$1
+WINE_DIR=$2
+WINEPREFIX_DIR=$3
+
+if [ $WINE_DIR == "wine" ]; then
+	export WINELOADER=$WINE_DIR
+	export WINEPREFIX=$WINEPREFIX_DIR
+else
+	export WINE=$WINE_DIR/bin/wine
+	export WINELOADER=$WINE_DIR/bin/wine
+	export WINESERVER=$WINE_DIR/bin/wineserver
+	export WINEDLLPATH=$WINE_DIR/lib
+	export WINEPREFIX=$WINEPREFIX_DIR
+fi
+
+cd $INSTALL_DIR/limbo/game
+$WINELOADER language_setup.exe' > $INSTALL_DIR'/limbo/settings.sh'
+chmod +x $INSTALL_DIR'/limbo/settings.sh'
+
+echo -e '#!/bin/bash
+INSTALL_DIR=$1
+WINEPREFIX_DIR=$3
+rm $WINEPREFIX_DIR/drive_c/Games/limbo
+mkdir -p $WINEPREFIX_DIR/drive_c/Games
+ln -s $INSTALL_DIR/limbo/game \
+$WINEPREFIX_DIR/drive_c/Games/limbo' > \
+$INSTALL_DIR'/limbo/additions.sh'
+chmod +x $INSTALL_DIR'/limbo/additions.sh'

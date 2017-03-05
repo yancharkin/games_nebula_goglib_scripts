@@ -1,0 +1,7 @@
+#!/bin/bash
+
+INSTALL_DIR=$2
+
+mv $INSTALL_DIR'/bittrip_runner/tmp/data/noarch/'* $INSTALL_DIR'/bittrip_runner/'
+rm -R -f $INSTALL_DIR'/bittrip_runner/tmp'
+chmod +x $INSTALL_DIR'/bittrip_runner/start.sh'

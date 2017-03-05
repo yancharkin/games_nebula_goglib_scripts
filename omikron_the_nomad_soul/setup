@@ -1,0 +1,22 @@
+#!/bin/bash
+
+INSTALL_DIR=$2
+
+mv $INSTALL_DIR'/omikron_the_nomad_soul/tmp/app' $INSTALL_DIR'/omikron_the_nomad_soul/game'
+rm -R -f $INSTALL_DIR'/omikron_the_nomad_soul/tmp'
+
+echo -e '#!/bin/bash
+NEBULA_DIR=$2
+python $NEBULA_DIR/launcher_wine.py omikron_the_nomad_soul Runtime.exe' > \
+$INSTALL_DIR'/omikron_the_nomad_soul/start.sh'
+chmod +x $INSTALL_DIR'/omikron_the_nomad_soul/start.sh'
+
+echo -e '#!/bin/bash
+INSTALL_DIR=$1
+WINEPREFIX_DIR=$3
+rm $WINEPREFIX_DIR/drive_c/Games/omikron_the_nomad_soul
+mkdir -p $WINEPREFIX_DIR/drive_c/Games
+ln -s $INSTALL_DIR/omikron_the_nomad_soul/game \
+$WINEPREFIX_DIR/drive_c/Games/omikron_the_nomad_soul' > \
+$INSTALL_DIR'/omikron_the_nomad_soul/additions.sh'
+chmod +x $INSTALL_DIR'/omikron_the_nomad_soul/additions.sh'

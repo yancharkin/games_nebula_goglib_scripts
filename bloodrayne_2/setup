@@ -1,0 +1,125 @@
+#!/bin/bash
+
+DOWNLOAD_DIR=$1
+INSTALL_DIR=$2
+
+mv $INSTALL_DIR'/bloodrayne_2/tmp/app' $INSTALL_DIR'/bloodrayne_2/game'
+rm -R -f $INSTALL_DIR'/bloodrayne_2/tmp'
+
+mkdir -p $DOWNLOAD_DIR'/_distr'
+
+if [ ! -f $DOWNLOAD_DIR'/_distr/directx_feb2010_redist.exe' ]; then
+    curl -L -o $DOWNLOAD_DIR'/_distr/directx_feb2010_redist.exe' -C - \
+    'https://download.microsoft.com/download/E/E/1/EE17FF74-6C45-4575-9CF4-7FC2597ACD18/directx_feb2010_redist.exe'
+fi
+
+if [ ! -f $DOWNLOAD_DIR'/_distr/directx_Jun2010_redist.exe' ]; then
+    curl -L -o $DOWNLOAD_DIR'/_distr/directx_Jun2010_redist.exe'  -C - \
+    'https://download.microsoft.com/download/8/4/A/84A35BF1-DAFE-4AE8-82AF-AD2AE20B6B14/directx_Jun2010_redist.exe'
+fi
+
+if [ ! -f $DOWNLOAD_DIR'/_distr/LAVFilters-0.68.1-x86.zip' ]; then
+    curl -L -o $DOWNLOAD_DIR'/_distr/LAVFilters-0.68.1-x86.zip'  -C - \
+    'https://github.com/Nevcairiel/LAVFilters/releases/download/0.68.1/LAVFilters-0.68.1-x86.zip'
+fi
+
+if [ ! -f $DOWNLOAD_DIR'/_distr/LAVFilters-0.68.1-x64.zip' ]; then
+    curl -L -o $DOWNLOAD_DIR'/_distr/LAVFilters-0.68.1-x64.zip'  -C - \
+    'https://github.com/Nevcairiel/LAVFilters/releases/download/0.68.1/LAVFilters-0.68.1-x64.zip'
+fi
+
+mkdir -p $HOME'/.cache/winetricks/directx9'
+if [ ! -f $HOME'/.cache/winetricks/directx9/directx_feb2010_redist.exe' ]; then
+    cp $DOWNLOAD_DIR'/_distr/directx_feb2010_redist.exe' $HOME'/.cache/winetricks/directx9/'
+fi
+
+if [ ! -f $HOME'/.cache/winetricks/directx9/directx_Jun2010_redist.exe' ]; then
+    cp $DOWNLOAD_DIR'/_distr/directx_Jun2010_redist.exe' $HOME'/.cache/winetricks/directx9/'
+fi
+
+echo -e '#!/bin/bash
+NEBULA_DIR=$2
+export WINEDLLOVERRIDES="d3d8=n,b" 
+python $NEBULA_DIR/launcher_wine.py bloodrayne_2 br2.exe' > \
+$INSTALL_DIR'/bloodrayne_2/start.sh'
+chmod +x $INSTALL_DIR'/bloodrayne_2/start.sh'
+
+echo -e '#!/bin/bash
+INSTALL_DIR=$1
+WINE_DIR=$2
+WINEPREFIX_DIR=$3
+DOWNLOAD_DIR=$4
+
+if [ $WINE_DIR == "wine" ]; then
+    export WINELOADER=$WINE_DIR
+    export WINEPREFIX=$WINEPREFIX_DIR
+else
+    export WINE=$WINE_DIR/bin/wine
+    export WINELOADER=$WINE_DIR/bin/wine
+    export WINESERVER=$WINE_DIR/bin/wineserver
+    export WINEDLLPATH=$WINE_DIR/lib
+    export WINEPREFIX=$WINEPREFIX_DIR
+fi
+
+mkdir -p $WINEPREFIX"/drive_c/Program Files/LAVFilters"
+
+if [ -d $WINEPREFIX/drive_c/windows/syswow64 ]; then
+    unzip -o $DOWNLOAD_DIR/_distr/LAVFilters-0.68.1-x64.zip -d \
+    $WINEPREFIX"/drive_c/Program Files/LAVFilters"
+else
+    unzip -o $DOWNLOAD_DIR/_distr/LAVFilters-0.68.1-x86.zip -d \
+    $WINEPREFIX"/drive_c/Program Files/LAVFilters"
+fi
+
+cd $WINEPREFIX"/drive_c/Program Files/LAVFilters"
+$WINELOADER regsvr32.exe LAVSplitter.ax
+$WINELOADER regsvr32.exe LAVVideo.ax
+$WINELOADER regsvr32.exe LAVAudio.ax
+
+winetricks --gui quartz devenum
+
+rm $WINEPREFIX_DIR/drive_c/Games/bloodrayne_2
+mkdir -p $WINEPREFIX_DIR/drive_c/Games
+ln -s $INSTALL_DIR/bloodrayne_2/game \
+$WINEPREFIX_DIR/drive_c/Games/bloodrayne_2' > $INSTALL_DIR'/bloodrayne_2/additions.sh'
+chmod +x $INSTALL_DIR'/bloodrayne_2/additions.sh'
+
+zenity --question \
+--text="Install BloodRayne 2 FSAA Patch?" \
+--ok-label="Yes" --cancel-label="No"
+if [ $? == 0 ]; then
+if [ ! -f $DOWNLOAD_DIR'/_distr/bloodrayne_2/BR2_FSAA_Patch_1.666.rar' ]; then
+mkdir -p $DOWNLOAD_DIR/_distr/bloodrayne_2
+xdg-open $DOWNLOAD_DIR/_distr/bloodrayne_2
+sensible-browser "http://www.coopdb.com/modules.php?name=BR2fsaa&op=Download" &
+zenity --info --text \
+"Download patch and put it in\n<b>$DOWNLOAD_DIR/_distr/bloodrayne_2/</b>\nThen press OK."
+fi
+
+7z x -aoa -o$INSTALL_DIR'/bloodrayne_2/game/' \
+$DOWNLOAD_DIR'/_distr/bloodrayne_2/BR2_FSAA_Patch_1.666.rar'
+mv $INSTALL_DIR'/bloodrayne_2/game/BR2 FSAA Patch 1.666/'* \
+$INSTALL_DIR'/bloodrayne_2/game/'
+rm -R $INSTALL_DIR'/bloodrayne_2/game/BR2 FSAA Patch 1.666/'
+
+echo -e '#!/bin/bash
+INSTALL_DIR=$1
+WINE_DIR=$2
+WINEPREFIX_DIR=$3
+
+if [ $WINE_DIR == "wine" ]; then
+    export WINELOADER=$WINE_DIR
+    export WINEPREFIX=$WINEPREFIX_DIR
+else
+    export WINE=$WINE_DIR/bin/wine
+    export WINELOADER=$WINE_DIR/bin/wine
+    export WINESERVER=$WINE_DIR/bin/wineserver
+    export WINEDLLPATH=$WINE_DIR/lib
+    export WINEPREFIX=$WINEPREFIX_DIR
+fi
+
+cd $INSTALL_DIR/bloodrayne_2/game
+$WINELOADER br2fsaaConfig.exe' > $INSTALL_DIR'/bloodrayne_2/settings.sh'
+chmod +x $INSTALL_DIR'/bloodrayne_2/settings.sh'
+
+fi

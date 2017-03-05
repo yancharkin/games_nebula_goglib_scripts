@@ -1,0 +1,86 @@
+#!/bin/bash
+
+DOWNLOAD_DIR=$1
+INSTALL_DIR=$2
+
+mv $INSTALL_DIR'/heroes_of_might_and_magic_3_complete_edition/tmp/app' \
+$INSTALL_DIR'/heroes_of_might_and_magic_3_complete_edition/game'
+rm -R -f $INSTALL_DIR'/heroes_of_might_and_magic_3_complete_edition/tmp'
+
+mkdir -p $DOWNLOAD_DIR'/_distr/heroes_of_might_and_magic_3_complete_edition'
+
+if [ ! -f $DOWNLOAD_DIR'/_distr/heroes_of_might_and_magic_3_complete_edition/HoMM3 HD Latest.exe' ]; then
+	curl -L -o $DOWNLOAD_DIR'/_distr/heroes_of_might_and_magic_3_complete_edition/HoMM3 HD Latest.exe' -C - \
+	'http://h3hota.com/HD/HoMM3%20HD%20Latest.exe'
+fi
+
+mkdir -p $INSTALL_DIR'/heroes_of_might_and_magic_3_complete_edition/tmp'
+innoextract $DOWNLOAD_DIR'/_distr/heroes_of_might_and_magic_3_complete_edition/HoMM3 HD Latest.exe' -d \
+$INSTALL_DIR'/heroes_of_might_and_magic_3_complete_edition/tmp'
+mv $INSTALL_DIR'/heroes_of_might_and_magic_3_complete_edition/tmp/app/'* \
+$INSTALL_DIR'/heroes_of_might_and_magic_3_complete_edition/game/'
+rm -R $INSTALL_DIR'/heroes_of_might_and_magic_3_complete_edition/tmp'
+
+echo -e '#!/bin/bash
+INSTALL_DIR=$1
+NEBULA_DIR=$2
+if [ -f "$INSTALL_DIR/heroes_of_might_and_magic_3_complete_edition/game/Heroes3 HD.exe" ]; then
+mv $INSTALL_DIR"/heroes_of_might_and_magic_3_complete_edition/game/Heroes3 HD.exe" \
+$INSTALL_DIR"/heroes_of_might_and_magic_3_complete_edition/game/Heroes3_HD.exe"
+python $NEBULA_DIR/launcher_wine.py heroes_of_might_and_magic_3_complete_edition "Heroes3_HD.exe"
+else
+if [ -f "$INSTALL_DIR/heroes_of_might_and_magic_3_complete_edition/game/Heroes3_HD.exe" ]; then
+python $NEBULA_DIR/launcher_wine.py heroes_of_might_and_magic_3_complete_edition "Heroes3_HD.exe"
+else
+python $NEBULA_DIR/launcher_wine.py heroes_of_might_and_magic_3_complete_edition Heroes3.exe
+fi
+fi' > $INSTALL_DIR'/heroes_of_might_and_magic_3_complete_edition/start.sh'
+chmod +x $INSTALL_DIR'/heroes_of_might_and_magic_3_complete_edition/start.sh'
+
+echo -e '#!/bin/bash
+INSTALL_DIR=$1
+WINE_DIR=$2
+WINEPREFIX_DIR=$3
+
+if [ $WINE_DIR == "wine" ]; then
+	export WINELOADER=$WINE_DIR
+	export WINEPREFIX=$WINEPREFIX_DIR
+else
+	export WINE=$WINE_DIR/bin/wine
+	export WINELOADER=$WINE_DIR/bin/wine
+	export WINESERVER=$WINE_DIR/bin/wineserver
+	export WINEDLLPATH=$WINE_DIR/lib
+	export WINEPREFIX=$WINEPREFIX_DIR
+fi
+
+cd $INSTALL_DIR/heroes_of_might_and_magic_3_complete_edition/game
+$WINELOADER HD_Launcher.exe' > \
+$INSTALL_DIR'/heroes_of_might_and_magic_3_complete_edition/settings.sh'
+chmod +x $INSTALL_DIR'/heroes_of_might_and_magic_3_complete_edition/settings.sh'
+
+echo -e '#!/bin/bash
+INSTALL_DIR=$1
+WINE_DIR=$2
+WINEPREFIX_DIR=$3
+INSTALL_DIR_WIN=$(echo Z:$INSTALL_DIR | sed -e s=/=\\\\\\\\=g)
+
+if [ $WINE_DIR == "wine" ]; then
+	export WINELOADER=$WINE_DIR
+	export WINEPREFIX=$WINEPREFIX_DIR
+else
+	export WINE=$WINE_DIR/bin/wine
+	export WINELOADER=$WINE_DIR/bin/wine
+	export WINESERVER=$WINE_DIR/bin/wineserver
+	export WINEDLLPATH=$WINE_DIR/lib
+	export WINEPREFIX=$WINEPREFIX_DIR
+fi
+
+$WINELOADER reg add "HKEY_LOCAL_MACHINE\Software\New World Computing\Heroes of Might and Magic® III\\1.0" /v \
+"CDDrive" /t REG_SZ /d "Z:" /f
+
+rm $WINEPREFIX_DIR/drive_c/Games/heroes_of_might_and_magic_3_complete_edition
+mkdir -p $WINEPREFIX_DIR/drive_c/Games
+ln -s $INSTALL_DIR/heroes_of_might_and_magic_3_complete_edition/game \
+$WINEPREFIX_DIR/drive_c/Games/heroes_of_might_and_magic_3_complete_edition' > \
+$INSTALL_DIR'/heroes_of_might_and_magic_3_complete_edition/additions.sh'
+chmod +x $INSTALL_DIR'/heroes_of_might_and_magic_3_complete_edition/additions.sh'

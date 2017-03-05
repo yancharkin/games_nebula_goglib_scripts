@@ -1,0 +1,7 @@
+#!/bin/bash
+
+INSTALL_DIR=$2
+
+mv $INSTALL_DIR'/star_vikings_demo/tmp/data/noarch/'* $INSTALL_DIR'/star_vikings_demo/'
+rm -R -f $INSTALL_DIR'/star_vikings_demo/tmp'
+chmod +x $INSTALL_DIR'/star_vikings_demo/start.sh'

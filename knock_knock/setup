@@ -1,0 +1,7 @@
+#!/bin/bash
+
+INSTALL_DIR=$2
+
+mv $INSTALL_DIR'/knock_knock/tmp/data/noarch/'* $INSTALL_DIR'/knock_knock/'
+rm -R -f $INSTALL_DIR'/knock_knock/tmp'
+chmod +x $INSTALL_DIR'/knock_knock/start.sh'

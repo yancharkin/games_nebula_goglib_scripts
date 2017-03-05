@@ -1,0 +1,34 @@
+#!/bin/bash
+
+INSTALL_DIR=$2
+
+mv $INSTALL_DIR'/heroes_of_might_and_magic/tmp/app' $INSTALL_DIR'/heroes_of_might_and_magic/game'
+rm -R -f $INSTALL_DIR'/heroes_of_might_and_magic/tmp'
+
+echo '#!/bin/bash
+INSTALL_DIR=$1
+NEBULA_DIR=$2
+rm $HOME/.games_nebula/games/.dosbox/heroes_of_might_and_magic
+mkdir -p $HOME/.games_nebula/games/.dosbox
+ln -s $INSTALL_DIR/heroes_of_might_and_magic/game \
+$HOME/.games_nebula/games/.dosbox/heroes_of_might_and_magic
+python $NEBULA_DIR/launcher_dosbox.py heroes_of_might_and_magic' > \
+$INSTALL_DIR'/heroes_of_might_and_magic/start.sh'
+chmod +x $INSTALL_DIR'/heroes_of_might_and_magic/start.sh'
+
+echo "[autoexec]
+@ECHO OFF
+mount C $HOME/.games_nebula/games/.dosbox/heroes_of_might_and_magic
+imgmount d $HOME/.games_nebula/games/.dosbox/heroes_of_might_and_magic/homm1.gog -t iso
+c:
+cls
+loadfix -4 heroes.exe
+exit" > $INSTALL_DIR'/heroes_of_might_and_magic/dosbox_game.conf'
+
+echo "[autoexec]
+mount C $HOME/.games_nebula/games/.dosbox/heroes_of_might_and_magic
+imgmount d $HOME/.games_nebula/games/.dosbox/heroes_of_might_and_magic/homm1.gog -t iso
+c:
+cls
+setup.exe
+exit" > $INSTALL_DIR'/heroes_of_might_and_magic/dosbox_settings.conf'

@@ -1,0 +1,22 @@
+#!/bin/bash
+
+INSTALL_DIR=$2
+
+mv $INSTALL_DIR'/jade_empire_special_edition/tmp/app' $INSTALL_DIR'/jade_empire_special_edition/game'
+rm -R -f $INSTALL_DIR'/jade_empire_special_edition/tmp'
+
+echo -e '#!/bin/bash
+NEBULA_DIR=$2
+python $NEBULA_DIR/launcher_wine.py jade_empire_special_edition JadeEmpire.exe' > \
+$INSTALL_DIR'/jade_empire_special_edition/start.sh'
+chmod +x $INSTALL_DIR'/jade_empire_special_edition/start.sh'
+
+echo -e '#!/bin/bash
+INSTALL_DIR=$1
+WINEPREFIX_DIR=$3
+rm $WINEPREFIX_DIR/drive_c/Games/jade_empire_special_edition
+mkdir -p $WINEPREFIX_DIR/drive_c/Games
+ln -s $INSTALL_DIR/jade_empire_special_edition/game \
+$WINEPREFIX_DIR/drive_c/Games/jade_empire_special_edition' > \
+$INSTALL_DIR'/jade_empire_special_edition/additions.sh'
+chmod +x $INSTALL_DIR'/jade_empire_special_edition/additions.sh'

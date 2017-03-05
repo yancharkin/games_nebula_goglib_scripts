@@ -1,0 +1,8 @@
+#!/bin/bash
+
+INSTALL_DIR=$2
+
+mv $INSTALL_DIR'/dreamfall_chapters_season_pass/tmp/data/noarch/'* \
+$INSTALL_DIR'/dreamfall_chapters_season_pass/'
+rm -R -f $INSTALL_DIR'/dreamfall_chapters_season_pass/tmp'
+chmod +x $INSTALL_DIR'/dreamfall_chapters_season_pass/start.sh'

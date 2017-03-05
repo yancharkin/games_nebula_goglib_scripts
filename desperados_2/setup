@@ -1,0 +1,22 @@
+#!/bin/bash
+
+INSTALL_DIR=$2
+
+mv $INSTALL_DIR'/desperados_2/tmp/app' $INSTALL_DIR'/desperados_2/game'
+rm -R -f $INSTALL_DIR'/desperados_2/tmp'
+
+echo -e '#!/bin/bash
+NEBULA_DIR=$2
+python $NEBULA_DIR/launcher_wine.py desperados_2 Desperados2.exe' > \
+$INSTALL_DIR'/desperados_2/start.sh'
+chmod +x $INSTALL_DIR'/desperados_2/start.sh'
+
+echo -e '#!/bin/bash
+INSTALL_DIR=$1
+WINEPREFIX_DIR=$3
+rm $WINEPREFIX_DIR/drive_c/Games/desperados_2
+mkdir -p $WINEPREFIX_DIR/drive_c/Games
+ln -s $INSTALL_DIR/desperados_2/game \
+$WINEPREFIX_DIR/drive_c/Games/desperados_2' > \
+$INSTALL_DIR'/desperados_2/additions.sh'
+chmod +x $INSTALL_DIR'/desperados_2/additions.sh'

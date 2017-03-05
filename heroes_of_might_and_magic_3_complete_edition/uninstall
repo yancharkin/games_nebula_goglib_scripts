@@ -1,0 +1,3 @@
+#!/bin/bash
+
+rm $HOME'/.games_nebula/wine_prefix/drive_c/Games/heroes_of_might_and_magic_3_complete_edition'

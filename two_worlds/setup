@@ -1,0 +1,66 @@
+#!/bin/bash
+
+DOWNLOAD_DIR=$1
+INSTALL_DIR=$2
+
+mv $INSTALL_DIR'/two_worlds/tmp/data/noarch/game/Game/TwoWorlds' \
+$INSTALL_DIR'/two_worlds/game'
+rm -R -f $INSTALL_DIR'/two_worlds/tmp'
+
+mkdir -p $DOWNLOAD_DIR'/_distr'
+
+if [ ! -f $DOWNLOAD_DIR'/_distr/directx_feb2010_redist.exe' ]; then
+	curl -L -o $DOWNLOAD_DIR'/_distr/directx_feb2010_redist.exe' -C - \
+	'https://download.microsoft.com/download/E/E/1/EE17FF74-6C45-4575-9CF4-7FC2597ACD18/directx_feb2010_redist.exe'
+fi
+
+if [ ! -f $DOWNLOAD_DIR'/_distr/directx_Jun2010_redist.exe' ]; then
+	curl -L -o $DOWNLOAD_DIR'/_distr/directx_Jun2010_redist.exe'  -C - \
+	'https://download.microsoft.com/download/8/4/A/84A35BF1-DAFE-4AE8-82AF-AD2AE20B6B14/directx_Jun2010_redist.exe'
+fi
+
+mkdir -p $HOME'/.cache/winetricks/directx9'
+if [ ! -f $HOME'/.cache/winetricks/directx9/directx_feb2010_redist.exe' ]; then
+	cp $DOWNLOAD_DIR'/_distr/directx_feb2010_redist.exe' $HOME'/.cache/winetricks/directx9/'
+fi
+
+if [ ! -f $HOME'/.cache/winetricks/directx9/directx_Jun2010_redist.exe' ]; then
+	cp $DOWNLOAD_DIR'/_distr/directx_Jun2010_redist.exe' $HOME'/.cache/winetricks/directx9/'
+fi
+
+echo -e '#!/bin/bash
+NEBULA_DIR=$2
+python $NEBULA_DIR/launcher_wine.py two_worlds TwoWorlds.exe' > \
+$INSTALL_DIR'/two_worlds/start.sh'
+chmod +x $INSTALL_DIR'/two_worlds/start.sh'
+
+echo -e '#!/bin/bash
+INSTALL_DIR=$1
+WINE_DIR=$2
+WINEPREFIX_DIR=$3
+INSTALL_DIR_WIN=$(echo Z:$INSTALL_DIR | sed -e s=/=\\\\\\\\=g)
+
+if [ $WINE_DIR == "wine" ]; then
+	export WINELOADER=$WINE_DIR
+	export WINEPREFIX=$WINEPREFIX_DIR
+else
+	export WINE=$WINE_DIR/bin/wine
+	export WINELOADER=$WINE_DIR/bin/wine
+	export WINESERVER=$WINE_DIR/bin/wineserver
+	export WINEDLLPATH=$WINE_DIR/lib
+	export WINEPREFIX=$WINEPREFIX_DIR
+fi
+
+$WINELOADER reg add "HKEY_LOCAL_MACHINE\Software\Reality Pump\TwoWorlds\FileSystem" /v \
+"DataPath" /t REG_SZ /d $INSTALL_DIR_WIN\\\\two_worlds\\\\game\\\\ /f
+
+winetricks --gui d3dx9
+
+$WINELOADER msiexec /i $INSTALL_DIR/two_worlds/game/PhysX-9.13.0604-SystemSoftware-Legacy.msi /quiet
+
+rm $WINEPREFIX_DIR/drive_c/Games/two_worlds
+mkdir -p $WINEPREFIX_DIR/drive_c/Games
+ln -s $INSTALL_DIR/two_worlds/game \
+$WINEPREFIX_DIR/drive_c/Games/two_worlds' > \
+$INSTALL_DIR'/two_worlds/additions.sh'
+chmod +x $INSTALL_DIR'/two_worlds/additions.sh'

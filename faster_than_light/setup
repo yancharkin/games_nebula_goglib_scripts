@@ -1,0 +1,26 @@
+#!/bin/bash
+
+INSTALL_DIR=$2
+
+mv $INSTALL_DIR'/faster_than_light/tmp/data/noarch/'* $INSTALL_DIR'/faster_than_light/'
+rm -R -f $INSTALL_DIR'/faster_than_light/tmp'
+mv $INSTALL_DIR'/faster_than_light/start.sh' $INSTALL_DIR'/faster_than_light/start_gog.sh'
+
+echo -e '#!/bin/bash
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+if [ $(uname -m) == "x86_64" ]; then
+    #export LD_LIBRARY_PATH="/lib:/usr/lib:/usr/local/lib:$LD_LIBRARY_PATH:$DIR/game/data/amd64/lib"
+    cd "$DIR/game/data"
+    "./amd64/bin/FTL"
+else
+    #export LD_LIBRARY_PATH="/lib:/usr/lib:/usr/local/lib:$LD_LIBRARY_PATH:$DIR/game/data/x86/lib"
+    cd "$DIR/game/data"
+    "./x86/bin/FTL"
+fi' > $INSTALL_DIR'/faster_than_light/start_gn.sh'
+chmod +x $INSTALL_DIR'/faster_than_light/start_gn.sh'
+
+echo -e '#!/bin/bash
+NEBULA_DIR=$2
+python $NEBULA_DIR/launcher_native.py faster_than_light' > \
+$INSTALL_DIR'/faster_than_light/start.sh'
+chmod +x $INSTALL_DIR'/faster_than_light/start.sh'

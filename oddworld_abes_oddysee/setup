@@ -1,0 +1,22 @@
+#!/bin/bash
+
+INSTALL_DIR=$2
+
+mv $INSTALL_DIR'/oddworld_abes_oddysee/tmp/app' $INSTALL_DIR'/oddworld_abes_oddysee/game'
+rm -R -f $INSTALL_DIR'/oddworld_abes_oddysee/tmp'
+
+echo -e '#!/bin/bash
+NEBULA_DIR=$2
+python $NEBULA_DIR/launcher_wine.py oddworld_abes_oddysee AbeWin.exe' > \
+$INSTALL_DIR'/oddworld_abes_oddysee/start.sh'
+chmod +x $INSTALL_DIR'/oddworld_abes_oddysee/start.sh'
+
+echo -e '#!/bin/bash
+INSTALL_DIR=$1
+WINEPREFIX_DIR=$3
+rm $WINEPREFIX_DIR/drive_c/Games/oddworld_abes_oddysee
+mkdir -p $WINEPREFIX_DIR/drive_c/Games
+ln -s $INSTALL_DIR/oddworld_abes_oddysee/game \
+$WINEPREFIX_DIR/drive_c/Games/oddworld_abes_oddysee' > \
+$INSTALL_DIR'/oddworld_abes_oddysee/additions.sh'
+chmod +x $INSTALL_DIR'/oddworld_abes_oddysee/additions.sh'

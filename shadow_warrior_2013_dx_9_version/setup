@@ -1,0 +1,13 @@
+#!/bin/bash
+
+'python2 /opt/games_nebula/modules/goglib_get_banner_2.py' \
+'shadow_warrior_2013_dx_9_version' \
+'https://images-3.gog.com/5ca2180a21dc19727710631ac55518897e8d375a21908675d97a8871c9b7b155.jpg' \
+$HOME'/.games_nebula/images/goglib_banners'
+
+INSTALL_DIR=$2
+
+mv $INSTALL_DIR'/shadow_warrior_2013_dx_9_version/tmp/data/noarch/'* \
+$INSTALL_DIR'/shadow_warrior_2013_dx_9_version/'
+rm -R -f $INSTALL_DIR'/shadow_warrior_2013_dx_9_version/tmp'
+chmod +x $INSTALL_DIR'/shadow_warrior_2013_dx_9_version/start.sh'

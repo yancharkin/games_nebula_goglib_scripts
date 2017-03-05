@@ -1,0 +1,41 @@
+#!/bin/bash
+
+INSTALL_DIR=$2
+
+mv $INSTALL_DIR'/beneath_a_steel_sky/tmp/data/noarch/data' \
+$INSTALL_DIR'/beneath_a_steel_sky/game'
+rm -R -f $INSTALL_DIR'/beneath_a_steel_sky/tmp'
+
+echo -e '#!/bin/bash
+
+INSTALL_DIR=$1
+NEBULA_DIR=$2
+
+SCUMMVMRC=$INSTALL_DIR/beneath_a_steel_sky/scummvmrc
+readarray -t ARRAY <<<"$(cat "$SCUMMVMRC")"
+LENGHT=${#ARRAY[@]}
+
+for i in $(seq 1 $LENGHT); do
+	if [[ ${ARRAY[i]} == "[beneath]" ]]; then
+		FIRST_LINE=$i
+	fi
+done
+
+cp $HOME/.games_nebula/config/scummvmrc $SCUMMVMRC
+
+for i in $(seq $FIRST_LINE $LENGHT); do 
+	echo ${ARRAY[i]} >> "$SCUMMVMRC"
+done
+
+python $NEBULA_DIR/launcher_scummvm.py beneath_a_steel_sky beneath' > \
+$INSTALL_DIR'/beneath_a_steel_sky/start.sh'
+chmod +x $INSTALL_DIR'/beneath_a_steel_sky/start.sh'
+
+cp $HOME'/.games_nebula/config/scummvmrc' $INSTALL_DIR'/beneath_a_steel_sky/'
+
+echo "[beneath]
+gameid=sky
+description=Beneath a Steel Sky (v0.0372 cd)
+path=$INSTALL_DIR/beneath_a_steel_sky/game
+savepath=$INSTALL_DIR/beneath_a_steel_sky/game" >> \
+$INSTALL_DIR'/beneath_a_steel_sky/scummvmrc'

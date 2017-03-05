@@ -1,0 +1,43 @@
+#!/bin/bash
+
+INSTALL_DIR=$2
+NEBULA_DIR=$3
+
+python2 $NEBULA_DIR'/modules/goglib_get_banner_2.py' \
+'alone_in_the_dark_2' \
+'https://images-4.gog.com/fbeb7abd02b2582026d94dd029d70a915e0894fdf636e8fd7a83adbf754d4a39.jpg' \
+$HOME'/.games_nebula/images/goglib_banners'
+
+mv $INSTALL_DIR'/alone_in_the_dark_2/tmp/app' $INSTALL_DIR'/alone_in_the_dark_2/game'
+rm -R -f $INSTALL_DIR'/alone_in_the_dark_2/tmp'
+
+echo '#!/bin/bash
+INSTALL_DIR=$1
+NEBULA_DIR=$2
+rm $HOME/.games_nebula/games/.dosbox/alone_in_the_dark_2
+mkdir -p $HOME/.games_nebula/games/.dosbox
+ln -s $INSTALL_DIR/alone_in_the_dark_2/game \
+$HOME/.games_nebula/games/.dosbox/alone_in_the_dark_2
+python $NEBULA_DIR/launcher_dosbox.py alone_in_the_dark_2' > \
+$INSTALL_DIR'/alone_in_the_dark_2/start.sh'
+chmod +x $INSTALL_DIR'/alone_in_the_dark_2/start.sh'
+
+echo "[autoexec]
+@echo off
+mount C $HOME/.games_nebula/games/.dosbox/alone_in_the_dark_2
+imgmount d $HOME/.games_nebula/games/.dosbox/alone_in_the_dark_2/GAME.INST -fs iso
+c:
+cls
+CD INDARK2
+AITD2
+exit" > $INSTALL_DIR'/alone_in_the_dark_2/dosbox_game.conf'
+
+echo "[autoexec]
+@echo off
+mount C $HOME/.games_nebula/games/.dosbox/alone_in_the_dark_2
+imgmount d $HOME/.games_nebula/games/.dosbox/alone_in_the_dark_2/GAME.INST -fs iso
+c:
+cls
+CD INDARK2
+INSTALL
+exit" > $INSTALL_DIR'/alone_in_the_dark_2/dosbox_settings.conf'

@@ -1,0 +1,58 @@
+#!/bin/bash
+
+DOWNLOAD_DIR=$1
+INSTALL_DIR=$2
+NEBULA_DIR=$3
+
+python2 $NEBULA_DIR'/modules/goglib_get_banner_2.py' \
+'heroes_chronicles_chapter_5_the_world_tree' \
+'https://images-2.gog.com/cc66d18a57557b05e709753e1a53582d4f73a4ad3e10f903373139588411a234.jpg' \
+$HOME'/.games_nebula/images/goglib_banners'
+
+mv $INSTALL_DIR'/heroes_chronicles_chapter_5_the_world_tree/tmp/app' \
+$INSTALL_DIR'/heroes_chronicles_chapter_5_the_world_tree/game'
+rm -R -f $INSTALL_DIR'/heroes_chronicles_chapter_5_the_world_tree/tmp'
+
+mkdir -p $INSTALL_DIR'/heroes_chronicles_common_data'
+
+count_file=$INSTALL_DIR'/heroes_chronicles_common_data/count_file'
+
+count=0
+INST_GAMES=$(ls $INSTALL_DIR)
+readarray -t INST_GAMES_ARRAY <<<"$INST_GAMES"
+
+IFS=$'\n';
+for i in ${INST_GAMES_ARRAY[@]};
+	do 
+		if [[ $i == heroes_chronicles_chapter* ]] 
+			then count=$(($count + 1))
+		fi
+done
+
+echo $count > $count_file
+
+cd $INSTALL_DIR'/heroes_chronicles_chapter_5_the_world_tree/game'
+
+if (($count == 1)); then
+	mv 'Data' $INSTALL_DIR'/heroes_chronicles_common_data/'
+	mv 'MP3' $INSTALL_DIR'/heroes_chronicles_common_data/'
+	ln -s $INSTALL_DIR'/heroes_chronicles_common_data/Data' 'Data'
+	ln -s $INSTALL_DIR'/heroes_chronicles_common_data/MP3' 'MP3'
+else
+	rm -R -f 'Data'
+	rm -R -f 'MP3'
+	ln -s $INSTALL_DIR'/heroes_chronicles_common_data/Data' 'Data'
+	ln -s $INSTALL_DIR'/heroes_chronicles_common_data/MP3' 'MP3'
+fi
+
+echo -e '#!/bin/bash
+INSTALL_DIR=$1
+NEBULA_DIR=$2
+cd $INSTALL_DIR/heroes_chronicles_chapter_5_the_world_tree/game/
+rm Data
+rm MP3
+ln -s $INSTALL_DIR/heroes_chronicles_common_data/Data Data
+ln -s $INSTALL_DIR/heroes_chronicles_common_data/MP3 MP3
+python $NEBULA_DIR/launcher_wine.py heroes_chronicles_chapter_5_the_world_tree "The World Tree/WorldTree.exe"' > \
+$INSTALL_DIR'/heroes_chronicles_chapter_5_the_world_tree/start.sh'
+chmod +x $INSTALL_DIR'/heroes_chronicles_chapter_5_the_world_tree/start.sh'

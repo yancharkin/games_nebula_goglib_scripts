@@ -1,0 +1,21 @@
+#!/bin/bash
+
+INSTALL_DIR=$2
+
+mv $INSTALL_DIR'/baldurs_gate_2_enhanced_edition/tmp/data/noarch/'* \
+$INSTALL_DIR'/baldurs_gate_2_enhanced_edition/'
+rm -R -f $INSTALL_DIR'/baldurs_gate_2_enhanced_edition/tmp'
+mv $INSTALL_DIR'/baldurs_gate_2_enhanced_edition/start.sh' $INSTALL_DIR'/baldurs_gate_2_enhanced_edition/start_gog.sh'
+
+echo -e '#!/bin/bash
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+#export LD_LIBRARY_PATH="/lib:/usr/lib:/usr/local/lib:$LD_LIBRARY_PATH:$DIR/lib"
+cd "$DIR/game"
+"./BaldursGateII"' > $INSTALL_DIR'/baldurs_gate_2_enhanced_edition/start_gn.sh'
+chmod +x $INSTALL_DIR'/baldurs_gate_2_enhanced_edition/start_gn.sh'
+
+echo -e '#!/bin/bash
+NEBULA_DIR=$2
+python $NEBULA_DIR/launcher_native.py baldurs_gate_2_enhanced_edition' > \
+$INSTALL_DIR'/baldurs_gate_2_enhanced_edition/start.sh'
+chmod +x $INSTALL_DIR'/baldurs_gate_2_enhanced_edition/start.sh'

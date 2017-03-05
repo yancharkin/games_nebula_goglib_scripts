@@ -1,0 +1,38 @@
+#!/bin/bash
+
+DOWNLOAD_DIR=$1
+INSTALL_DIR=$2
+
+mv $INSTALL_DIR'/edna_harvey_the_breakout/tmp/app' \
+$INSTALL_DIR'/edna_harvey_the_breakout/game'
+rm -R -f $INSTALL_DIR'/edna_harvey_the_breakout/tmp'
+
+if [ ! -f $DOWNLOAD_DIR'/_distr/java_i586.tar.gz' ]; then
+	mkdir -p $DOWNLOAD_DIR'/_distr'
+	curl -L -o $DOWNLOAD_DIR'/_distr/java_i586.tar.gz' -C - \
+	'http://javadl.oracle.com/webapps/download/AutoDL?BundleId=216422'
+fi
+
+if [ ! -f $DOWNLOAD_DIR'/_distr/lwjgl-2.7.1.zip' ]; then
+	mkdir -p $DOWNLOAD_DIR'/_distr'
+	curl -L -o $DOWNLOAD_DIR'/_distr/lwjgl-2.7.1.zip' -C - \
+	'http://downloads.sourceforge.net/project/java-game-lib/Official%20Releases/LWJGL%202.7.1/lwjgl-2.7.1.zip'
+fi
+
+tar -xzvf $DOWNLOAD_DIR'/_distr/java_i586.tar.gz' -C $INSTALL_DIR'/edna_harvey_the_breakout/'
+mv $INSTALL_DIR'/edna_harvey_the_breakout/jre'* $INSTALL_DIR'/edna_harvey_the_breakout/java'
+
+mkdir -p $INSTALL_DIR'/edna_harvey_the_breakout/tmp'
+unzip $DOWNLOAD_DIR'/_distr/lwjgl-2.7.1.zip' -d $INSTALL_DIR'/edna_harvey_the_breakout/tmp'
+mv $INSTALL_DIR'/edna_harvey_the_breakout/tmp/lwjgl-2.7.1/native/linux' \
+$INSTALL_DIR'/edna_harvey_the_breakout/lib'
+rm -R $INSTALL_DIR'/edna_harvey_the_breakout/tmp'
+
+echo -e '#!/bin/bash
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+export JAVA_HOME=$DIR/game
+cd $DIR/game
+../java/bin/java  "-Duser.home=saves" \
+"-Djava.library.path=../lib" \
+-noverify -jar Edna.jar' > $INSTALL_DIR'/edna_harvey_the_breakout/start.sh'
+chmod +x $INSTALL_DIR'/edna_harvey_the_breakout/start.sh'

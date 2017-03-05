@@ -1,0 +1,41 @@
+#!/bin/bash
+
+INSTALL_DIR=$2
+
+mv $INSTALL_DIR'/dragonsphere/tmp/data/noarch/data' $INSTALL_DIR'/dragonsphere/game'
+rm -R -f $INSTALL_DIR'/dragonsphere/tmp'
+
+echo '#!/bin/bash
+INSTALL_DIR=$1
+NEBULA_DIR=$2
+rm $HOME/.games_nebula/games/.dosbox/dragonsphere
+mkdir -p $HOME/.games_nebula/games/.dosbox
+ln -s $INSTALL_DIR/dragonsphere/game \
+$HOME/.games_nebula/games/.dosbox/dragonsphere
+python $NEBULA_DIR/launcher_dosbox.py dragonsphere' > \
+$INSTALL_DIR'/dragonsphere/start.sh'
+chmod +x $INSTALL_DIR'/dragonsphere/start.sh'
+
+echo "[autoexec]
+mount C $HOME/.games_nebula/games/.dosbox/dragonsphere
+imgmount d $HOME/.games_nebula/games/.dosbox/dragonsphere/GAME.GOG -t iso
+c:
+cls
+CD DRAGON
+@echo off
+set oldmads=%mads%
+set mads=
+mainmenu -p
+set mads=%oldmads%
+set oldmads=
+
+exit" > $INSTALL_DIR'/dragonsphere/dosbox_game.conf'
+
+echo "[autoexec]
+mount C $HOME/.games_nebula/games/.dosbox/dragonsphere
+imgmount d $HOME/.games_nebula/games/.dosbox/dragonsphere/GAME.GOG -t iso
+c:
+cls
+CD DRAGON
+install
+exit" > $INSTALL_DIR'/dragonsphere/dosbox_settings.conf'

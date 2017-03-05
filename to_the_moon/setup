@@ -1,0 +1,26 @@
+#!/bin/bash
+
+INSTALL_DIR=$2
+
+mv $INSTALL_DIR'/to_the_moon/tmp/data/noarch/'* $INSTALL_DIR'/to_the_moon/'
+rm -R -f $INSTALL_DIR'/to_the_moon/tmp'
+mv $INSTALL_DIR'/to_the_moon/start.sh' $INSTALL_DIR'/to_the_moon/start_gog.sh'
+
+echo -e '#!/bin/bash
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+if [ $(uname -m) == "x86_64" ]; then
+    #export LD_LIBRARY_PATH="/lib:/usr/lib:/usr/local/lib:$LD_LIBRARY_PATH:$DIR/game/lib64"
+    cd "$DIR/game"
+    "./ToTheMoon.bin.x86_64"
+else
+    #export LD_LIBRARY_PATH="/lib:/usr/lib:/usr/local/lib:$LD_LIBRARY_PATH:$DIR/game/lib"
+    cd "$DIR/game"
+    "./ToTheMoon.bin.x86"
+fi'> $INSTALL_DIR'/to_the_moon/start_gn.sh'
+chmod +x $INSTALL_DIR'/to_the_moon/start_gn.sh'
+
+echo -e '#!/bin/bash
+NEBULA_DIR=$2
+python $NEBULA_DIR/launcher_native.py to_the_moon' > \
+$INSTALL_DIR'/to_the_moon/start.sh'
+chmod +x $INSTALL_DIR'/to_the_moon/start.sh'

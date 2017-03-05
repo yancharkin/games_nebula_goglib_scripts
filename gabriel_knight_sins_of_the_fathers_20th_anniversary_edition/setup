@@ -1,0 +1,24 @@
+#!/bin/bash
+
+INSTALL_DIR=$2
+
+mv $INSTALL_DIR'/gabriel_knight_sins_of_the_fathers_20th_anniversary_edition/tmp/app' \
+$INSTALL_DIR'/gabriel_knight_sins_of_the_fathers_20th_anniversary_edition/game'
+rm -R -f $INSTALL_DIR'/gabriel_knight_sins_of_the_fathers_20th_anniversary_edition/tmp'
+
+echo -e '#!/bin/bash
+NEBULA_DIR=$2
+python $NEBULA_DIR/launcher_wine.py \
+gabriel_knight_sins_of_the_fathers_20th_anniversary_edition GK1.exe' > \
+$INSTALL_DIR'/gabriel_knight_sins_of_the_fathers_20th_anniversary_edition/start.sh'
+chmod +x $INSTALL_DIR'/gabriel_knight_sins_of_the_fathers_20th_anniversary_edition/start.sh'
+
+echo -e '#!/bin/bash
+INSTALL_DIR=$1
+WINEPREFIX_DIR=$3
+rm $WINEPREFIX_DIR/drive_c/Games/gabriel_knight_sins_of_the_fathers_20th_anniversary_edition
+mkdir -p $WINEPREFIX_DIR/drive_c/Games
+ln -s $INSTALL_DIR/gabriel_knight_sins_of_the_fathers_20th_anniversary_edition/game \
+$WINEPREFIX_DIR/drive_c/Games/gabriel_knight_sins_of_the_fathers_20th_anniversary_edition' > \
+$INSTALL_DIR'/gabriel_knight_sins_of_the_fathers_20th_anniversary_edition/additions.sh'
+chmod +x $INSTALL_DIR'/gabriel_knight_sins_of_the_fathers_20th_anniversary_edition/additions.sh'

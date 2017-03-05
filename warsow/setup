@@ -1,0 +1,25 @@
+#!/bin/bash
+
+INSTALL_DIR=$2
+
+mv $INSTALL_DIR'/warsow/tmp/data/noarch/'* $INSTALL_DIR'/warsow/'
+rm -R -f $INSTALL_DIR'/warsow/tmp'
+mv $INSTALL_DIR'/warsow/start.sh' $INSTALL_DIR'/warsow/start_gog.sh'
+
+echo -e '#!/bin/bash
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+    #export LD_LIBRARY_PATH="/lib:/usr/lib:/usr/local/lib:$LD_LIBRARY_PATH:$DIR/game/libs"
+if [ $(uname -m) == "x86_64" ]; then
+    cd "$DIR/game"
+    "./warsow.x86_64"
+else
+    cd "$DIR/game"
+    "./warsow.i386"
+fi'> $INSTALL_DIR'/warsow/start_gn.sh'
+chmod +x $INSTALL_DIR'/warsow/start_gn.sh'
+
+echo -e '#!/bin/bash
+NEBULA_DIR=$2
+python $NEBULA_DIR/launcher_native.py warsow' > \
+$INSTALL_DIR'/warsow/start.sh'
+chmod +x $INSTALL_DIR'/warsow/start.sh'

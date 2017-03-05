@@ -1,0 +1,58 @@
+#!/bin/bash
+
+DOWNLOAD_DIR=$1
+INSTALL_DIR=$2
+NEBULA_DIR=$3
+
+python2 $NEBULA_DIR'/modules/goglib_get_banner_2.py' \
+'heroes_chronicles_chapter_4_clash_of_the_dragons' \
+'https://images-1.gog.com/7cc76783fbdf6da836a29dcf78c6895751674d2d6a2a47c2143eecc49cd24aaa.jpg' \
+$HOME'/.games_nebula/images/goglib_banners'
+
+mv $INSTALL_DIR'/heroes_chronicles_chapter_4_clash_of_the_dragons/tmp/app' \
+$INSTALL_DIR'/heroes_chronicles_chapter_4_clash_of_the_dragons/game'
+rm -R -f $INSTALL_DIR'/heroes_chronicles_chapter_4_clash_of_the_dragons/tmp'
+
+mkdir -p $INSTALL_DIR'/heroes_chronicles_common_data'
+
+count_file=$INSTALL_DIR'/heroes_chronicles_common_data/count_file'
+
+count=0
+INST_GAMES=$(ls $INSTALL_DIR)
+readarray -t INST_GAMES_ARRAY <<<"$INST_GAMES"
+
+IFS=$'\n';
+for i in ${INST_GAMES_ARRAY[@]};
+	do 
+		if [[ $i == heroes_chronicles_chapter* ]] 
+			then count=$(($count + 1))
+		fi
+done
+
+echo $count > $count_file
+
+cd $INSTALL_DIR'/heroes_chronicles_chapter_4_clash_of_the_dragons/game'
+
+if (($count == 1)); then
+	mv 'Data' $INSTALL_DIR'/heroes_chronicles_common_data/'
+	mv 'MP3' $INSTALL_DIR'/heroes_chronicles_common_data/'
+	ln -s $INSTALL_DIR'/heroes_chronicles_common_data/Data' 'Data'
+	ln -s $INSTALL_DIR'/heroes_chronicles_common_data/MP3' 'MP3'
+else
+	rm -R -f 'Data'
+	rm -R -f 'MP3'
+	ln -s $INSTALL_DIR'/heroes_chronicles_common_data/Data' 'Data'
+	ln -s $INSTALL_DIR'/heroes_chronicles_common_data/MP3' 'MP3'
+fi
+
+echo -e '#!/bin/bash
+INSTALL_DIR=$1
+NEBULA_DIR=$2
+cd $INSTALL_DIR/heroes_chronicles_chapter_4_clash_of_the_dragons/game/
+rm Data
+rm MP3
+ln -s $INSTALL_DIR/heroes_chronicles_common_data/Data Data
+ln -s $INSTALL_DIR/heroes_chronicles_common_data/MP3 MP3
+python $NEBULA_DIR/launcher_wine.py heroes_chronicles_chapter_4_clash_of_the_dragons "Clash of the Dragons/Dragons.exe"' > \
+$INSTALL_DIR'/heroes_chronicles_chapter_4_clash_of_the_dragons/start.sh'
+chmod +x $INSTALL_DIR'/heroes_chronicles_chapter_4_clash_of_the_dragons/start.sh'

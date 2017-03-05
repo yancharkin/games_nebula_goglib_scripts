@@ -1,0 +1,137 @@
+#!/bin/bash
+
+INSTALL_DIR=$2
+
+mv $INSTALL_DIR'/shadow_warrior_complete/tmp/data/noarch/data' \
+$INSTALL_DIR'/shadow_warrior_complete/game'
+rm -R -f $INSTALL_DIR'/shadow_warrior_complete/tmp'
+
+echo '#!/bin/bash
+INSTALL_DIR=$1
+NEBULA_DIR=$2
+rm $HOME/.games_nebula/games/.dosbox/shadow_warrior_complete
+mkdir -p $HOME/.games_nebula/games/.dosbox
+ln -s $INSTALL_DIR/shadow_warrior_complete/game \
+$HOME/.games_nebula/games/.dosbox/shadow_warrior_complete
+python $NEBULA_DIR/launcher_dosbox.py shadow_warrior_complete' > \
+$INSTALL_DIR'/shadow_warrior_complete/start.sh'
+chmod +x $INSTALL_DIR'/shadow_warrior_complete/start.sh'
+
+echo "[autoexec]
+@echo off
+mount C $HOME/.games_nebula/games/.dosbox/shadow_warrior_complete
+imgmount d $HOME/.games_nebula/games/.dosbox/shadow_warrior_complete/GAME.DAT -t iso
+c:
+cls
+@ECHO [40;1m
+@ECHO  ----------------------------
+@ECHO  Shadow Warrior Complete Pack
+@ECHO  ----------------------------
+@ECHO on
+@ECHO off
+@ECHO  1) Shadow Warrior       
+@ECHO  2) Twin Dragon          
+@ECHO  3) Wanton Destruction   
+@ECHO on
+@ECHO off
+@ECHO  ----------------------------
+@ECHO  4) exit program             
+@ECHO  ----------------------------
+@ECHO [0m
+@ECHO on 
+@ECHO off
+@choice /c1234 /s Which game do you want to run? [1-4]: /n 
+if errorlevel 4 goto exit
+if errorlevel 3 goto wanton
+if errorlevel 2 goto tdragon
+if errorlevel 1 goto swarrior
+
+:swarrior
+cls
+@echo off
+@COPY sw.dat sw.exe
+cls
+sw.exe
+cls
+exit
+
+:tdragon
+cls
+@echo off
+cd .\dragon
+#tdragon.exe
+cls
+sw.exe
+cls
+exit
+
+:wanton
+cls
+@echo off
+@COPY wanton.dat sw.exe
+cls
+sw.exe
+cls
+exit
+
+:exit
+exit" > $INSTALL_DIR'/shadow_warrior_complete/dosbox_game.conf'
+
+echo "[autoexec]
+@echo off
+mount C $HOME/.games_nebula/games/.dosbox/shadow_warrior_complete
+imgmount d $HOME/.games_nebula/games/.dosbox/shadow_warrior_complete/GAME.DAT -t iso
+c:
+cls
+
+@ECHO [40;1m
+@ECHO  ----------------------------
+@ECHO  Shadow Warrior Settings
+@ECHO  ----------------------------
+@ECHO on
+@ECHO off
+@ECHO  1) Shadow Warrior       
+@ECHO  2) Twin Dragon        
+@ECHO  3) Wanton Destruction     
+@ECHO on
+@ECHO off
+@ECHO  ----------------------------
+@ECHO  4) exit program             
+@ECHO  ----------------------------
+@ECHO [0m
+@ECHO on 
+@ECHO off
+@choice /c1234 /s Which game do you want to run? [1-4]: /n 
+if errorlevel 3 goto exit
+if errorlevel 2 goto tdragon
+if errorlevel 1 goto swarrior
+
+:swarrior
+cls
+@echo off
+@COPY sw.dat sw.exe
+cls
+setup.exe
+cls
+exit
+
+:tdragon
+cls
+@echo off
+cd .\dragon
+cls
+setup.exe
+cls
+exit
+
+:wanton
+cls
+@echo off
+@COPY wanton.dat sw.exe
+cls
+setup.exe
+cls
+exit
+
+:exit
+exit" > $INSTALL_DIR'/shadow_warrior_complete/dosbox_settings.conf'

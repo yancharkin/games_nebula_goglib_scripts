@@ -1,0 +1,48 @@
+#!/bin/bash
+
+INSTALL_DIR=$2
+NEBULA_DIR=$3
+
+python2 $NEBULA_DIR'/modules/goglib_get_banner_2.py' \
+'leisure_suit_larry_5_passionate_patti_does_a_little_undercover_work' \
+'https://images-2.gog.com/4b747988e028c8ba91b9e6315ba72b2223762445c605f0f543a9a8da8946cd6e.jpg' \
+$HOME'/.games_nebula/images/goglib_banners'
+
+mv $INSTALL_DIR'/leisure_suit_larry_5_passionate_patti_does_a_little_undercover_work/tmp/data/noarch/data' \
+$INSTALL_DIR'/leisure_suit_larry_5_passionate_patti_does_a_little_undercover_work/game'
+rm -R -f $INSTALL_DIR'/leisure_suit_larry_5_passionate_patti_does_a_little_undercover_work/tmp'
+
+echo -e '#!/bin/bash
+
+INSTALL_DIR=$1
+NEBULA_DIR=$2
+
+SCUMMVMRC=$INSTALL_DIR/leisure_suit_larry_5_passionate_patti_does_a_little_undercover_work/scummvmrc
+readarray -t ARRAY <<<"$(cat "$SCUMMVMRC")"
+LENGHT=${#ARRAY[@]}
+
+for i in $(seq 1 $LENGHT); do
+	if [[ ${ARRAY[i]} == "[lsl5]" ]]; then
+		FIRST_LINE=$i
+	fi
+done
+
+cp $HOME/.games_nebula/config/scummvmrc $SCUMMVMRC
+
+for i in $(seq $FIRST_LINE $LENGHT); do 
+	echo ${ARRAY[i]} >> "$SCUMMVMRC"
+done
+
+python $NEBULA_DIR/launcher_scummvm.py leisure_suit_larry_5_passionate_patti_does_a_little_undercover_work lsl5' > \
+$INSTALL_DIR'/leisure_suit_larry_5_passionate_patti_does_a_little_undercover_work/start.sh'
+chmod +x $INSTALL_DIR'/leisure_suit_larry_5_passionate_patti_does_a_little_undercover_work/start.sh'
+
+cp $HOME'/.games_nebula/config/scummvmrc' \
+$INSTALL_DIR'/leisure_suit_larry_5_passionate_patti_does_a_little_undercover_work/'
+
+echo "[lsl5]
+description=Leisure Suit Larry 5: Passionate Patti Does a Little Undercover Work (DOS/English)
+gameid=sci
+path=$INSTALL_DIR/leisure_suit_larry_5_passionate_patti_does_a_little_undercover_work/game
+savepath=$INSTALL_DIR/leisure_suit_larry_5_passionate_patti_does_a_little_undercover_work/game" >> \
+$INSTALL_DIR'/leisure_suit_larry_5_passionate_patti_does_a_little_undercover_work/scummvmrc'

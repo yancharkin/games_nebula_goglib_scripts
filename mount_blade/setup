@@ -1,0 +1,42 @@
+#!/bin/bash
+
+INSTALL_DIR=$2
+
+mv $INSTALL_DIR'/mount_blade/tmp/app' $INSTALL_DIR'/mount_blade/game'
+rm -R -f $INSTALL_DIR'/mount_blade/tmp'
+
+echo -e '#!/bin/bash
+NEBULA_DIR=$2
+python $NEBULA_DIR/launcher_wine.py mount_blade mount&blade.exe' > \
+$INSTALL_DIR'/mount_blade/start.sh'
+chmod +x $INSTALL_DIR'/mount_blade/start.sh'
+
+echo -e '#!/bin/bash
+INSTALL_DIR=$1
+WINE_DIR=$2
+WINEPREFIX_DIR=$3
+
+if [ $WINE_DIR == "wine" ]; then
+	export WINELOADER=$WINE_DIR
+	export WINEPREFIX=$WINEPREFIX_DIR
+else
+	export WINE=$WINE_DIR/bin/wine
+	export WINELOADER=$WINE_DIR/bin/wine
+	export WINESERVER=$WINE_DIR/bin/wineserver
+	export WINEDLLPATH=$WINE_DIR/lib
+	export WINEPREFIX=$WINEPREFIX_DIR
+fi
+
+cd $INSTALL_DIR/mount_blade/game
+$WINELOADER Language.exe' > $INSTALL_DIR'/mount_blade/settings.sh'
+chmod +x $INSTALL_DIR'/mount_blade/settings.sh'
+
+echo -e '#!/bin/bash
+INSTALL_DIR=$1
+WINEPREFIX_DIR=$3
+rm $WINEPREFIX_DIR/drive_c/Games/mount_blade
+mkdir -p $WINEPREFIX_DIR/drive_c/Games
+ln -s $INSTALL_DIR/mount_blade/game \
+$WINEPREFIX_DIR/drive_c/Games/mount_blade' > \
+$INSTALL_DIR'/mount_blade/additions.sh'
+chmod +x $INSTALL_DIR'/mount_blade/additions.sh'

@@ -1,0 +1,38 @@
+#!/bin/bash
+
+INSTALL_DIR=$2
+
+mv $INSTALL_DIR'/ultima_worlds_of_adventure_2_martian_dreams/tmp/app' \
+$INSTALL_DIR'/ultima_worlds_of_adventure_2_martian_dreams/game'
+rm -R -f $INSTALL_DIR'/ultima_worlds_of_adventure_2_martian_dreams/tmp'
+
+mkdir -p $INSTALL_DIR'/ultima_worlds_of_adventure_2_martian_dreams/game/MARTIAN/SAVEGAME/'
+cp $INSTALL_DIR'/ultima_worlds_of_adventure_2_martian_dreams/game/__support/save/MARTIAN/SAVEGAME/'* \
+$INSTALL_DIR'/ultima_worlds_of_adventure_2_martian_dreams/game/MARTIAN/SAVEGAME/'
+
+echo '#!/bin/bash
+INSTALL_DIR=$1
+NEBULA_DIR=$2
+rm $HOME/.games_nebula/games/.dosbox/ultima_worlds_of_adventure_2_martian_dreams
+mkdir -p $HOME/.games_nebula/games/.dosbox
+ln -s $INSTALL_DIR/ultima_worlds_of_adventure_2_martian_dreams/game \
+$HOME/.games_nebula/games/.dosbox/ultima_worlds_of_adventure_2_martian_dreams
+python $NEBULA_DIR/launcher_dosbox.py ultima_worlds_of_adventure_2_martian_dreams' > \
+$INSTALL_DIR'/ultima_worlds_of_adventure_2_martian_dreams/start.sh'
+chmod +x $INSTALL_DIR'/ultima_worlds_of_adventure_2_martian_dreams/start.sh'
+
+echo "[autoexec]
+mount C $HOME/.games_nebula/games/.dosbox/ultima_worlds_of_adventure_2_martian_dreams
+c:
+CD MARTIAN
+cls
+MARTIAN.EXE
+exit" > $INSTALL_DIR'/ultima_worlds_of_adventure_2_martian_dreams/dosbox_game.conf'
+
+echo "[autoexec]
+mount C $HOME/.games_nebula/games/.dosbox/ultima_worlds_of_adventure_2_martian_dreams
+c:
+CD MARTIAN
+cls
+INSTALL.EXE
+exit" > $INSTALL_DIR'/ultima_worlds_of_adventure_2_martian_dreams/dosbox_settings.conf'

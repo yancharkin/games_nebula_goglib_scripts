@@ -1,0 +1,22 @@
+#!/bin/bash
+
+INSTALL_DIR=$2
+
+mv $INSTALL_DIR'/expeditions_conquistador/tmp/app' $INSTALL_DIR'/expeditions_conquistador/game'
+rm -R -f $INSTALL_DIR'/expeditions_conquistador/tmp'
+
+echo -e '#!/bin/bash
+NEBULA_DIR=$2
+python $NEBULA_DIR/launcher_wine.py expeditions_conquistador "Expeditions Conquistador.exe"' > \
+$INSTALL_DIR'/expeditions_conquistador/start.sh'
+chmod +x $INSTALL_DIR'/expeditions_conquistador/start.sh'
+
+echo -e '#!/bin/bash
+INSTALL_DIR=$1
+WINEPREFIX_DIR=$3
+rm $WINEPREFIX_DIR/drive_c/Games/expeditions_conquistador
+mkdir -p $WINEPREFIX_DIR/drive_c/Games
+ln -s $INSTALL_DIR/expeditions_conquistador/game \
+$WINEPREFIX_DIR/drive_c/Games/expeditions_conquistador' > \
+$INSTALL_DIR'/expeditions_conquistador/additions.sh'
+chmod +x $INSTALL_DIR'/expeditions_conquistador/additions.sh'

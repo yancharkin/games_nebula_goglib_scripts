@@ -1,0 +1,131 @@
+#!/bin/bash
+
+INSTALL_DIR=$2
+NEBULA_DIR=$3
+
+python2 $NEBULA_DIR'/modules/goglib_get_banner_2.py' \
+'konung_legend_of_the_north' \
+'https://images-3.gog.com/7e143d1242b62cf0ea7dfb5f40189971ba962d46b5deaf3c7f77104bdea5cee5.jpg' \
+$HOME'/.games_nebula/images/goglib_banners'
+
+mv $INSTALL_DIR'/konung_legend_of_the_north/tmp/app' \
+$INSTALL_DIR'/konung_legend_of_the_north/game'
+rm -R -f $INSTALL_DIR'/konung_legend_of_the_north/tmp'
+
+mkdir -p $DOWNLOAD_DIR'/_distr'
+
+if [ ! -f $DOWNLOAD_DIR'/_distr/directx_feb2010_redist.exe' ]; then
+	curl -L -o $DOWNLOAD_DIR'/_distr/directx_feb2010_redist.exe' -C - \
+	'https://download.microsoft.com/download/E/E/1/EE17FF74-6C45-4575-9CF4-7FC2597ACD18/directx_feb2010_redist.exe'
+fi
+
+if [ ! -f $DOWNLOAD_DIR'/_distr/directx_Jun2010_redist.exe' ]; then
+	curl -L -o $DOWNLOAD_DIR'/_distr/directx_Jun2010_redist.exe'  -C - \
+	'https://download.microsoft.com/download/8/4/A/84A35BF1-DAFE-4AE8-82AF-AD2AE20B6B14/directx_Jun2010_redist.exe'
+fi
+
+if [ ! -f $DOWNLOAD_DIR'/_distr/scripten.exe' ]; then
+	curl -L -o $DOWNLOAD_DIR'/_distr/scripten.exe'  -C - \
+	'http://download.microsoft.com/download/4/4/d/44de8a9e-630d-4c10-9f17-b9b34d3f6417/scripten.exe'
+fi
+
+if [ ! -f $DOWNLOAD_DIR'/_distr/MPSetup.exe' ]; then
+	curl -L -o $DOWNLOAD_DIR'/_distr/MPSetup.exe'  -C - \
+	'http://download.microsoft.com/download/1/b/c/1bc0b1a3-c839-4b36-8f3c-19847ba09299/MPSetup.exe'
+fi
+
+if [ ! -f $DOWNLOAD_DIR'/_distr/WM9Codecs9x.exe' ]; then
+	curl -L -o $DOWNLOAD_DIR'/_distr/WM9Codecs9x.exe'  -C - \
+	'http://birds.camden.rutgers.edu/WM9Codecs9x.exe'
+fi
+
+if [ ! -f $DOWNLOAD_DIR'/_distr/codinstl.exe' ]; then
+	curl -L -o $DOWNLOAD_DIR'/_distr/codinstl.exe'  -C - \
+	'http://www.cucusoft.com/codecdownload/codinstl.exe'
+fi
+
+mkdir -p $HOME'/.cache/winetricks/directx9'
+if [ ! -f $HOME'/.cache/winetricks/directx9/directx_feb2010_redist.exe' ]; then
+	cp $DOWNLOAD_DIR'/_distr/directx_feb2010_redist.exe' $HOME'/.cache/winetricks/directx9/'
+fi
+
+if [ ! -f $HOME'/.cache/winetricks/directx9/directx_Jun2010_redist.exe' ]; then
+	cp $DOWNLOAD_DIR'/_distr/directx_Jun2010_redist.exe' $HOME'/.cache/winetricks/directx9/'
+fi
+
+mkdir -p $HOME'/.cache/winetricks/wsh57'
+if [ ! -f $HOME'/.cache/winetricks/wsh57/scripten.exe' ]; then
+	cp $DOWNLOAD_DIR'/_distr/scripten.exe' $HOME'/.cache/winetricks/wsh57/'
+fi
+
+mkdir -p $HOME'/.cache/winetricks/wmp9'
+if [ ! -f $HOME'/.cache/winetricks/wmp9/MPSetup.exe' ]; then
+	cp $DOWNLOAD_DIR'/_distr/MPSetup.exe' $HOME'/.cache/winetricks/wmp9/'
+fi
+
+mkdir -p $HOME'/.cache/winetricks/wm9codecs'
+if [ ! -f $HOME'/.cache/winetricks/wm9codecs/WM9Codecs9x.exe' ]; then
+	cp $DOWNLOAD_DIR'/_distr/WM9Codecs9x.exe' $HOME'/.cache/winetricks/wm9codecs/'
+fi
+
+mkdir -p $HOME'/.cache/winetricks/icodecs'
+if [ ! -f $HOME'/.cache/winetricks/icodecs/codinstl.exe' ]; then
+	cp $DOWNLOAD_DIR'/_distr/codinstl.exe' $HOME'/.cache/winetricks/icodecs/'
+fi
+
+echo -e '#!/bin/bash
+INSTALL_DIR=$1
+NEBULA_DIR=$2
+
+if [ -d $INSTALL_DIR/konung_legend_of_the_north/game/MUSIC ]; then
+
+GAME=$(zenity --list --radiolist --title="Konung" \
+--text="Start:" --hide-header --column="x" \
+--column="Title" FALSE "Tutorial" TRUE "Singleplayer" \
+FALSE "LAN multiplayer")
+if [ "$GAME" == "Tutorial" ]; then
+	python $NEBULA_DIR/launcher_wine.py konung_legend_of_the_north TUTORIAL.EXE
+fi
+if [ "$GAME" == "Singleplayer" ]; then
+	python $NEBULA_DIR/launcher_wine.py konung_legend_of_the_north KONUNG.EXE
+fi
+if [ "$GAME" == "LAN multiplayer" ]; then
+	python $NEBULA_DIR/launcher_wine.py konung_legend_of_the_north LAN_KONG.EXE
+fi
+
+else
+
+python $NEBULA_DIR/launcher_wine.py konung_legend_of_the_north konung.exe
+
+fi' > \
+$INSTALL_DIR'/konung_legend_of_the_north/start.sh'
+chmod +x $INSTALL_DIR'/konung_legend_of_the_north/start.sh'
+
+echo -e '#!/bin/bash
+INSTALL_DIR=$1
+WINE_DIR=$2
+WINEPREFIX_DIR=$3
+
+if [ $WINE_DIR == "wine" ]; then
+	export WINELOADER=$WINE_DIR
+	export WINEPREFIX=$WINEPREFIX_DIR
+else
+	export WINE=$WINE_DIR/bin/wine
+	export WINELOADER=$WINE_DIR/bin/wine
+	export WINESERVER=$WINE_DIR/bin/wineserver
+	export WINEDLLPATH=$WINE_DIR/lib
+	export WINEPREFIX=$WINEPREFIX_DIR
+fi
+
+if [ -d $INSTALL_DIR/konung_legend_of_the_north/game/MUSIC ]; then
+	winetricks --gui icodecs quartz
+else
+	winetricks --gui wmp9 quartz devenum
+fi
+
+rm $WINEPREFIX_DIR/drive_c/Games/konung_legend_of_the_north
+mkdir -p $WINEPREFIX_DIR/drive_c/Games
+ln -s $INSTALL_DIR/konung_legend_of_the_north/game \
+$WINEPREFIX_DIR/drive_c/Games/konung_legend_of_the_north' > \
+$INSTALL_DIR'/konung_legend_of_the_north/additions.sh'
+chmod +x $INSTALL_DIR'/konung_legend_of_the_north/additions.sh'

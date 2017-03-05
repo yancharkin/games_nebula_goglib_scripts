@@ -1,0 +1,47 @@
+#!/bin/bash
+
+INSTALL_DIR=$2
+NEBULA_DIR=$3
+
+python2 $NEBULA_DIR'/modules/goglib_get_banner_2.py' \
+'leisure_suit_larry_1_in_the_land_of_the_lounge_lizards' \
+'https://images-3.gog.com/0f8a35df28fa297e453f82204c977255e6556548b61d96c6f95b8997e4a65ad8.jpg' \
+$HOME'/.games_nebula/images/goglib_banners'
+
+mv $INSTALL_DIR'/leisure_suit_larry_1_in_the_land_of_the_lounge_lizards/tmp/data/noarch/data' \
+$INSTALL_DIR'/leisure_suit_larry_1_in_the_land_of_the_lounge_lizards/game'
+rm -R -f $INSTALL_DIR'/leisure_suit_larry_1_in_the_land_of_the_lounge_lizards/tmp'
+
+echo -e '#!/bin/bash
+
+INSTALL_DIR=$1
+NEBULA_DIR=$2
+
+SCUMMVMRC=$INSTALL_DIR/leisure_suit_larry_1_in_the_land_of_the_lounge_lizards/scummvmrc
+readarray -t ARRAY <<<"$(cat "$SCUMMVMRC")"
+LENGHT=${#ARRAY[@]}
+
+for i in $(seq 1 $LENGHT); do
+	if [[ ${ARRAY[i]} == "[lsl1]" ]]; then
+		FIRST_LINE=$i
+	fi
+done
+
+cp $HOME/.games_nebula/config/scummvmrc $SCUMMVMRC
+
+for i in $(seq $FIRST_LINE $LENGHT); do 
+	echo ${ARRAY[i]} >> "$SCUMMVMRC"
+done
+
+python $NEBULA_DIR/launcher_scummvm.py leisure_suit_larry_1_in_the_land_of_the_lounge_lizards lsl1' > \
+$INSTALL_DIR'/leisure_suit_larry_1_in_the_land_of_the_lounge_lizards/start.sh'
+chmod +x $INSTALL_DIR'/leisure_suit_larry_1_in_the_land_of_the_lounge_lizards/start.sh'
+
+cp $HOME'/.games_nebula/config/scummvmrc' $INSTALL_DIR'/leisure_suit_larry_1_in_the_land_of_the_lounge_lizards/'
+
+echo "[lsl1]
+gameid=agi
+description=Leisure Suit Larry in the Land of the Lounge Lizards (1.00 1987-06-01 5.25"/3.5"/DOS/English)
+path=$INSTALL_DIR/leisure_suit_larry_1_in_the_land_of_the_lounge_lizards/game
+savepath=$INSTALL_DIR/leisure_suit_larry_1_in_the_land_of_the_lounge_lizards/game" >> \
+$INSTALL_DIR'/leisure_suit_larry_1_in_the_land_of_the_lounge_lizards/scummvmrc'

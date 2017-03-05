@@ -1,0 +1,37 @@
+#!/bin/bash
+
+INSTALL_DIR=$2
+NEBULA_DIR=$3
+
+python2 $NEBULA_DIR'/modules/goglib_get_banner_2.py' \
+'alien_breed' \
+'https://images-3.gog.com/543b53836f1cc8a8027d2fb358885c7db797f99ed575f7acaf2a726a6e24e343.jpg' \
+$HOME'/.games_nebula/images/goglib_banners'
+
+mv $INSTALL_DIR'/alien_breed/tmp/app' $INSTALL_DIR'/alien_breed/game'
+rm -R -f $INSTALL_DIR'/alien_breed/tmp'
+
+echo '#!/bin/bash
+INSTALL_DIR=$1
+NEBULA_DIR=$2
+rm $HOME/.games_nebula/games/.dosbox/alien_breed
+mkdir -p $HOME/.games_nebula/games/.dosbox
+ln -s $INSTALL_DIR/alien_breed/game \
+$HOME/.games_nebula/games/.dosbox/alien_breed
+python $NEBULA_DIR/launcher_dosbox.py alien_breed' > \
+$INSTALL_DIR'/alien_breed/start.sh'
+chmod +x $INSTALL_DIR'/alien_breed/start.sh'
+
+echo "[autoexec]
+mount C $HOME/.games_nebula/games/.dosbox/alien_breed
+c:
+cls
+Alien.exe
+exit" > $INSTALL_DIR'/alien_breed/dosbox_game.conf'
+
+echo "[autoexec]
+mount C $HOME/.games_nebula/games/.dosbox/alien_breed
+c:
+cls
+config
+exit" > $INSTALL_DIR'/alien_breed/dosbox_settings.conf'

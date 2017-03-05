@@ -1,0 +1,22 @@
+#!/bin/bash
+
+INSTALL_DIR=$2
+
+mv $INSTALL_DIR'/broken_sword_2__the_smoking_mirror/tmp/data/noarch/'* \
+$INSTALL_DIR'/broken_sword_2__the_smoking_mirror/'
+rm -R -f $INSTALL_DIR'/broken_sword_2__the_smoking_mirror/tmp'
+mv $INSTALL_DIR'/broken_sword_2__the_smoking_mirror/start.sh' \
+$INSTALL_DIR'/broken_sword_2__the_smoking_mirror/start_gog.sh'
+
+echo -e '#!/bin/bash
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+#export LD_LIBRARY_PATH="/lib:/usr/lib:/usr/local/lib:$LD_LIBRARY_PATH:$DIR/lib"
+cd "$DIR/game"
+"./BS2Remastered_i386"' > $INSTALL_DIR'/broken_sword_2__the_smoking_mirror/start_gn.sh'
+chmod +x $INSTALL_DIR'/broken_sword_2__the_smoking_mirror/start_gn.sh'
+
+echo -e '#!/bin/bash
+NEBULA_DIR=$2
+python $NEBULA_DIR/launcher_native.py broken_sword_2__the_smoking_mirror' > \
+$INSTALL_DIR'/broken_sword_2__the_smoking_mirror/start.sh'
+chmod +x $INSTALL_DIR'/broken_sword_2__the_smoking_mirror/start.sh'

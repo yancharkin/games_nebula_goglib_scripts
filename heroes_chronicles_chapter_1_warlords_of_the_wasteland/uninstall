@@ -1,0 +1,13 @@
+#!/bin/bash
+
+INSTALL_DIR=$1
+
+count_file=$INSTALL_DIR'/heroes_chronicles_common_data/count_file'
+count=$(cat "$count_file")
+count=$(($count - 1))
+
+if (($count == 0)); then
+	rm -R -f $INSTALL_DIR'/heroes_chronicles_common_data'
+else
+	echo $count > $count_file
+fi

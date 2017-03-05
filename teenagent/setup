@@ -1,0 +1,40 @@
+#!/bin/bash
+
+INSTALL_DIR=$2
+
+mv $INSTALL_DIR'/teenagent/tmp/app' $INSTALL_DIR'/teenagent/game'
+rm -R -f $INSTALL_DIR'/teenagent/tmp'
+
+echo -e '#!/bin/bash
+
+INSTALL_DIR=$1
+NEBULA_DIR=$2
+
+SCUMMVMRC=$INSTALL_DIR/teenagent/scummvmrc
+readarray -t ARRAY <<<"$(cat "$SCUMMVMRC")"
+LENGHT=${#ARRAY[@]}
+
+for i in $(seq 1 $LENGHT); do
+	if [[ ${ARRAY[i]} == "[teenagent]" ]]; then
+		FIRST_LINE=$i
+	fi
+done
+
+cp $HOME/.games_nebula/config/scummvmrc $SCUMMVMRC
+
+for i in $(seq $FIRST_LINE $LENGHT); do 
+	echo ${ARRAY[i]} >> "$SCUMMVMRC"
+done
+
+python $NEBULA_DIR/launcher_scummvm.py teenagent teenagent' > \
+$INSTALL_DIR'/teenagent/start.sh'
+chmod +x $INSTALL_DIR'/teenagent/start.sh'
+
+cp $HOME'/.games_nebula/config/scummvmrc' $INSTALL_DIR'/teenagent/'
+
+echo "[teenagent]
+gameid=teenagent
+description=Teen Agent (DOS/English)
+path=$INSTALL_DIR/teenagent/game
+savepath=$INSTALL_DIR/teenagent/game" >> \
+$INSTALL_DIR'/teenagent/scummvmrc'

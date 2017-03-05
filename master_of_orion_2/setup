@@ -1,0 +1,32 @@
+#!/bin/bash
+
+INSTALL_DIR=$2
+NEBULA_DIR=$3
+
+python2 $NEBULA_DIR'/modules/goglib_get_banner_2.py' \
+'master_of_orion_2' \
+'https://images-2.gog.com/3fd40ec161e1452b5d028819c21483096d7aca9e80be2c0f5cd0cc8116564d1b.jpg' \
+$HOME'/.games_nebula/images/goglib_banners'
+
+mv $INSTALL_DIR'/master_of_orion_2/tmp/data/noarch/data' $INSTALL_DIR'/master_of_orion_2/game'
+rm -R -f $INSTALL_DIR'/master_of_orion_2/tmp'
+
+echo '#!/bin/bash
+INSTALL_DIR=$1
+NEBULA_DIR=$2
+rm $HOME/.games_nebula/games/.dosbox/master_of_orion_2
+mkdir -p $HOME/.games_nebula/games/.dosbox
+ln -s $INSTALL_DIR/master_of_orion_2/game \
+$HOME/.games_nebula/games/.dosbox/master_of_orion_2
+python $NEBULA_DIR/launcher_dosbox.py master_of_orion_2' > \
+$INSTALL_DIR'/master_of_orion_2/start.sh'
+chmod +x $INSTALL_DIR'/master_of_orion_2/start.sh'
+
+echo "[autoexec]
+@echo off
+mount C $HOME/.games_nebula/games/.dosbox/master_of_orion_2
+c:
+cls
+orion2.exe
+cls
+exit" > $INSTALL_DIR'/master_of_orion_2/dosbox_game.conf'

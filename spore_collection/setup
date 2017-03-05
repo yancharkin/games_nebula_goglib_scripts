@@ -1,0 +1,150 @@
+#!/bin/bash
+
+INSTALL_DIR=$2
+
+mv $INSTALL_DIR'/spore_collection/tmp/game' $INSTALL_DIR'/spore_collection/game'
+mv $INSTALL_DIR'/spore_collection/tmp/language_setup/language_setup.exe' \
+$INSTALL_DIR'/spore_collection/game/'
+rm -R -f $INSTALL_DIR'/spore_collection/tmp'
+
+echo -e '#!/bin/bash
+NEBULA_DIR=$2
+python $NEBULA_DIR/launcher_wine.py spore_collection SporebinEP1/SporeApp.exe' > \
+$INSTALL_DIR'/spore_collection/start.sh'
+chmod +x $INSTALL_DIR'/spore_collection/start.sh'
+
+echo -e '#!/bin/bash
+INSTALL_DIR=$1
+WINE_DIR=$2
+WINEPREFIX_DIR=$3
+
+if [ $WINE_DIR == "wine" ]; then
+	export WINELOADER=$WINE_DIR
+	export WINEPREFIX=$WINEPREFIX_DIR
+else
+	export WINE=$WINE_DIR/bin/wine
+	export WINELOADER=$WINE_DIR/bin/wine
+	export WINESERVER=$WINE_DIR/bin/wineserver
+	export WINEDLLPATH=$WINE_DIR/lib
+	export WINEPREFIX=$WINEPREFIX_DIR
+fi
+
+cd $INSTALL_DIR/spore_collection/game
+$WINELOADER language_setup.exe' > $INSTALL_DIR'/spore_collection/settings.sh'
+chmod +x $INSTALL_DIR'/spore_collection/settings.sh'
+
+echo -e '#!/bin/bash
+INSTALL_DIR=$1
+WINE_DIR=$2
+WINEPREFIX_DIR=$3
+INSTALL_DIR_WIN=$(echo Z:$INSTALL_DIR | sed -e s=/=\\\\\\\\=g)
+
+if [ $WINE_DIR == "wine" ]; then
+	export WINELOADER=$WINE_DIR
+	export WINEPREFIX=$WINEPREFIX_DIR
+else
+	export WINE=$WINE_DIR/bin/wine
+	export WINELOADER=$WINE_DIR/bin/wine
+	export WINESERVER=$WINE_DIR/bin/wineserver
+	export WINEDLLPATH=$WINE_DIR/lib
+	export WINEPREFIX=$WINEPREFIX_DIR
+fi
+
+PREF_DIR=$WINEPREFIX"/drive_c/users/"$USER"/Application Data/Spore/Preferences"
+mkdir -p "$PREF_DIR"
+
+echo -e "PrefsClearGraphicsCache 1
+OptionShadows 2
+OptionTextureDetail 2
+OptionEffects 2
+OptionScreenSize 0
+OptionFullScreen 1
+OptionBakeQuality 3
+OptionDiskCacheSize 4
+OptionFitToScreen 0
+OptionLighting 2
+OptionPlanetQuality 2
+OptionPhotoRes 2
+OptionVideoRes 2
+OptionVersion 9
+OptionTutorialsEnabled 1
+OptionLoggedInYouTube 0
+OptionShowHints 1
+OptionGameQuality 2
+OptionBuddiesOnly 0
+OptionExplainSporepedia 1
+OptionExplainPaintLikeThis 1
+OptionExpireOld 0
+OptionExpireDays 30
+OptionArchiveExpired 0
+OptionCaptureUI 0
+OptionEdgeScroll 1
+OptionCellControls 0
+OptionCreatureControls 0
+OptionTribeControls 0
+OptionCivControls 0
+OptionSpaceControls 0
+OptionDownloadSize 8
+OptionUpdateLimit 0
+OptionUpdateLimitDays 7
+NumScenarioTutorialCompletedBuild 0
+NumScenarioTutorialCompletedTerrain 0
+CaptainEditorTutorialCompleted false
+ScenarioPlayModeTutorialComplete false
+CaptainSporepediaTutorialCompleted false
+ScenarioStarEffectsEnabled false
+ScenarioGAEditorEffectsEnabled true
+ScenarioGAButtonClicked false
+ScenarioCaptainEditorLaunched false
+ScenarioAdventureEditorLaunched false
+ScenarioGAFirstLaunched true
+ScenarioSpaceGameLaunched false
+OptionHighResTextures 1
+AudioVOXVolume 1.000000
+AudioSFXVolume 1.000000
+AudioSpeakerMode 2
+OptionDOF 1
+OptionAudioPerformance 3
+AudioMuteAll false
+AudioMusicVolume 1.000000
+AudioMasterVolume 1.000000" > "$PREF_DIR"/"Preferences.prop"
+
+$WINELOADER reg add "HKEY_LOCAL_MACHINE\Software\\electronic arts\\ea games\spore(tm)\\ergc" \
+/v "@" /t REG_SZ /d "" /f
+$WINELOADER reg add "HKEY_LOCAL_MACHINE\Software\\electronic arts\spore" \
+/v "appdir" /t REG_SZ /d "Spore" /f
+$WINELOADER reg add "HKEY_LOCAL_MACHINE\Software\\electronic arts\spore" /v \
+"datadir" /t REG_SZ /d $INSTALL_DIR_WIN\\\\spore_collection\\\\game\\\\Data /f
+$WINELOADER reg add "HKEY_LOCAL_MACHINE\Software\\electronic arts\spore" \
+/v "installcompleted" /t REG_DWORD /d "1" /f
+$WINELOADER reg add "HKEY_LOCAL_MACHINE\Software\\electronic arts\spore" /v \
+"installloc" /t REG_SZ /d $INSTALL_DIR_WIN\\\\spore_collection\\\\game /f
+$WINELOADER reg add "HKEY_LOCAL_MACHINE\Software\\electronic arts\spore" \
+/v "locale" /t REG_SZ /d "en-us" /f
+$WINELOADER reg add "HKEY_LOCAL_MACHINE\Software\\electronic arts\spore" \
+/v "playerdir" /t REG_SZ /d "My Spore Creations" /f
+$WINELOADER reg add "HKEY_LOCAL_MACHINE\Software\\electronic arts\spore" \
+/v "reindexyesorno" /t REG_DWORD /d "0" /f
+$WINELOADER reg add "HKEY_LOCAL_MACHINE\Software\\electronic arts\SPORE Creepy and Cute Parts Pack" \
+/v "AddOnID" /t REG_DWORD /d "1" /f
+$WINELOADER reg add "HKEY_LOCAL_MACHINE\Software\\electronic arts\SPORE Creepy and Cute Parts Pack" /v \
+"DataDir" /t REG_SZ /d $INSTALL_DIR_WIN\\\\spore_collection\\\\game\\\\bp1content\\\\ /f
+$WINELOADER reg add "HKEY_LOCAL_MACHINE\Software\\electronic arts\SPORE Creepy and Cute Parts Pack" \
+/v "PackID" /t REG_DWORD /d "116700625" /f
+$WINELOADER reg add "HKEY_LOCAL_MACHINE\Software\\electronic arts\SPORE Creepy and Cute Parts Pack" \
+/v "ProductKey" /t REG_SZ /d "" /f
+$WINELOADER reg add "HKEY_LOCAL_MACHINE\Software\\electronic arts\SPORE_EP1" \
+/v "AddOnID" /t REG_DWORD /d "2" /f
+$WINELOADER reg add "HKEY_LOCAL_MACHINE\Software\\electronic arts\SPORE_EP1" /v \
+"DataDir" /t REG_SZ /d $INSTALL_DIR_WIN\\\\spore_collection\\\\game\\\\DataEP1\\\\ /f
+$WINELOADER reg add "HKEY_LOCAL_MACHINE\Software\\electronic arts\SPORE_EP1" \
+/v "PackID" /t REG_DWORD /d "128448390" /f
+$WINELOADER reg add "HKEY_LOCAL_MACHINE\Software\\electronic arts\SPORE_EP1" \
+/v "ProductKey" /t REG_SZ /d "" /f
+
+rm $WINEPREFIX_DIR/drive_c/Games/spore_collection
+mkdir -p $WINEPREFIX_DIR/drive_c/Games
+ln -s $INSTALL_DIR/spore_collection/game \
+$WINEPREFIX_DIR/drive_c/Games/spore_collection' > \
+$INSTALL_DIR'/spore_collection/additions.sh'
+chmod +x $INSTALL_DIR'/spore_collection/additions.sh'

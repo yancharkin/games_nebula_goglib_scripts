@@ -1,0 +1,37 @@
+#!/bin/bash
+
+INSTALL_DIR=$2
+NEBULA_DIR=$3
+
+python2 $NEBULA_DIR'/modules/goglib_get_banner_2.py' \
+'realms_of_arkania_star_trail' \
+'https://images-4.gog.com/c9483c2002c79d5881358e5e265d015d672dc387eb5060a8de3534a57fa4347d.jpg' \
+$HOME'/.games_nebula/images/goglib_banners'
+
+mv $INSTALL_DIR'/realms_of_arkania_star_trail/tmp/app' $INSTALL_DIR'/realms_of_arkania_star_trail/game'
+rm -R -f $INSTALL_DIR'/realms_of_arkania_star_trail/tmp'
+
+echo '#!/bin/bash
+INSTALL_DIR=$1
+NEBULA_DIR=$2
+rm $HOME/.games_nebula/games/.dosbox/realms_of_arkania_star_trail
+mkdir -p $HOME/.games_nebula/games/.dosbox
+ln -s $INSTALL_DIR/realms_of_arkania_star_trail/game \
+$HOME/.games_nebula/games/.dosbox/realms_of_arkania_star_trail
+python $NEBULA_DIR/launcher_dosbox.py realms_of_arkania_star_trail' > \
+$INSTALL_DIR'/realms_of_arkania_star_trail/start.sh'
+chmod +x $INSTALL_DIR'/realms_of_arkania_star_trail/start.sh'
+
+echo "[autoexec]
+mount C $HOME/.games_nebula/games/.dosbox/realms_of_arkania_star_trail
+c:
+cls
+STAR
+exit" > $INSTALL_DIR'/realms_of_arkania_star_trail/dosbox_game.conf'
+
+echo "[autoexec]
+mount C $HOME/.games_nebula/games/.dosbox/realms_of_arkania_star_trail
+c:
+cls
+sound
+exit" > $INSTALL_DIR'/realms_of_arkania_star_trail/dosbox_settings.conf'

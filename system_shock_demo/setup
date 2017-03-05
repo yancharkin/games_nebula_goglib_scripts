@@ -1,0 +1,7 @@
+#!/bin/bash
+
+INSTALL_DIR=$2
+
+mv $INSTALL_DIR'/system_shock_demo/tmp/data/noarch/'* $INSTALL_DIR'/system_shock_demo/'
+rm -R -f $INSTALL_DIR'/system_shock_demo/tmp'
+chmod +x $INSTALL_DIR'/system_shock_demo/start.sh'

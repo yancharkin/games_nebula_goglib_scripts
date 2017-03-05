@@ -1,0 +1,85 @@
+#!/bin/bash
+
+DOWNLOAD_DIR=$1
+INSTALL_DIR=$2
+
+mv $INSTALL_DIR'/silver/tmp/app' $INSTALL_DIR'/silver/game'
+rm -R -f $INSTALL_DIR'/silver/tmp'
+
+mkdir -p $DOWNLOAD_DIR'/_distr'
+
+if [ ! -f $DOWNLOAD_DIR'/_distr/directx_feb2010_redist.exe' ]; then
+	curl -L -o $DOWNLOAD_DIR'/_distr/directx_feb2010_redist.exe' -C - \
+	'https://download.microsoft.com/download/E/E/1/EE17FF74-6C45-4575-9CF4-7FC2597ACD18/directx_feb2010_redist.exe'
+fi
+
+if [ ! -f $DOWNLOAD_DIR'/_distr/directx_Jun2010_redist.exe' ]; then
+	curl -L -o $DOWNLOAD_DIR'/_distr/directx_Jun2010_redist.exe' -C - \
+	'https://download.microsoft.com/download/8/4/A/84A35BF1-DAFE-4AE8-82AF-AD2AE20B6B14/directx_Jun2010_redist.exe'
+fi
+
+if [ ! -f $DOWNLOAD_DIR'/_distr/iv5setup.exe' ]; then
+	curl -L -o $DOWNLOAD_DIR'/_distr/iv5setup.exe' -C - \
+	'http://s3.amazonaws.com/moviecodec/files/iv5setup.exe'
+fi
+
+mkdir -p $HOME'/.cache/winetricks/directx9'
+if [ ! -f $HOME'/.cache/winetricks/directx9/directx_feb2010_redist.exe' ]; then
+	cp $DOWNLOAD_DIR'/_distr/directx_feb2010_redist.exe' $HOME'/.cache/winetricks/directx9/'
+fi
+if [ ! -f $HOME'/.cache/winetricks/directx9/directx_Jun2010_redist.exe' ]; then
+	cp $DOWNLOAD_DIR'/_distr/directx_Jun2010_redist.exe' $HOME'/.cache/winetricks/directx9/'
+fi
+
+echo -e '#!/bin/bash
+NEBULA_DIR=$2
+python $NEBULA_DIR/launcher_wine.py silver silver.exe' > \
+$INSTALL_DIR'/silver/start.sh'
+chmod +x $INSTALL_DIR'/silver/start.sh'
+
+echo -e '#!/bin/bash
+INSTALL_DIR=$1
+WINE_DIR=$2
+WINEPREFIX_DIR=$3
+DOWNLOAD_DIR=$4
+
+if [ $WINE_DIR == "wine" ]; then
+	export WINELOADER=$WINE_DIR
+	export WINEPREFIX=$WINEPREFIX_DIR
+else
+	export WINE=$WINE_DIR/bin/wine
+	export WINELOADER=$WINE_DIR/bin/wine
+	export WINESERVER=$WINE_DIR/bin/wineserver
+	export WINEDLLPATH=$WINE_DIR/lib
+	export WINEPREFIX=$WINEPREFIX_DIR
+fi
+
+mkdir -p $WINEPREFIX/drive_c/windows/system32
+cd $DOWNLOAD_DIR/_distr
+7z x -otmp iv5setup.exe
+cd tmp
+unshield x data1.cab
+cp Indeo_3_2_codec/ir32_32.dll $WINEPREFIX/drive_c/windows/system32
+cd ..
+rm -R tmp
+
+$WINELOADER reg add "HKLM\Software\Microsoft\Windows NT\CurrentVersion\drivers.desc" \
+/v "ir32_32.dll" /t REG_SZ /d "Indeo® Video R3.2" /f 
+$WINELOADER reg add "HKLM\Software\Microsoft\Windows NT\CurrentVersion\Drivers32" \
+/v "vidc.iv32" /t REG_SZ /d "ir32_32.dll" /f
+
+winetricks --gui quartz
+
+if [ ! -f $INSTALL_DIR/silver/game/data/intro/.converted ]; then
+	ffmpeg -i $INSTALL_DIR/silver/game/data/intro/intro.avi -vcodec copy \
+	-acodec adpcm_ima_wav $INSTALL_DIR/silver/game/data/intro/new_intro.avi
+	mv $INSTALL_DIR/silver/game/data/intro/new_intro.avi \
+	$INSTALL_DIR/silver/game/data/intro/intro.avi
+	touch $INSTALL_DIR/silver/game/data/intro/.converted
+fi
+
+rm $WINEPREFIX_DIR/drive_c/Games/silver
+mkdir -p $WINEPREFIX_DIR/drive_c/Games
+ln -s $INSTALL_DIR/silver/game \
+$WINEPREFIX_DIR/drive_c/Games/silver' > $INSTALL_DIR'/silver/additions.sh'
+chmod +x $INSTALL_DIR'/silver/additions.sh'

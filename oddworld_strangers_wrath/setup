@@ -1,0 +1,22 @@
+#!/bin/bash
+
+INSTALL_DIR=$2
+
+mv $INSTALL_DIR'/oddworld_strangers_wrath/tmp/game' $INSTALL_DIR'/oddworld_strangers_wrath/game'
+rm -R -f -f $INSTALL_DIR'/oddworld_strangers_wrath/tmp'
+
+echo -e '#!/bin/bash
+NEBULA_DIR=$2
+python $NEBULA_DIR/launcher_wine.py oddworld_strangers_wrath Launcher.exe' > \
+$INSTALL_DIR'/oddworld_strangers_wrath/start.sh'
+chmod +x $INSTALL_DIR'/oddworld_strangers_wrath/start.sh'
+
+echo -e '#!/bin/bash
+INSTALL_DIR=$1
+WINEPREFIX_DIR=$3
+rm $WINEPREFIX_DIR/drive_c/Games/oddworld_strangers_wrath
+mkdir -p $WINEPREFIX_DIR/drive_c/Games
+ln -s $INSTALL_DIR/oddworld_strangers_wrath/game \
+$WINEPREFIX_DIR/drive_c/Games/oddworld_strangers_wrath' > \
+$INSTALL_DIR'/oddworld_strangers_wrath/additions.sh'
+chmod +x $INSTALL_DIR'/oddworld_strangers_wrath/additions.sh'

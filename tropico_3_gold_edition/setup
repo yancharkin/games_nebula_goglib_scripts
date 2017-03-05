@@ -1,0 +1,86 @@
+#!/bin/bash
+
+DOWNLOAD_DIR=$1
+INSTALL_DIR=$2
+
+mv $INSTALL_DIR'/tropico_3_gold_edition/tmp/app' $INSTALL_DIR'/tropico_3_gold_edition/game'
+rm -R -f $INSTALL_DIR'/tropico_3_gold_edition/tmp'
+
+mkdir -p $DOWNLOAD_DIR'/_distr'
+
+if [ ! -f $DOWNLOAD_DIR'/_distr/directx_feb2010_redist.exe' ]; then
+	curl -L -o $DOWNLOAD_DIR'/_distr/directx_feb2010_redist.exe' -C - \
+	'https://download.microsoft.com/download/E/E/1/EE17FF74-6C45-4575-9CF4-7FC2597ACD18/directx_feb2010_redist.exe'
+fi
+
+if [ ! -f $DOWNLOAD_DIR'/_distr/directx_Jun2010_redist.exe' ]; then
+	curl -L -o $DOWNLOAD_DIR'/_distr/directx_Jun2010_redist.exe'  -C - \
+	'https://download.microsoft.com/download/8/4/A/84A35BF1-DAFE-4AE8-82AF-AD2AE20B6B14/directx_Jun2010_redist.exe'
+fi
+
+mkdir -p $HOME'/.cache/winetricks/directx9'
+if [ ! -f $HOME'/.cache/winetricks/directx9/directx_feb2010_redist.exe' ]; then
+	cp $DOWNLOAD_DIR'/_distr/directx_feb2010_redist.exe' $HOME'/.cache/winetricks/directx9/'
+fi
+
+if [ ! -f $HOME'/.cache/winetricks/directx9/directx_Jun2010_redist.exe' ]; then
+	cp $DOWNLOAD_DIR'/_distr/directx_Jun2010_redist.exe' $HOME'/.cache/winetricks/directx9/'
+fi
+
+echo -e '#!/bin/bash
+NEBULA_DIR=$2
+python $NEBULA_DIR/launcher_wine.py tropico_3_gold_edition tropico3.exe' > \
+$INSTALL_DIR'/tropico_3_gold_edition/start.sh'
+chmod +x $INSTALL_DIR'/tropico_3_gold_edition/start.sh'
+
+echo -e '#!/bin/bash
+INSTALL_DIR=$1
+WINE_DIR=$2
+WINEPREFIX_DIR=$3
+
+if [ $WINE_DIR == "wine" ]; then
+	export WINELOADER=$WINE_DIR
+	export WINEPREFIX=$WINEPREFIX_DIR
+else
+	export WINE=$WINE_DIR/bin/wine
+	export WINELOADER=$WINE_DIR/bin/wine
+	export WINESERVER=$WINE_DIR/bin/wineserver
+	export WINEDLLPATH=$WINE_DIR/lib
+	export WINEPREFIX=$WINEPREFIX_DIR
+fi
+
+cd $INSTALL_DIR/tropico_3_gold_edition/game
+$WINELOADER Language.exe' > \
+$INSTALL_DIR'/tropico_3_gold_edition/settings.sh'
+chmod +x $INSTALL_DIR'/tropico_3_gold_edition/settings.sh'
+
+echo -e '#!/bin/bash
+INSTALL_DIR=$1
+WINE_DIR=$2
+WINEPREFIX_DIR=$3
+INSTALL_DIR_WIN=$(echo Z:$INSTALL_DIR | sed -e s=/=\\\\\\\\=g)
+
+if [ $WINE_DIR == "wine" ]; then
+	export WINELOADER=$WINE_DIR
+	export WINEPREFIX=$WINEPREFIX_DIR
+else
+	export WINE=$WINE_DIR/bin/wine
+	export WINELOADER=$WINE_DIR/bin/wine
+	export WINESERVER=$WINE_DIR/bin/wineserver
+	export WINEDLLPATH=$WINE_DIR/lib
+	export WINEPREFIX=$WINEPREFIX_DIR
+fi
+
+$WINELOADER reg add "HKEY_LOCAL_MACHINE\Software\Haemimont Games\Tropico3" \
+/v "Language" /t REG_SZ /d "English" /f
+$WINELOADER reg add "HKEY_LOCAL_MACHINE\Software\Haemimont Games\Tropico3" \
+/v "AppName" /t REG_SZ /d "Tropico 3" /f
+
+winetricks --gui d3dx9
+
+rm $WINEPREFIX_DIR/drive_c/Games/tropico_3_gold_edition
+mkdir -p $WINEPREFIX_DIR/drive_c/Games
+ln -s $INSTALL_DIR/tropico_3_gold_edition/game \
+$WINEPREFIX_DIR/drive_c/Games/tropico_3_gold_edition' > \
+$INSTALL_DIR'/tropico_3_gold_edition/additions.sh'
+chmod +x $INSTALL_DIR'/tropico_3_gold_edition/additions.sh'

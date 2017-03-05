@@ -1,0 +1,23 @@
+#!/bin/bash
+
+INSTALL_DIR=$2
+
+mv $INSTALL_DIR'/prince_of_persia_the_sands_of_time/tmp/app' \
+$INSTALL_DIR'/prince_of_persia_the_sands_of_time/game'
+rm -R -f $INSTALL_DIR'/prince_of_persia_the_sands_of_time/tmp'
+
+echo -e '#!/bin/bash
+NEBULA_DIR=$2
+python $NEBULA_DIR/launcher_wine.py prince_of_persia_the_sands_of_time PrinceOfPersia.EXE' > \
+$INSTALL_DIR'/prince_of_persia_the_sands_of_time/start.sh'
+chmod +x $INSTALL_DIR'/prince_of_persia_the_sands_of_time/start.sh'
+
+echo -e '#!/bin/bash
+INSTALL_DIR=$1
+WINEPREFIX_DIR=$3
+rm $WINEPREFIX_DIR/drive_c/Games/prince_of_persia_the_sands_of_time
+mkdir -p $WINEPREFIX_DIR/drive_c/Games
+ln -s $INSTALL_DIR/prince_of_persia_the_sands_of_time/game \
+$WINEPREFIX_DIR/drive_c/Games/prince_of_persia_the_sands_of_time' > \
+$INSTALL_DIR'/prince_of_persia_the_sands_of_time/additions.sh'
+chmod +x $INSTALL_DIR'/prince_of_persia_the_sands_of_time/additions.sh'

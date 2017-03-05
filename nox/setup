@@ -1,0 +1,22 @@
+#!/bin/bash
+
+INSTALL_DIR=$2
+
+mv $INSTALL_DIR'/nox/tmp/app' $INSTALL_DIR'/nox/game'
+rm -R -f $INSTALL_DIR'/nox/tmp'
+
+echo -e '#!/bin/bash
+NEBULA_DIR=$2
+python $NEBULA_DIR/launcher_wine.py nox NOX.EXE' > \
+$INSTALL_DIR'/nox/start.sh'
+chmod +x $INSTALL_DIR'/nox/start.sh'
+
+echo -e '#!/bin/bash
+INSTALL_DIR=$1
+WINEPREFIX_DIR=$3
+rm $WINEPREFIX_DIR/drive_c/Games/nox
+mkdir -p $WINEPREFIX_DIR/drive_c/Games
+ln -s $INSTALL_DIR/nox/game \
+$WINEPREFIX_DIR/drive_c/Games/nox' > \
+$INSTALL_DIR'/nox/additions.sh'
+chmod +x $INSTALL_DIR'/nox/additions.sh'
