@@ -1,0 +1,36 @@
+#!/bin/bash
+
+DOWNLOAD_DIR=$1 
+INSTALL_DIR=$2
+
+mv $INSTALL_DIR'/xenonauts/tmp/data/noarch/'* $INSTALL_DIR'/xenonauts/'
+rm -R -f $INSTALL_DIR'/xenonauts/tmp'
+mv $INSTALL_DIR'/xenonauts/start.sh' $INSTALL_DIR'/xenonauts/start_gog.sh'
+
+echo -e '#!/bin/bash
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+#export LD_LIBRARY_PATH="/lib:/usr/lib:/usr/local/lib:$LD_LIBRARY_PATH:$DIR/lib"
+cd "$DIR/game"
+"./Xenonauts.bin.x86"' > $INSTALL_DIR'/xenonauts/start_gn.sh'
+chmod +x $INSTALL_DIR'/xenonauts/start_gn.sh'
+
+echo -e '#!/bin/bash
+NEBULA_DIR=$2
+python $NEBULA_DIR/launcher_native.py xenonauts' > \
+$INSTALL_DIR'/xenonauts/start.sh'
+chmod +x $INSTALL_DIR'/xenonauts/start.sh'
+
+
+if [ ! -f "$DOWNLOAD_DIR/_distr/libsdl2-2.0-0_2.0.2+dfsg1-6_i386.deb" ]; then
+	mkdir -p "$DOWNLOAD_DIR/_distr"
+	curl -L -o "$DOWNLOAD_DIR/_distr/libsdl2-2.0-0_2.0.2+dfsg1-6_i386.deb" \
+	"http://ftp.debian.org/debian/pool/main/libs/libsdl2/libsdl2-2.0-0_2.0.2+dfsg1-6_i386.deb"
+fi
+
+7z x -aoa "$DOWNLOAD_DIR/_distr/libsdl2-2.0-0_2.0.2+dfsg1-6_i386.deb" \
+-o$INSTALL_DIR'/xenonauts/tmp'                                      	
+7z x -aoa $INSTALL_DIR'/xenonauts/tmp/data.tar' \
+-o$INSTALL_DIR'/xenonauts/tmp'
+mv $INSTALL_DIR'/xenonauts/tmp/usr/lib/i386-linux-gnu/libSDL2-2.0.so.0.2.0' \
+$INSTALL_DIR'/xenonauts/lib/libSDL2-2.0.so.0'
+rm -r $INSTALL_DIR'/xenonauts/tmp/'
