@@ -1,0 +1,9 @@
+#!/bin/bash
+
+INSTALL_DIR=$2
+
+mv $INSTALL_DIR'/herald_an_interactive_period_drama_book_i_ii_demo/tmp/data/noarch/'* \
+$INSTALL_DIR'/herald_an_interactive_period_drama_book_i_ii_demo/'
+rm -R -f $INSTALL_DIR'/herald_an_interactive_period_drama_book_i_ii_demo/tmp'
+
+chmod +x $INSTALL_DIR'/herald_an_interactive_period_drama_book_i_ii_demo/start.sh'
