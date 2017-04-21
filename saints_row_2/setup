@@ -10,13 +10,3 @@ NEBULA_DIR=$2
 python $NEBULA_DIR/launcher_wine.py saints_row_2 SR2_pc.exe' > \
 $INSTALL_DIR'/saints_row_2/start.sh'
 chmod +x $INSTALL_DIR'/saints_row_2/start.sh'
-
-echo -e '#!/bin/bash
-INSTALL_DIR=$1
-WINEPREFIX_DIR=$3
-rm $WINEPREFIX_DIR/drive_c/Games/saints_row_2
-mkdir -p $WINEPREFIX_DIR/drive_c/Games
-ln -s $INSTALL_DIR/saints_row_2/game \
-$WINEPREFIX_DIR/drive_c/Games/saints_row_2' > \
-$INSTALL_DIR'/saints_row_2/additions.sh'
-chmod +x $INSTALL_DIR'/saints_row_2/additions.sh'
