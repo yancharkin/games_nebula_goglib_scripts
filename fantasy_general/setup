@@ -1,0 +1,36 @@
+#!/bin/bash
+
+INSTALL_DIR=$2
+
+mv $INSTALL_DIR'/fantasy_general/tmp/data/noarch/data' $INSTALL_DIR'/fantasy_general/game'
+mv $INSTALL_DIR'/fantasy_general/tmp/data/noarch/docs' $INSTALL_DIR'/fantasy_general/docs'
+rm -R -f $INSTALL_DIR'/fantasy_general/tmp'
+
+echo '#!/bin/bash
+INSTALL_DIR=$1
+NEBULA_DIR=$2
+rm $HOME/.games_nebula/games/.dosbox/fantasy_general
+mkdir -p $HOME/.games_nebula/games/.dosbox
+ln -s $INSTALL_DIR/fantasy_general/game \
+$HOME/.games_nebula/games/.dosbox/fantasy_general
+python $NEBULA_DIR/launcher_dosbox.py fantasy_general' > \
+$INSTALL_DIR'/fantasy_general/start.sh'
+chmod +x $INSTALL_DIR'/fantasy_general/start.sh'
+
+echo "[autoexec]
+@echo off
+mount C $HOME/.games_nebula/games/.dosbox/fantasy_general
+c:
+imgmount d $HOME/.games_nebula/games/.dosbox/fantasy_general/game.ins -t iso
+cls
+fg.bat
+exit" > $INSTALL_DIR'/fantasy_general/dosbox_game.conf'
+
+echo "[autoexec]
+@echo off
+mount C $HOME/.games_nebula/games/.dosbox/fantasy_general
+c:
+imgmount d $HOME/.games_nebula/games/.dosbox/fantasy_general/game.ins -t iso
+cls
+sound.bat
+exit" > $INSTALL_DIR'/fantasy_general/dosbox_settings.conf'
