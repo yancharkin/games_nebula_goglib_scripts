@@ -1,0 +1,28 @@
+#!/bin/bash
+
+INSTALL_DIR="$2"
+
+mv "$INSTALL_DIR/metro_2033_redux/tmp/game" \
+"$INSTALL_DIR/metro_2033_redux/game"
+rm -R -f "$INSTALL_DIR/metro_2033_redux/tmp"
+
+echo -e '#!/bin/bash
+NEBULA_DIR=$2
+export WINEARCH=win64
+python $NEBULA_DIR/launcher_wine.py metro_2033_redux metro.exe' > \
+"$INSTALL_DIR/metro_2033_redux/start.sh"
+chmod +x "$INSTALL_DIR/metro_2033_redux/start.sh"
+
+echo -e '[Settings]
+wine = global
+wine_path = 
+wine_version = 
+monitor = 0
+launcher = True
+show_banner = True
+win_ver = 0
+virtual_desktop = False
+virtual_desktop_width = 
+virtual_desktop_height = 
+own_prefix = True
+mouse_capture = False' > "$INSTALL_DIR/metro_2033_redux/config.ini"
