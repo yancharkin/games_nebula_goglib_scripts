@@ -1,0 +1,19 @@
+#!/bin/bash
+
+INSTALL_DIR=$2
+NEBULA_DIR=$3
+
+python2 "$NEBULA_DIR/modules/goglib_get_banner_2.py" \
+'commandos_2_men_of_courage' \
+'https://images-3.gog.com/29635246c6e2ae404bdda844ce0b5cb718b44c22b39a20229290ecc077b09db2.jpg' \
+"$HOME/.games_nebula/images/goglib_banners"
+
+mv "$INSTALL_DIR/commandos_2_men_of_courage/tmp/app" \
+"$INSTALL_DIR/commandos_2_men_of_courage/game"
+rm -R -f "$INSTALL_DIR/commandos_2_men_of_courage/tmp"
+
+echo -e '#!/bin/bash
+NEBULA_DIR=$2
+python $NEBULA_DIR/launcher_wine.py commandos_2_men_of_courage comm2.exe' > \
+"$INSTALL_DIR/commandos_2_men_of_courage/start.sh"
+chmod +x "$INSTALL_DIR/commandos_2_men_of_courage/start.sh"

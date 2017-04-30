@@ -1,0 +1,19 @@
+#!/bin/bash
+
+INSTALL_DIR=$2
+NEBULA_DIR=$3
+
+python2 "$NEBULA_DIR/modules/goglib_get_banner_2.py" \
+'commandos_3_destination_berlin' \
+'https://images-2.gog.com/70c9ca379756e387fe1da2bb89a174de2a69439590c1cf7d16d27f115a63edca.jpg' \
+"$HOME/.games_nebula/images/goglib_banners"
+
+mv "$INSTALL_DIR/commandos_3_destination_berlin/tmp/app" \
+"$INSTALL_DIR/commandos_3_destination_berlin/game"
+rm -R -f "$INSTALL_DIR/commandos_3_destination_berlin/tmp"
+
+echo -e '#!/bin/bash
+NEBULA_DIR=$2
+python $NEBULA_DIR/launcher_wine.py commandos_3_destination_berlin Commandos3.exe' > \
+"$INSTALL_DIR/commandos_3_destination_berlin/start.sh"
+chmod +x "$INSTALL_DIR/commandos_3_destination_berlin/start.sh"
