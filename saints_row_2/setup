@@ -1,32 +1,33 @@
 #!/bin/bash
 
-INSTALL_DIR=$2
+INSTALL_DIR="$2"
 
-mv $INSTALL_DIR'/saints_row_2/tmp/game' $INSTALL_DIR'/saints_row_2/game'
-cp $INSTALL_DIR'/saints_row_2/tmp/support/add/local/settings.dat' \
-$INSTALL_DIR'/saints_row_2/game/settings.dat.original'
-mv $INSTALL_DIR'/saints_row_2/tmp/support/add/local/settings.dat' \
-$INSTALL_DIR'/saints_row_2/game'
-rm -R -f $INSTALL_DIR'/saints_row_2/tmp'
-cp $HOME'/.games_nebula/scripts/goglib/saints_row_2/settings.py' $INSTALL_DIR/'saints_row_2/'
-
-echo -e '#!/bin/bash
-NEBULA_DIR=$2
-python $NEBULA_DIR/launcher_wine.py saints_row_2 SR2_pc.exe' > \
-$INSTALL_DIR'/saints_row_2/start.sh'
-chmod +x $INSTALL_DIR'/saints_row_2/start.sh'
+mv "$INSTALL_DIR/saints_row_2/tmp/game" "$INSTALL_DIR/saints_row_2/game"
+cp "$INSTALL_DIR/saints_row_2/tmp/support/add/local/settings.dat" \
+"$INSTALL_DIR/saints_row_2/game/settings.dat.original"
+mv "$INSTALL_DIR/saints_row_2/tmp/support/add/local/settings.dat" \
+"$INSTALL_DIR/saints_row_2/game"
+rm -R -f "$INSTALL_DIR/saints_row_2/tmp"
+cp "$HOME/.games_nebula/scripts/goglib/saints_row_2/settings.py" "$INSTALL_DIR/saints_row_2/"
 
 echo -e '#!/bin/bash
+NEBULA_DIR="$2"
+python "$NEBULA_DIR/launcher_wine.py" saints_row_2 SR2_pc.exe' > \
+"$INSTALL_DIR/saints_row_2/start.sh"
+chmod +x "$INSTALL_DIR/saints_row_2/start.sh"
+
+echo -e '#!/bin/bash
+NEBULA_DIR="$4"
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-python2 "$DIR/settings.py"' > $INSTALL_DIR'/saints_row_2/settings.sh'
-chmod +x $INSTALL_DIR'/saints_row_2/settings.sh'
+python2 "$DIR/settings.py" "$NEBULA_DIR"' > "$INSTALL_DIR/saints_row_2/settings.sh"
+chmod +x "$INSTALL_DIR/saints_row_2/settings.sh"
 
 echo -e '#!/bin/bash
-INSTALL_DIR=$1
-WINEPREFIX_DIR=$3
+INSTALL_DIR="$1"
+WINEPREFIX_DIR="$3"
 rm "$WINEPREFIX_DIR/drive_c/users/$USER/Local Settings/Application Data/THQ/Saints Row 2/settings.dat"
 mkdir -p "$WINEPREFIX_DIR/drive_c/users/$USER/Local Settings/Application Data/THQ/Saints Row 2"
 ln -s "$INSTALL_DIR/saints_row_2/game/settings.dat" \
 "$WINEPREFIX_DIR/drive_c/users/$USER/Local Settings/Application Data/THQ/Saints Row 2/settings.dat"' > \
-$INSTALL_DIR'/saints_row_2/additions.sh'
-chmod +x $INSTALL_DIR'/saints_row_2/additions.sh'
+"$INSTALL_DIR/saints_row_2/additions.sh"
+chmod +x "$INSTALL_DIR/saints_row_2/additions.sh"

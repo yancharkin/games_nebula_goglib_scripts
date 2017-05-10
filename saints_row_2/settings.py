@@ -6,11 +6,7 @@ import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk
 import ConfigParser
-
 import gettext
-gettext.bindtextdomain('sr2', 'locale')
-gettext.textdomain('sr2')
-_ = gettext.gettext
 
 current_dir = sys.path[0]
 
@@ -32,7 +28,11 @@ dict_lang = {
 
 class GUI:
 
-    def __init__(self):
+    def __init__(self, nebula_dir):
+        
+        gettext.bindtextdomain('games_nebula', nebula_dir + '/locale')
+        gettext.textdomain('games_nebula')
+        self._ = gettext.gettext
 
         self.get_global_settings()
         self.config_load()
@@ -105,7 +105,7 @@ class GUI:
     def create_main_window(self):
 
         self.main_window = Gtk.Window(
-            title = _("Saints Row 2"),
+            title = self._("Saints Row 2"),
             type = Gtk.WindowType.TOPLEVEL,
             window_position = Gtk.WindowPosition.CENTER_ALWAYS,
             resizable = False,
@@ -123,7 +123,7 @@ class GUI:
             )
 
         self.label_language = Gtk.Label(
-            label = _("Language")
+            label = self._("Language")
             )
 
         self.combobox_language = Gtk.ComboBoxText()
@@ -138,13 +138,13 @@ class GUI:
         self.combobox_language.connect('changed', self.cb_combobox_language)
 
         self.checkbutton_custom_res = Gtk.CheckButton(
-            label = _("Custom resolution"),
+            label = self._("Custom resolution"),
             active = self.custom_res,
             )
         self.checkbutton_custom_res.connect('toggled', self.cb_checkbutton_custom_res)
 
         self.entry_custom_width = Gtk.Entry(
-            placeholder_text = _("Width"),
+            placeholder_text = self._("Width"),
             no_show_all = True,
             max_length = 4,
             xalign = 0.5,
@@ -154,7 +154,7 @@ class GUI:
         self.entry_custom_width.connect('changed', self.cb_entry_custom_width)
 
         self.entry_custom_height = Gtk.Entry(
-            placeholder_text = _("Height"),
+            placeholder_text = self._("Height"),
             no_show_all = True,
             max_length = 4,
             xalign = 0.5,
@@ -164,12 +164,12 @@ class GUI:
         self.entry_custom_height.connect('changed', self.cb_entry_custom_height)
 
         self.button_save = Gtk.Button(
-            label = _("Save and quit")
+            label = self._("Save and quit")
             )
         self.button_save.connect('clicked', self.cb_button_save)
 
         self.button_quit = Gtk.Button(
-            label = _("Quit without saving")
+            label = self._("Quit without saving")
             )
         self.button_quit.connect('clicked', Gtk.main_quit)
 
@@ -264,7 +264,7 @@ class GUI:
 
 def main():
     import sys
-    app = GUI()
+    app = GUI(sys.argv[1])
     Gtk.main()
 
 if __name__ == '__main__':
