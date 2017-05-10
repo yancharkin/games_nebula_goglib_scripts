@@ -1,44 +1,23 @@
 #!/bin/bash
 
-INSTALL_DIR=$2
+INSTALL_DIR="$2"
 
-mv $INSTALL_DIR'/battle_realms_winter_of_the_wolf/tmp/app' \
-$INSTALL_DIR'/battle_realms_winter_of_the_wolf/game'
-rm -R -f $INSTALL_DIR'/battle_realms_winter_of_the_wolf/tmp'
-
-cp $HOME'/.games_nebula/scripts/goglib/battle_realms_winter_of_the_wolf/battle-realms-resolution-patch.py' \
-$INSTALL_DIR/'battle_realms_winter_of_the_wolf/game/'
-chmod +x $INSTALL_DIR/'battle_realms_winter_of_the_wolf/game/battle-realms-resolution-patch.py'
-
-echo -e '#!/bin/bash
-NEBULA_DIR=$2
-python $NEBULA_DIR/launcher_wine.py battle_realms_winter_of_the_wolf Battle_Realms_F.exe
-xgamma -gamma 1' > $INSTALL_DIR'/battle_realms_winter_of_the_wolf/start.sh'
-chmod +x $INSTALL_DIR'/battle_realms_winter_of_the_wolf/start.sh'
+mv "$INSTALL_DIR/battle_realms_winter_of_the_wolf/tmp/app" \
+"$INSTALL_DIR/battle_realms_winter_of_the_wolf/game"
+rm -R -f "$INSTALL_DIR/battle_realms_winter_of_the_wolf/tmp"
+cp "$HOME/.games_nebula/scripts/goglib/battle_realms_winter_of_the_wolf/settings.py" \
+"$INSTALL_DIR/battle_realms_winter_of_the_wolf/"
+chmod +x "$INSTALL_DIR/battle_realms_winter_of_the_wolf/settings.py"
 
 echo -e '#!/bin/bash
-INSTALL_DIR=$1
-WINEPREFIX_DIR=$3
-rm $WINEPREFIX_DIR/drive_c/Games/battle_realms_winter_of_the_wolf
-mkdir -p $WINEPREFIX_DIR/drive_c/Games
-ln -s $INSTALL_DIR/battle_realms_winter_of_the_wolf/game \
-$WINEPREFIX_DIR/drive_c/Games/battle_realms_winter_of_the_wolf' > \
-$INSTALL_DIR'/battle_realms_winter_of_the_wolf/additions.sh'
-chmod +x $INSTALL_DIR'/battle_realms_winter_of_the_wolf/additions.sh'
+NEBULA_DIR="$2"
+python "$NEBULA_DIR/launcher_wine.py" battle_realms_winter_of_the_wolf Battle_Realms_F.exe
+xgamma -gamma 1' > "$INSTALL_DIR/battle_realms_winter_of_the_wolf/start.sh"
+chmod +x "$INSTALL_DIR/battle_realms_winter_of_the_wolf/start.sh"
 
 echo -e '#!/bin/bash
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-cd $DIR
-python3 ./battle-realms-resolution-patch.py' > \
-$INSTALL_DIR'/battle_realms_winter_of_the_wolf/game/battle-realms-resolution-patch.sh'
-chmod +x $INSTALL_DIR'/battle_realms_winter_of_the_wolf/game/battle-realms-resolution-patch.sh'
-
-zenity --question \
---title "Battle Realms" \
---text "Apply resolution patch?" \
---image "$INSTALL_DIR/battle_realms_winter_of_the_wolf/game/gfw_high.ico" \
---ok-label "Yes" --cancel-label "No"
-if [ $? == 0 ]; then
-    xterm -fg green -bg black -fn 10x20 -e \
-    $INSTALL_DIR'/battle_realms_winter_of_the_wolf/game/battle-realms-resolution-patch.sh'
-fi
+INSTALL_DIR="$1"
+NEBULA_DIR="$4"
+python2 "$INSTALL_DIR/battle_realms_winter_of_the_wolf/settings.py" \
+"$NEBULA_DIR"' > "$INSTALL_DIR/battle_realms_winter_of_the_wolf/settings.sh"
+chmod +x "$INSTALL_DIR/battle_realms_winter_of_the_wolf/settings.sh"
