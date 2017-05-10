@@ -1,0 +1,2 @@
+#!/bin/bash
+rm "$HOME/.games_nebula/wine_prefix/drive_c/Games/populous_the_beginning"
