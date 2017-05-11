@@ -12,14 +12,14 @@ current_dir = sys.path[0]
 
 class GUI:
 
-    def __init__(self, wine_dir, wineprefix_dir, nebula_dir):
+    def __init__(self, wine_path, wineprefix_path, nebula_dir):
 
         gettext.bindtextdomain('games_nebula', nebula_dir + '/locale')
         gettext.textdomain('games_nebula')
         self._ = gettext.gettext
 
-        self.wine_dir = wine_dir
-        self.wineprefix_dir = wineprefix_dir
+        self.wine_path = wine_path
+        self.wineprefix_path = wineprefix_path
 
         self.popres_exe = current_dir + '/game/popres.exe'
         
@@ -211,18 +211,25 @@ class GUI:
         Gtk.main_quit()
     
     def cb_button_res_changer(self, button):
+        
+        if self.wine_path == 'wine':
+            export_command = 'export WINELOADER=wine && ' + \
+            'export WINEPREFIX=' + self.wineprefix_path
+        else:
+            export_command = 'export WINE=' + self.wine_path + '/bin/wine && ' + \
+            'export WINELOADER=' + self.wine_path + '/bin/wine && ' + \
+            'export WINESERVER=' + self.wine_path + '/bin/wineserver && ' + \
+            'export WINEDLLPATH=' + self.wine_path + '/lib && ' + \
+            'export WINEPREFIX=' + self.wineprefix_path
 
-        command = 'export WINE=' + self.wine_dir + ' && ' + \
-            'export WINELOADER=' + self.wine_dir + ' && ' + \
-            'export WINEPREFIX=' + self.wineprefix_dir + ' && ' + \
-            '$WINELOADER "' + self.popres_exe + '"'
+        launch_command = '"$WINELOADER" "' + self.popres_exe + '"'
             
         self.main_window.hide()
 
         while Gtk.events_pending():
             Gtk.main_iteration()
 
-        os.system(command)
+        os.system(export_command + '\n' + launch_command)
         
         self.main_window.show()
 
