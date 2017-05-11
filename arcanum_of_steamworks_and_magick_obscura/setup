@@ -41,17 +41,17 @@ cp "$DOWNLOAD_DIR/_distr/arcanum_of_steamworks_and_magick_obscura/uap091225.exe"
 "$INSTALL_DIR/arcanum_of_steamworks_and_magick_obscura/game/"
 
 echo -e '#!/bin/bash
-./tolower
 ./weidu --nogame ./setup-highres.tp2' > \
 "$INSTALL_DIR/arcanum_of_steamworks_and_magick_obscura/game/highres.sh"
 chmod +x "$INSTALL_DIR/arcanum_of_steamworks_and_magick_obscura/game/highres.sh"
 
 cp "$HOME/.games_nebula/scripts/goglib/arcanum_of_steamworks_and_magick_obscura/settings.py" \
 "$INSTALL_DIR/arcanum_of_steamworks_and_magick_obscura/"
+chmod +x "$HOME/.games_nebula/scripts/goglib/arcanum_of_steamworks_and_magick_obscura/settings.py"
 
 echo -e '#!/bin/bash
 NEBULA_DIR="$2"
-python "$NEBULA_DIR/launcher_wine.py" arcanum_of_steamworks_and_magick_obscura Arcanum.exe' > \
+python "$NEBULA_DIR/launcher_wine.py" arcanum_of_steamworks_and_magick_obscura arcanum.exe' > \
 "$INSTALL_DIR/arcanum_of_steamworks_and_magick_obscura/start.sh"
 chmod +x "$INSTALL_DIR/arcanum_of_steamworks_and_magick_obscura/start.sh"
 
@@ -67,51 +67,13 @@ chmod +x "$INSTALL_DIR/arcanum_of_steamworks_and_magick_obscura/settings.sh"
 
 echo -e '#!/bin/bash
 INSTALL_DIR="$1"
-WINE_DIR="$2"
 WINEPREFIX_DIR="$3"
-INSTALL_DIR_WIN=$(echo Z:$INSTALL_DIR | sed -e s=/=\\\\\\\\=g)
-
-if [ "$WINE_DIR" == "wine" ]; then
-    export WINELOADER="$WINE_DIR"
-    export WINEPREFIX="$WINEPREFIX_DIR"
-else
-    export WINE="$WINE_DIR/bin/wine"
-    export WINELOADER="$WINE_DIR/bin/wine"
-    export WINESERVER="$WINE_DIR/bin/wineserver"
-    export WINEDLLPATH="$WINE_DIR/lib"
-    export WINEPREFIX="$WINEPREFIX_DIR"
-fi
-
 rm "$WINEPREFIX_DIR/drive_c/Games/arcanum_of_steamworks_and_magick_obscura"
 mkdir -p "$WINEPREFIX_DIR/drive_c/Games"
 ln -s "$INSTALL_DIR/arcanum_of_steamworks_and_magick_obscura/game" \
-"$WINEPREFIX_DIR/drive_c/Games/arcanum_of_steamworks_and_magick_obscura"
-
-if [ ! -f "$INSTALL_DIR/arcanum_of_steamworks_and_magick_obscura/.patch_installed" ]; then
-zenity --question \
---text="Install Unofficial Arcanum Patch v091225?" \
---ok-label="Yes" --cancel-label="No"
-if [ $? == 0 ]; then
-zenity --info --text "Install to default location!"
-if [ -f "$INSTALL_DIR/arcanum_of_steamworks_and_magick_obscura/game/uap091225.exe" ]; then
-$WINELOADER $INSTALL_DIR/arcanum_of_steamworks_and_magick_obscura/game/uap091225.exe /D=\
-"$INSTALL_DIR_WIN\\\\arcanum_of_steamworks_and_magick_obscura\\\\game"
-else
-$WINELOADER "$INSTALL_DIR/arcanum_of_steamworks_and_magick_obscura/game/UAP091225.exe" /D=\
-"$INSTALL_DIR_WIN\\\\arcanum_of_steamworks_and_magick_obscura\\\\game"
-fi
-touch "$INSTALL_DIR/arcanum_of_steamworks_and_magick_obscura/.patch_installed"
-fi
-fi
-
-if [ ! -f "$INSTALL_DIR/arcanum_of_steamworks_and_magick_obscura/.hd_installed" ]; then
-zenity --question \
---text="Install High Resolution Patch?" \
---ok-label="Yes" --cancel-label="No"
-if [ $? == 0 ]; then
-cd "$INSTALL_DIR/arcanum_of_steamworks_and_magick_obscura/game"
-xterm -fg green -bg black -fn 10x20 -e ./highres.sh
-touch "$INSTALL_DIR/arcanum_of_steamworks_and_magick_obscura/.hd_installed"
-fi
-fi' > "$INSTALL_DIR/arcanum_of_steamworks_and_magick_obscura/additions.sh"
+"$WINEPREFIX_DIR/drive_c/Games/arcanum_of_steamworks_and_magick_obscura"' > \
+"$INSTALL_DIR/arcanum_of_steamworks_and_magick_obscura/additions.sh"
 chmod +x "$INSTALL_DIR/arcanum_of_steamworks_and_magick_obscura/additions.sh"
+
+cd "$INSTALL_DIR/arcanum_of_steamworks_and_magick_obscura/game"
+printf 'y\nn\n' | ./tolower
