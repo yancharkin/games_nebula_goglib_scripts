@@ -1,0 +1,111 @@
+#!/bin/bash
+
+DOWNLOAD_DIR="$1"
+INSTALL_DIR="$2"
+NEBULA_DIR="$3"
+
+mv "$INSTALL_DIR/dungeon_keeper/tmp/app" \
+"$INSTALL_DIR/dungeon_keeper/game"
+rm -R -f "$INSTALL_DIR/dungeon_keeper/tmp"
+
+cp "$HOME/.games_nebula/scripts/goglib/dungeon_keeper/settings.py" \
+"$INSTALL_DIR/dungeon_keeper/"
+cp "$HOME/.games_nebula/scripts/goglib/dungeon_keeper/settings.dat" \
+"$INSTALL_DIR/dungeon_keeper/game/SAVE/SETTINGS.DAT"
+
+VER=$(python2 "$NEBULA_DIR/dialogs.py" list "DOSBox, KeeperFX (~400 Mb)")
+
+if [ "$VER" == "DOSBox" ]; then
+
+echo '#!/bin/bash
+INSTALL_DIR="$1"
+NEBULA_DIR="$2"
+rm "$HOME/.games_nebula/games/.dosbox/dungeon_keeper"
+mkdir -p "$HOME/.games_nebula/games/.dosbox"
+ln -s "$INSTALL_DIR/dungeon_keeper/game" \
+"$HOME/.games_nebula/games/.dosbox/dungeon_keeper"
+python "$NEBULA_DIR/launcher_dosbox.py" dungeon_keeper' > \
+"$INSTALL_DIR/dungeon_keeper/start.sh"
+chmod +x "$INSTALL_DIR/dungeon_keeper/start.sh"
+
+echo "[autoexec]
+@echo off
+mount c $HOME/.games_nebula/games/.dosbox/dungeon_keeper
+c:
+imgmount d $HOME/.games_nebula/games/.dosbox/dungeon_keeper/GAME.INST -fs iso
+cls
+
+echo.
+echo.
+ECHO  ---------------------------------
+ECHO  Dungeon Keeper
+ECHO  ---------------------------------
+ECHO  1) Dungeon Keeper
+ECHO  2) The Deeper Dungeons
+ECHO  ---------------------------------
+ECHO  3) Exit
+ECHO  ---------------------------------
+echo.
+echo.
+
+choice /c123 /s Select number [1-3]: /n
+if errorlevel 3 goto exit
+if errorlevel 2 goto dd
+if errorlevel 1 goto dk
+
+:dk
+cls
+KEEPER.EXE
+cls
+exit
+
+:dd
+cls
+DEEPER.EXE
+cls
+exit
+
+:exit
+exit" > "$INSTALL_DIR/dungeon_keeper/dosbox_game.conf"
+
+echo "[autoexec]
+@echo off
+mount C $HOME/.games_nebula/games/.dosbox/dungeon_keeper
+c:
+imgmount d $HOME/.games_nebula/games/.dosbox/dungeon_keeper/GAME.INST -fs iso
+cd SOUND
+cls
+SETSOUND.EXE
+exit" > "$INSTALL_DIR/dungeon_keeper/dosbox_settings.conf"
+
+fi
+
+if [ "$VER" == "KeeperFX (~400 Mb)" ]; then
+
+mkdir -p "$DOWNLOAD_DIR/_distr/dungeon_keeper"
+if [ ! -f "$DOWNLOAD_DIR/_distr/dungeon_keeper/keeperfx_ccp_0_4_6_complete.7z" ]; then
+python2 "$NEBULA_DIR/dialogs.py" progress downloading \
+"curl -L -o $DOWNLOAD_DIR/_distr/dungeon_keeper/keeperfx_ccp_0_4_6_complete.7z http://keeperfx.keeperklan.com/keeperfx_ccp_0_4_6_complete.7z"
+fi
+
+python2 "$NEBULA_DIR/dialogs.py" progress installing \
+"7z x -aoa -o$INSTALL_DIR/dungeon_keeper/game $DOWNLOAD_DIR/_distr/dungeon_keeper/keeperfx_ccp_0_4_6_complete.7z"
+
+mv "$INSTALL_DIR/dungeon_keeper/game/"*.ogg "$INSTALL_DIR/dungeon_keeper/game/music"
+cp "$HOME/.games_nebula/scripts/goglib/dungeon_keeper/settings.dat" \
+"$INSTALL_DIR/dungeon_keeper/game/save"
+
+echo -e '#!/bin/bash
+NEBULA_DIR="$2"
+python "$NEBULA_DIR/launcher_wine.py" dungeon_keeper "keeperfx.exe -nocd"' > \
+"$INSTALL_DIR/dungeon_keeper/start.sh"
+chmod +x "$INSTALL_DIR/dungeon_keeper/start.sh"
+
+echo -e '#!/bin/bash
+NEBULA_DIR="$4"
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+python2 "$DIR/settings.py" "$NEBULA_DIR"' > \
+"$INSTALL_DIR/dungeon_keeper/settings.sh"
+chmod +x "$INSTALL_DIR/dungeon_keeper/settings.sh"
+
+fi

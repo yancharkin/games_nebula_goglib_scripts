@@ -1,0 +1,2 @@
+#!/bin/bash
+rm "$HOME/.games_nebula/games/.dosbox/dungeon_keeper"
