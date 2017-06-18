@@ -120,7 +120,7 @@ class GUI:
         radiobutton_poptbuw.connect('clicked', self.cb_radiobuttons)
 
         frame_patches = Gtk.Frame(
-            label =self. _("Patches"),
+            label = _("Patches"),
             label_xalign = 0.5
             )
 
