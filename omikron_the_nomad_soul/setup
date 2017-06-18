@@ -1,22 +1,10 @@
 #!/bin/bash
 
-INSTALL_DIR=$2
+source "$NEBULA_DIR/scripts/shell_functions.sh"
 
-mv $INSTALL_DIR'/omikron_the_nomad_soul/tmp/app' $INSTALL_DIR'/omikron_the_nomad_soul/game'
-rm -R -f $INSTALL_DIR'/omikron_the_nomad_soul/tmp'
+get_common_file 'Old_Games_Widescreen_Patch.rar' \
+'https://community.pcgamingwiki.com/files/download/109-old-games-widescreen-patch/'
 
-echo -e '#!/bin/bash
-NEBULA_DIR=$2
-python $NEBULA_DIR/launcher_wine.py omikron_the_nomad_soul Runtime.exe' > \
-$INSTALL_DIR'/omikron_the_nomad_soul/start.sh'
-chmod +x $INSTALL_DIR'/omikron_the_nomad_soul/start.sh'
-
-echo -e '#!/bin/bash
-INSTALL_DIR=$1
-WINEPREFIX_DIR=$3
-rm $WINEPREFIX_DIR/drive_c/Games/omikron_the_nomad_soul
-mkdir -p $WINEPREFIX_DIR/drive_c/Games
-ln -s $INSTALL_DIR/omikron_the_nomad_soul/game \
-$WINEPREFIX_DIR/drive_c/Games/omikron_the_nomad_soul' > \
-$INSTALL_DIR'/omikron_the_nomad_soul/additions.sh'
-chmod +x $INSTALL_DIR'/omikron_the_nomad_soul/additions.sh'
+7z e -aoa -o"$INSTALL_DIR/$GAME_NAME/game/" \
+"$DOWNLOAD_DIR/_distr/Old_Games_Widescreen_Patch.rar" \
+Old_Games_Widescreen_Patch/*

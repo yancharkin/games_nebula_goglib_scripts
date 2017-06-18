@@ -1,91 +1,10 @@
 #!/bin/bash
 
-DOWNLOAD_DIR=$1
-INSTALL_DIR=$2
+source "$NEBULA_DIR/scripts/shell_functions.sh"
 
-mv $INSTALL_DIR'/the_temple_of_elemental_evil/tmp/app' \
-$INSTALL_DIR'/the_temple_of_elemental_evil/game'
-rm -R -f $INSTALL_DIR'/the_temple_of_elemental_evil/tmp'
-
-echo -e '#!/bin/bash
-INSTALL_DIR=$1
-NEBULA_DIR=$2
-if [ -f $INSTALL_DIR/the_temple_of_elemental_evil/game/TFE-X.exe ]; then
-python $NEBULA_DIR/launcher_wine.py the_temple_of_elemental_evil TFE-X.exe
+ARCH=$(get_arch x)
+if [ "$ARCH" == "x86_64" ]; then
+get_java_x64
 else
-python $NEBULA_DIR/launcher_wine.py the_temple_of_elemental_evil ToEEa.exe
-fi' > $INSTALL_DIR'/the_temple_of_elemental_evil/start.sh'
-chmod +x $INSTALL_DIR'/the_temple_of_elemental_evil/start.sh'
-
-echo -e '#!/bin/bash
-INSTALL_DIR=$1
-WINE_DIR=$2
-WINEPREFIX_DIR=$3
-DOWNLOAD_DIR=$4
-
-if [ $WINE_DIR == "wine" ]; then
-    export WINELOADER=$WINE_DIR
-    export WINEPREFIX=$WINEPREFIX_DIR
-else
-    export WINE=$WINE_DIR/bin/wine
-    export WINELOADER=$WINE_DIR/bin/wine
-    export WINESERVER=$WINE_DIR/bin/wineserver
-    export WINEDLLPATH=$WINE_DIR/lib
-    export WINEPREFIX=$WINEPREFIX_DIR
-fi
-
-rm $WINEPREFIX_DIR/drive_c/Games/the_temple_of_elemental_evil
-mkdir -p $WINEPREFIX_DIR/drive_c/Games
-ln -s $INSTALL_DIR/the_temple_of_elemental_evil/game \
-$WINEPREFIX_DIR/drive_c/Games/the_temple_of_elemental_evil
-
-if [ -f $INSTALL_DIR/the_temple_of_elemental_evil/game/TFE-X.exe ]; then
-$WINELOADER $DOWNLOAD_DIR/_distr/jre-i586.exe /s | zenity --progress --title \
-"Java Runtime Environment" --text \
-"Installing Java Runtime Environment..." --auto-close --no-cancel --pulsate
-fi' > $INSTALL_DIR'/the_temple_of_elemental_evil/additions.sh'
-chmod +x $INSTALL_DIR'/the_temple_of_elemental_evil/additions.sh'
-
-zenity --question \
---text="Install The Circle of Eight Modpack?" \
---ok-label="Yes" --cancel-label="No"
-if [ $? == 0 ]; then
-
-if [ ! -f $DOWNLOAD_DIR/_distr/the_temple_of_elemental_evil/* ]; then
-VERSION=$(zenity --list --radiolist --title="The Circle of Eight Modpack" \
---text="Version to download:" --hide-header --column="x" \
---column="Title" TRUE "New Content Edition" FALSE "Standard Edition")
-
-mkdir -p $DOWNLOAD_DIR/_distr/the_temple_of_elemental_evil
-xdg-open $DOWNLOAD_DIR/_distr/the_temple_of_elemental_evil
-
-if [ "$VERSION" == "New Content Edition" ]; then
-sensible-browser "http://www.moddb.com/downloads/start/73406?referer=http%3A%2F%2Fwww.moddb.com%2Fmods%2Fcircle-of-eight-modpack" &
-zenity --info --text \
-"Download modpack and put it in\n<b>$DOWNLOAD_DIR/_distr/the_temple_of_elemental_evil/</b>\nThen click OK."
-fi
-
-if [ "$VERSION" == "Standard Edition" ]; then
-sensible-browser "http://www.moddb.com/downloads/start/73404?referer=http%3A%2F%2Fwww.moddb.com%2Fmods%2Fcircle-of-eight-modpack" &
-zenity --info --text \
-"Download modpack and put it in\n<b>$DOWNLOAD_DIR/_distr/the_temple_of_elemental_evil/</b>\nThen click OK."
-fi
-
-curl -L -o $DOWNLOAD_DIR/_distr/jre-i586.exe -C - \
-"http://javadl.oracle.com/webapps/download/AutoDL?BundleId=218831_e9e7ea248e2c4826b92b3f075a80e441" \
-| zenity --progress --title "Java Runtime Environment" --text \
-"Downloading Java Runtime Environment..." --auto-close --no-cancel --pulsate
-fi
-
-mkdir $INSTALL_DIR/the_temple_of_elemental_evil/tmp
-innoextract $DOWNLOAD_DIR/_distr/the_temple_of_elemental_evil/* \
--d $INSTALL_DIR/the_temple_of_elemental_evil/tmp \
-| zenity --progress --title "The Circle of Eight Modpack" --text \
-"Installing..." --auto-close --no-cancel --pulsate
-
-mv $INSTALL_DIR/the_temple_of_elemental_evil/tmp/app/* \
-$INSTALL_DIR/the_temple_of_elemental_evil/game
-rm -R $INSTALL_DIR/the_temple_of_elemental_evil/tmp
-chmod +x $INSTALL_DIR/the_temple_of_elemental_evil/game/TFE-X.sh
-
+get_java_i586
 fi

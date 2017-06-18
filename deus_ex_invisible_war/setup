@@ -1,42 +1,5 @@
 #!/bin/bash
 
-INSTALL_DIR=$2
-
-mv $INSTALL_DIR'/deus_ex_invisible_war/tmp/app' $INSTALL_DIR'/deus_ex_invisible_war/game'
-rm -R -f $INSTALL_DIR'/deus_ex_invisible_war/tmp'
-
 # Edit binary (explanation at winehq.org)
-cd $INSTALL_DIR'/deus_ex_invisible_war/game/System'
+cd "$INSTALL_DIR/$GAME_NAME/game/System"
 printf "$(printf '\\x%02X' '68')" | dd of='dx2.exe' bs=1 seek=3237 count=1 conv=notrunc
-
-echo -e '#!/bin/bash
-NEBULA_DIR=$2
-python $NEBULA_DIR/launcher_wine.py deus_ex_invisible_war System/dx2.exe' > \
-$INSTALL_DIR'/deus_ex_invisible_war/start.sh'
-chmod +x $INSTALL_DIR'/deus_ex_invisible_war/start.sh'
-
-echo -e '#!/bin/bash
-INSTALL_DIR=$1
-WINE_DIR=$2
-WINEPREFIX_DIR=$3
-
-if [ $WINE_DIR == "wine" ]; then
-	export WINELOADER=$WINE_DIR
-	export WINEPREFIX=$WINEPREFIX_DIR
-else
-	export WINE=$WINE_DIR/bin/wine
-	export WINELOADER=$WINE_DIR/bin/wine
-	export WINESERVER=$WINE_DIR/bin/wineserver
-	export WINEDLLPATH=$WINE_DIR/lib
-	export WINEPREFIX=$WINEPREFIX_DIR
-fi
-
-$WINELOADER reg add "HKEY_LOCAL_MACHINE\Software\Ion Storm\Deus Ex - Invisible War" /v \
-"ION_ROOT_PC" /t REG_SZ /d $INSTALL_DIR_WIN\\\\deus_ex_invisible_war\\\\game /f
-
-rm $WINEPREFIX_DIR/drive_c/Games/deus_ex_invisible_war
-mkdir -p $WINEPREFIX_DIR/drive_c/Games
-ln -s $INSTALL_DIR/deus_ex_invisible_war/game \
-$WINEPREFIX_DIR/drive_c/Games/deus_ex_invisible_war' > \
-$INSTALL_DIR'/deus_ex_invisible_war/additions.sh'
-chmod +x $INSTALL_DIR'/deus_ex_invisible_war/additions.sh'

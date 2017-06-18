@@ -7,28 +7,29 @@ gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk
 import ConfigParser
 import gettext
+import imp
+
+nebula_dir = os.getenv('NEBULA_DIR')
+
+modules_dir = nebula_dir + '/modules'
+set_visuals = imp.load_source('set_visuals', modules_dir + '/set_visuals.py')
+
+gettext.bindtextdomain('games_nebula', nebula_dir + '/locale')
+gettext.textdomain('games_nebula')
+_ = gettext.gettext
 
 current_dir = sys.path[0]
 
 class GUI:
 
-    def __init__(self, wine_path, wineprefix_path, nebula_dir):
-
-        gettext.bindtextdomain('games_nebula', nebula_dir + '/locale')
-        gettext.textdomain('games_nebula')
-        self._ = gettext.gettext
-
-        self.wine_path = wine_path
-        self.wineprefix_path = wineprefix_path
-
-        self.get_global_settings()
+    def __init__(self):
         self.config_load()
         self.create_main_window()
 
     def create_main_window(self):
 
         self.main_window = Gtk.Window(
-            title = self._("Dungeon Keeper 2"),
+            title = _("Dungeon Keeper 2"),
             type = Gtk.WindowType.TOPLEVEL,
             window_position = Gtk.WindowPosition.CENTER_ALWAYS,
             resizable = False,
@@ -45,7 +46,7 @@ class GUI:
             )
 
         frame_rendering = Gtk.Frame(
-            label = self._("Rendering"),
+            label = _("Rendering"),
             label_xalign = 0.5,
             )
 
@@ -59,18 +60,18 @@ class GUI:
             )
 
         radiobutton_dk2dx = Gtk.RadioButton(
-            label = self._("GOG HW Patch"),
+            label = _("GOG HW Patch"),
             name = 'DKII-DX.exe'
             )
 
         radiobutton_dk2 = Gtk.RadioButton(
-            label = self._("Hardware rendering"),
+            label = _("Hardware rendering"),
             name = 'DKII.EXE'
             )
         radiobutton_dk2.join_group(radiobutton_dk2dx)
 
         radiobutton_dk2soft = Gtk.RadioButton(
-            label = self._("Software rendering"),
+            label = _("Software rendering"),
             name = 'DKII_SOFT.EXE'
             )
         radiobutton_dk2soft.join_group(radiobutton_dk2dx)
@@ -86,11 +87,11 @@ class GUI:
             )
 
         label_res = Gtk.Label(
-            label = self._("Resolution")
+            label = _("Resolution")
             )
 
         entry_width = Gtk.Entry(
-            placeholder_text = self._("Width"),
+            placeholder_text = _("Width"),
             xalign = 0.5,
             max_length = 4,
             text = self.width,
@@ -99,7 +100,7 @@ class GUI:
         entry_width.connect('changed', self.cb_entries_res)
 
         entry_height = Gtk.Entry(
-            placeholder_text = self._("Height"),
+            placeholder_text = _("Height"),
             xalign = 0.5,
             max_length = 4,
             text = self.height,
@@ -112,7 +113,7 @@ class GUI:
         box_res.pack_start(entry_height, True, True, 0)
 
         button_save = Gtk.Button(
-            label = self._("Save and quit")
+            label = _("Save and quit")
             )
         button_save.connect('clicked', self.cb_button_save)
 
@@ -130,22 +131,6 @@ class GUI:
 
         self.main_window.add(box_main)
         self.main_window.show_all()
-
-    def get_global_settings(self):
-
-        global_config_file = os.getenv('HOME') + '/.games_nebula/config/config.ini'
-        global_config_parser = ConfigParser.ConfigParser()
-        global_config_parser.read(global_config_file)
-        gtk_theme = global_config_parser.get('visuals', 'gtk_theme')
-        gtk_dark = global_config_parser.getboolean('visuals', 'gtk_dark')
-        icon_theme = global_config_parser.get('visuals', 'icon_theme')
-        font = global_config_parser.get('visuals','font')
-        screen = Gdk.Screen.get_default()
-        gsettings = Gtk.Settings.get_for_screen(screen)
-        gsettings.set_property('gtk-theme-name', gtk_theme)
-        gsettings.set_property('gtk-application-prefer-dark-theme', gtk_dark)
-        gsettings.set_property('gtk-icon-theme-name', icon_theme)
-        gsettings.set_property('gtk-font-name', font)
 
     def config_load(self):
 
@@ -196,16 +181,6 @@ class GUI:
 
     def modify_registry(self):
 
-        if self.wine_path == 'wine':
-            export_command = 'export WINELOADER=wine && ' + \
-            'export WINEPREFIX=' + self.wineprefix_path
-        else:
-            export_command = 'export WINE=' + self.wine_path + '/bin/wine && ' + \
-            'export WINELOADER=' + self.wine_path + '/bin/wine && ' + \
-            'export WINESERVER=' + self.wine_path + '/bin/wineserver && ' + \
-            'export WINEDLLPATH=' + self.wine_path + '/lib && ' + \
-            'export WINEPREFIX=' + self.wineprefix_path
-
         regedit_command = '"$WINELOADER" reg add ' + \
         '"HKEY_CURRENT_USER\Software\Bullfrog Productions Ltd\Dungeon Keeper II\Configuration\Video" /v ' + \
         '"Screen Width" /t REG_DWORD /d ' + str(hex(int(self.width))) + ' /f && ' + \
@@ -213,7 +188,7 @@ class GUI:
         '"HKEY_CURRENT_USER\Software\Bullfrog Productions Ltd\Dungeon Keeper II\Configuration\Video" /v ' + \
         '"Screen Height" /t REG_DWORD /d ' + str(hex(int(self.height))) + ' /f'
 
-        os.system(export_command + '\n' + regedit_command)
+        os.system(regedit_command)
 
     def cb_radiobuttons(self, radiobutton):
         self.exe = radiobutton.get_name()
@@ -251,7 +226,7 @@ class GUI:
 
 def main():
     import sys
-    app = GUI(sys.argv[1], sys.argv[2], sys.argv[3])
+    app = GUI()
     Gtk.main()
 
 if __name__ == '__main__':

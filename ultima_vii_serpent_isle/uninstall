@@ -1,7 +1,4 @@
 #!/bin/bash
-INSTALL_DIR="$1"
-
-rm "$HOME/.games_nebula/games/.dosbox/ultima_vii_serpent_isle"
 
 if [ ! -d "$INSTALL_DIR/ultima_vii_the_black_gate_the_forge_of_virtue" ]; then
 rm -r "$INSTALL_DIR/exult"

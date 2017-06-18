@@ -1,63 +1,7 @@
 #!/bin/bash
 
-DOWNLOAD_DIR="$1"
-INSTALL_DIR="$2"
+source "$NEBULA_DIR/scripts/shell_functions.sh"
 
-mv "$INSTALL_DIR/populous_the_beginning/tmp/app" "$INSTALL_DIR/populous_the_beginning/game"
-rm -R -f "$INSTALL_DIR/populous_the_beginning/tmp"
-cp "$HOME/.games_nebula/scripts/goglib/populous_the_beginning/settings.py" \
-"$INSTALL_DIR/populous_the_beginning/"
-chmod +x "$INSTALL_DIR/populous_the_beginning/settings.py"
-
-mkdir -p "$DOWNLOAD_DIR/_distr/populous_the_beginning"
-
-if [ ! -f "$DOWNLOAD_DIR/_distr/populous_the_beginning/popres.exe" ]; then
-    curl -L -o "$DOWNLOAD_DIR/_distr/populous_the_beginning/popres.exe" -C - \
-    'https://www.popre.net/files/popres.exe'
-fi
-cp "$DOWNLOAD_DIR/_distr/populous_the_beginning/popres.exe" \
-"$INSTALL_DIR/populous_the_beginning/game/popres.exe"
-
-echo -e '#!/bin/bash
-NEBULA_DIR="$2"
-python "$NEBULA_DIR/launcher_wine.py" populous_the_beginning "D3DPopTB.exe -allres"' > \
-"$INSTALL_DIR/populous_the_beginning/start.sh"
-chmod +x "$INSTALL_DIR/populous_the_beginning/start.sh"
-
-echo -e '#!/bin/bash
-INSTALL_DIR="$1"
-WINE_DIR="$2"
-WINEPREFIX_DIR="$3"
-NEBULA_DIR="$4"
-python2 "$INSTALL_DIR/populous_the_beginning/settings.py" \
-"$WINE_DIR" "$WINEPREFIX_DIR" "$NEBULA_DIR"' > \
-"$INSTALL_DIR/populous_the_beginning/settings.sh"
-chmod +x "$INSTALL_DIR/populous_the_beginning/settings.sh"
-
-echo -e '#!/bin/bash
-INSTALL_DIR="$1"
-WINE_DIR="$2"
-WINEPREFIX_DIR="$3"
-
-if [ $WINE_DIR == "wine" ]; then
-    export WINELOADER="$WINE_DIR"
-    export WINEPREFIX="$WINEPREFIX_DIR"
-else
-    export WINE="$WINE_DIR/bin/wine"
-    export WINELOADER="$WINE_DIR/bin/wine"
-    export WINESERVER="$WINE_DIR/bin/wineserver"
-    export WINEDLLPATH="$WINE_DIR/lib"
-    export WINEPREFIX="$WINEPREFIX_DIR"
-fi
-
-rm "$WINEPREFIX_DIR/drive_c/Games/populous_the_beginning"
-mkdir -p "$WINEPREFIX_DIR/drive_c/Games"
-ln -s "$INSTALL_DIR/populous_the_beginning/game" \
-"$WINEPREFIX_DIR/drive_c/Games/populous_the_beginning"
-
-"$WINELOADER" reg add "HKEY_LOCAL_MACHINE\Software\Bullfrog Productions Ltd\Populous: The Beginning" /v \
-"InstallDirectory" /t REG_SZ /d "populous_the_beginning" /f
-"$WINELOADER" reg add "HKEY_LOCAL_MACHINE\Software\Bullfrog Productions Ltd\Populous: The Beginning" /v \
-"InstallDrive" /t REG_SZ /d "C:" /f' > \
-"$INSTALL_DIR/populous_the_beginning/additions.sh"
-chmod +x "$INSTALL_DIR/populous_the_beginning/additions.sh"
+get_file 'popres.exe' \
+'https://www.popre.net/files/popres.exe'
+cp "$DOWNLOAD_DIR/_distr/$GAME_NAME/popres.exe" "$INSTALL_DIR/$GAME_NAME/game/"

@@ -1,23 +1,19 @@
 #!/bin/bash
 
-INSTALL_DIR=$2
+source "$NEBULA_DIR/scripts/shell_functions.sh"
 
-mv $INSTALL_DIR'/prince_of_persia_the_sands_of_time/tmp/app' \
-$INSTALL_DIR'/prince_of_persia_the_sands_of_time/game'
-rm -R -f $INSTALL_DIR'/prince_of_persia_the_sands_of_time/tmp'
+get_from_mega 'pop1_widescreen.7z' \
+'https://mega.nz/#!jdoh3Aab!Q0V4trWEZ_vxmsAfslx_Yrtmp81BuLm1RewH3LoqG1c'
+
+7z x -aoa -o"$INSTALL_DIR/$GAME_NAME/game/" \
+"$DOWNLOAD_DIR/_distr/$GAME_NAME/pop1_widescreen.7z" \
+'pop.7z'
+
+7z x -aoa -p'pop' -o"$INSTALL_DIR/$GAME_NAME/game/" \
+"$INSTALL_DIR/$GAME_NAME/game/pop.7z"
 
 echo -e '#!/bin/bash
-NEBULA_DIR=$2
-python $NEBULA_DIR/launcher_wine.py prince_of_persia_the_sands_of_time PrinceOfPersia.EXE' > \
-$INSTALL_DIR'/prince_of_persia_the_sands_of_time/start.sh'
-chmod +x $INSTALL_DIR'/prince_of_persia_the_sands_of_time/start.sh'
-
-echo -e '#!/bin/bash
-INSTALL_DIR=$1
-WINEPREFIX_DIR=$3
-rm $WINEPREFIX_DIR/drive_c/Games/prince_of_persia_the_sands_of_time
-mkdir -p $WINEPREFIX_DIR/drive_c/Games
-ln -s $INSTALL_DIR/prince_of_persia_the_sands_of_time/game \
-$WINEPREFIX_DIR/drive_c/Games/prince_of_persia_the_sands_of_time' > \
-$INSTALL_DIR'/prince_of_persia_the_sands_of_time/additions.sh'
-chmod +x $INSTALL_DIR'/prince_of_persia_the_sands_of_time/additions.sh'
+export WINEDLLOVERRIDES="pop1w=n,b"
+export WINEDLLOVERRIDES="d3d9=n,b"
+python2 "$NEBULA_DIR/launcher_wine.py" '"$GAME_NAME"' "PrinceOfPersia.EXE"' > \
+"$START_FILE"

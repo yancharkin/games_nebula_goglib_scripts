@@ -1,25 +1,31 @@
 #!/bin/bash
 
-DOWNLOAD_DIR=$1
-INSTALL_DIR=$2
+source "$NEBULA_DIR/scripts/shell_functions.sh"
 
-lgogdownloader --download --exclude 4,16 --game 'hotline_miami_2_wrong_number_digital_comics'
+lgogdownloader --download --game "$GAME_NAME" --platform 4 --exclude 4,16 \
+--ignore-dlc-count  --directory="$DOWNLOAD_DIR"
 
-unzip -o $DOWNLOAD_DIR'/hotline_miami_2_wrong_number_digital_comics/extras/hlm_2_comics_linux.zip' \
--d $INSTALL_DIR'/hotline_miami_2_wrong_number_digital_comics'
+7z x -aoa  -o"$INSTALL_DIR/$GAME_NAME" "$DOWNLOAD_DIR/$GAME_NAME/extras/hlm_2_comics_linux.zip" \
+& proc_timer $! "Extracting hlm_2_comics_linux.zip"
 
-mv $INSTALL_DIR'/hotline_miami_2_wrong_number_digital_comics/hlm_2_comics_linux/'* \
-$INSTALL_DIR'/hotline_miami_2_wrong_number_digital_comics/'
+mv "$INSTALL_DIR/$GAME_NAME/hlm_2_comics_linux/"* "$INSTALL_DIR/$GAME_NAME/"
 
-chmod +x $INSTALL_DIR'/hotline_miami_2_wrong_number_digital_comics/linux32/hlm2comics'
-chmod +x $INSTALL_DIR'/hotline_miami_2_wrong_number_digital_comics/linux64/hlm2comics'
+chmod +x "$INSTALL_DIR/$GAME_NAME/linux32/hlm2comics"
+chmod +x "$INSTALL_DIR/$GAME_NAME/linux64/hlm2comics"
 
-rm -R $INSTALL_DIR'/hotline_miami_2_wrong_number_digital_comics/hlm_2_comics_linux'
+rm -R "$INSTALL_DIR/$GAME_NAME/hlm_2_comics_linux"
+
+ARCH=$(get_arch x)
+if [ "$ARCH" == "x86_64" ]; then
+echo -e '#!/bin/bash
+"$INSTALL_DIR/'"$GAME_NAME"'/linux64/hlm2comics"' > \
+"$START_GN_FILE" && chmod +x "$START_GN_FILE"
+else
+echo -e '#!/bin/bash
+"$INSTALL_DIR/'"$GAME_NAME"'/linux32/hlm2comics"' > \
+"$START_GN_FILE" && chmod +x "$START_GN_FILE"
+fi
 
 echo -e '#!/bin/bash
-if [ $(uname -m) == "x86_64" ]; then\n'\
-"	$INSTALL_DIR/hotline_miami_2_wrong_number_digital_comics/linux64/hlm2comics
-else
-	$INSTALL_DIR/hotline_miami_2_wrong_number_digital_comics/linux32/hlm2comics
-fi" >  $INSTALL_DIR'/hotline_miami_2_wrong_number_digital_comics/start.sh'
-chmod +x $INSTALL_DIR'/hotline_miami_2_wrong_number_digital_comics/start.sh'
+python2 "$NEBULA_DIR/launcher_native.py" '"$GAME_NAME" > \
+"$START_FILE" && chmod +x "$START_FILE"

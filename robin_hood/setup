@@ -1,0 +1,78 @@
+#!/bin/bash
+
+source "$NEBULA_DIR/scripts/shell_functions.sh"
+
+VER=$(python2 "$NEBULA_DIR/dialogs.py" list "Windows, Linux (+13 Mb)")
+
+if [ "$VER" == "Linux (+13 Mb)" ]; then
+
+mv "$INSTALL_DIR/$GAME_NAME/game/DATA" "$INSTALL_DIR/$GAME_NAME/game/Data"
+mv "$INSTALL_DIR/$GAME_NAME/game/2047/data" "$INSTALL_DIR/$GAME_NAME/game/2047/Data"
+
+get_file 'robin.hood_1.2-multilingual.cdrom_x86-20121119.mojo.run' \
+'https://bitbucket.org/runesoftdev/robinhood_public/downloads/robin.hood_1.2-multilingual.cdrom_x86-20121119.mojo.run'
+
+INSTALLER="$DOWNLOAD_DIR/_distr/$GAME_NAME/robin.hood_1.2-multilingual.cdrom_x86-20121119.mojo.run"
+
+7z e -aoa -o"$INSTALL_DIR/$GAME_NAME/game/2047/Data/Text/" \
+"$INSTALLER" \
+"data/updates/2047/Data/Text/Levels.res" \
+& proc_timer $! "Unpacking installer"
+
+7z e -aoa -o"$INSTALL_DIR/$GAME_NAME/game/2047/Data/Interface/" \
+"$INSTALLER" \
+"data/updates/2047/Data/Interface/Slideshow_in.pak" \
+& proc_timer $! "Unpacking installer"
+
+7z e -aoa -o"$INSTALL_DIR/$GAME_NAME/game/" \
+"$INSTALLER" \
+"data/bins.and.libs_LINUX_X86_32.tar.xz" \
+& proc_timer $! "Unpacking installer"
+
+tar xvfJ "$INSTALL_DIR/$GAME_NAME/game/bins.and.libs_LINUX_X86_32.tar.xz" -C \
+"$INSTALL_DIR/$GAME_NAME/game/"
+rm "$INSTALL_DIR/$GAME_NAME/game/bins.and.libs_LINUX_X86_32.tar.xz"
+
+get_file 'liberation-sans.zip' \
+'https://www.fontsquirrel.com/fonts/download/liberation-sans'
+
+7z x -aoa -o"$INSTALL_DIR/$GAME_NAME/game/" \
+"$DOWNLOAD_DIR/_distr/$GAME_NAME/liberation-sans.zip" \
+'LiberationSans-Regular.ttf'
+
+mv "$INSTALL_DIR/$GAME_NAME/game/LiberationSans-Regular.ttf" \
+"$INSTALL_DIR/$GAME_NAME/game/arial.ttf"
+
+cd "$INSTALL_DIR/$GAME_NAME/game/2047/Data/Cinematics"
+for file in $(ls .); do
+ffmpeg -i ${file%.*}".vid" -codec:v libtheora -qscale:v 7 -codec:a libvorbis \
+-qscale:a 5 ${file%.*}".ogg"  > /dev/null 2>&1 \
+& proc_timer $! "Converting "${file%.*}".vid"
+rm ${file%.*}".vid"
+done
+echo "Done"
+
+cd "$INSTALL_DIR/$GAME_NAME/game/Data/Musics"
+for file in $(ls .); do
+if [ ${file#*.} == 'wav' ]; then
+ffmpeg -i ${file%.*}".wav" -c:a libvorbis -qscale:a 5 ${file%.*}".ogg" > /dev/null 2>&1 \
+& proc_timer $! "Converting "${file%.*}".wav"
+rm ${file%.*}".wav"
+fi
+done
+echo "Done"
+
+echo -e '#!/bin/bash
+python2 "$NEBULA_DIR/launcher_native.py" '"$GAME_NAME" > \
+"$START_FILE"
+
+echo -e '#!/bin/bash
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+"$DIR/game/robin" -NOFULLSCREEN' > \
+"$START_GN_FILE" && chmod +x "$START_GN_FILE"
+
+else
+
+rm "$INSTALL_DIR/$GAME_NAME/settings.py" "$INSTALL_DIR/$GAME_NAME/settings.sh"
+
+fi

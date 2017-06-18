@@ -1,48 +1,24 @@
 #!/bin/bash
 
-INSTALL_DIR=$2
+source "$NEBULA_DIR/scripts/shell_functions.sh"
 
-mv $INSTALL_DIR'/prince_of_persia_warrior_within/tmp/app' \
-$INSTALL_DIR'/prince_of_persia_warrior_within/game'
-rm -R -f $INSTALL_DIR'/prince_of_persia_warrior_within/tmp'
+get_upx
+
+cd "$INSTALL_DIR/$GAME_NAME/game"
+./upx -d pop2.exe
+
+get_from_mega 'pop2_widescreen.7z' \
+'https://mega.nz/#!mN4g1Qwb!ssTueG8xp_nAjvMBuPm0xg1tMn_mKv14zhuvwv6HrV0'
+
+7z x -aoa -o"$INSTALL_DIR/$GAME_NAME/game/" \
+"$DOWNLOAD_DIR/_distr/$GAME_NAME/pop2_widescreen.7z" \
+'pop2.7z'
+
+7z x -aoa -p'pop2' -o"$INSTALL_DIR/$GAME_NAME/game/" \
+"$INSTALL_DIR/$GAME_NAME/game/pop2.7z"
 
 echo -e '#!/bin/bash
-NEBULA_DIR=$2
-python $NEBULA_DIR/launcher_wine.py prince_of_persia_warrior_within PrinceOfPersia.exe' > \
-$INSTALL_DIR'/prince_of_persia_warrior_within/start.sh'
-chmod +x $INSTALL_DIR'/prince_of_persia_warrior_within/start.sh'
-
-echo -e '#!/bin/bash
-INSTALL_DIR=$1
-WINE_DIR=$2
-WINEPREFIX_DIR=$3
-INSTALL_DIR_WIN=$(echo Z:$INSTALL_DIR | sed -e s=/=\\\\\\\\=g)
-
-if [ $WINE_DIR == "wine" ]; then
-	export WINELOADER=$WINE_DIR
-	export WINEPREFIX=$WINEPREFIX_DIR
-else
-	export WINE=$WINE_DIR/bin/wine
-	export WINELOADER=$WINE_DIR/bin/wine
-	export WINESERVER=$WINE_DIR/bin/wineserver
-	export WINEDLLPATH=$WINE_DIR/lib
-	export WINEPREFIX=$WINEPREFIX_DIR
-fi
-
-$WINELOADER reg add "HKEY_LOCAL_MACHINE\Software\\Ubisoft\Prince of Persia Warrior Within\1.00.999" /v \
-"Product_Executable" /t REG_SZ /d "PrinceOfPersia.exe" /f
-$WINELOADER reg add "HKEY_LOCAL_MACHINE\Software\\Ubisoft\Prince of Persia Warrior Within\1.00.999" /v \
-"Product_Language" /t REG_SZ /d "9" /f
-$WINELOADER reg add "HKEY_LOCAL_MACHINE\Software\\Ubisoft\Prince of Persia Warrior Within\1.00.999" /v \
-"Product_Path" /t REG_SZ /d $INSTALL_DIR_WIN"\prince_of_persia_warrior_within\game" /f
-$WINELOADER reg add "HKEY_LOCAL_MACHINE\Software\\Ubisoft\Prince of Persia Warrior Within\1.00.999" /v \
-"Product_Release" /t REG_SZ /d "Retail EMEA" /f
-$WINELOADER reg add "HKEY_LOCAL_MACHINE\Software\\Ubisoft\Prince of Persia Warrior Within\1.00.999" /v \
-"Profiles_Path" /t REG_SZ /d $INSTALL_DIR_WIN"\prince_of_persia_warrior_within\game" /f
-
-rm $WINEPREFIX_DIR/drive_c/Games/prince_of_persia_warrior_within
-mkdir -p $WINEPREFIX_DIR/drive_c/Games
-ln -s $INSTALL_DIR/prince_of_persia_warrior_within/game \
-$WINEPREFIX_DIR/drive_c/Games/prince_of_persia_warrior_within' > \
-$INSTALL_DIR'/prince_of_persia_warrior_within/additions.sh'
-chmod +x $INSTALL_DIR'/prince_of_persia_warrior_within/additions.sh'
+export WINEDLLOVERRIDES="pop2w=n,b"
+export WINEDLLOVERRIDES="d3d9=n,b"
+python2 "$NEBULA_DIR/launcher_wine.py" '"$GAME_NAME"' "PrinceOfPersia.exe"' > \
+"$START_FILE"

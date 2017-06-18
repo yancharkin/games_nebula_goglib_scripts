@@ -1,235 +1,133 @@
 #!/bin/bash
 
-DOWNLOAD_DIR=$1
-INSTALL_DIR=$2
-NEBULA_DIR=$3
+source "$NEBULA_DIR/scripts/shell_functions.sh"
 
-python2 $NEBULA_DIR'/modules/goglib_get_banner_2.py' \
-'baldurs_gate_2_complete' \
-'https://images-2.gog.com/3906ba7129e42951a364a912fdf1b8b73dfcfd3771783e1caaa1345ce4642e4f.jpg' \
-$HOME'/.games_nebula/images/goglib_banners'
+get_common_file 'WeiDU-Linux-240.zip' \
+'http://www.weidu.org/%7Ethebigg/WeiDU-Linux-240.zip'
 
-mv $INSTALL_DIR"/baldurs_gate_2_complete/tmp/data/noarch/prefix/drive_c/GOG Games/Baldur's Gate 2" \
-$INSTALL_DIR'/baldurs_gate_2_complete/game'
-rm -R -f $INSTALL_DIR'/baldurs_gate_2_complete/tmp'
+7z e -aoa -o"$INSTALL_DIR/$GAME_NAME/game" \
+"$DOWNLOAD_DIR/_distr/WeiDU-Linux-240.zip" \
+"WeiDU-Linux/bin/i386/weidu" \
+"WeiDU-Linux/bin/i386/tolower" \
 
-mkdir -p $DOWNLOAD_DIR'/_distr/baldurs_gate_2_complete'
+get_common_file 'lin-widescreen-v3.07.tar.gz' \
+'http://gibberlings3.net/forums/index.php?app=downloads&module=display&section=download&do=confirm_download&id=869'
 
-if [ ! -f $DOWNLOAD_DIR'/_distr/WeiDU-Linux-240.zip' ]; then
-	curl -L -o $DOWNLOAD_DIR'/_distr/WeiDU-Linux-240.zip' -C - \
-	'http://www.weidu.org/%7Ethebigg/WeiDU-Linux-240.zip'
+get_file 'lin-bg2fixpack-v10.tar.gz' \
+'http://gibberlings3.net/forums/index.php?app=downloads&module=display&section=download&do=confirm_download&id=742'
+
+get_file 'UnfinishedBusiness-v26.zip' \
+'http://mods.pocketplane.net/UnfinishedBusiness-v26.zip'
+
+get_file 'lin-bg2_tweaks-v16.tar.gz' \
+'http://gibberlings3.net/forums/index.php?app=downloads&module=display&section=download&do=confirm_download&id=743'
+
+get_file 'BGT118-Install.rar' \
+'http://www.shsforums.net/files/download/54-baldurs-gate-trilogy-weidu/'
+
+get_file 'BG2-Bigger-Fonts.rar' \
+'http://www.shsforums.net/index.php?app=core&module=attach&section=attach&attach_id=23681'
+
+get_file 'bg1ub-v14.zip' \
+'http://mods.pocketplane.net/bg1ubfiles/bg1ub-v14.zip'
+
+mkdir -p "$DOWNLOAD_DIR/_distr/baldurs_gate_the_original_saga"
+if [ ! -f "$DOWNLOAD_DIR/_distr/baldurs_gate_the_original_saga/bg1ub-v14.zip" ]; then
+curl -L -o "$DOWNLOAD_DIR/_distr/baldurs_gate_the_original_saga/bg1ub-v14.zip" -C - \
+'http://mods.pocketplane.net/bg1ubfiles/bg1ub-v14.zip'
 fi
 
-if [ ! -f $DOWNLOAD_DIR'/_distr/lin-widescreen-v3.07.tar.gz' ]; then
-	curl -L -o $DOWNLOAD_DIR'/_distr/lin-widescreen-v3.07.tar.gz' -C - \
-	'http://gibberlings3.net/forums/index.php?app=downloads&module=display&section=download&do=confirm_download&id=869'
-fi
+tar -xzvf "$DOWNLOAD_DIR/_distr/lin-widescreen-v3.07.tar.gz" -C "$INSTALL_DIR/$GAME_NAME/game"
 
-if [ ! -f $DOWNLOAD_DIR'/_distr/lin-bg2fixpack-v10.tar.gz' ]; then
-	curl -L -o $DOWNLOAD_DIR'/_distr/baldurs_gate_2_complete/lin-bg2fixpack-v10.tar.gz' -C - \
-	'http://gibberlings3.net/forums/index.php?app=downloads&module=display&section=download&do=confirm_download&id=742'
-fi
+tar -xzvf "$DOWNLOAD_DIR/_distr/$GAME_NAME/lin-bg2fixpack-v10.tar.gz" \
+-C "$INSTALL_DIR/$GAME_NAME/game"
 
-if [ ! -f $DOWNLOAD_DIR'/_distr/UnfinishedBusiness-v26.zip' ]; then
-	curl -L -o $DOWNLOAD_DIR'/_distr/baldurs_gate_2_complete/UnfinishedBusiness-v26.zip' -C - \
-	'http://mods.pocketplane.net/UnfinishedBusiness-v26.zip'
-fi
+7z x -aoa -o"$INSTALL_DIR/$GAME_NAME/game" \
+"$DOWNLOAD_DIR/_distr/$GAME_NAME/UnfinishedBusiness-v26.zip"
 
-if [ ! -f $DOWNLOAD_DIR'/_distr/lin-bg2_tweaks-v16.tar.gz' ]; then
-	curl -L -o $DOWNLOAD_DIR'/_distr/baldurs_gate_2_complete/lin-bg2_tweaks-v16.tar.gz' -C - \
-	'http://gibberlings3.net/forums/index.php?app=downloads&module=display&section=download&do=confirm_download&id=743'
-fi
+tar -xzvf "$DOWNLOAD_DIR/_distr/$GAME_NAME/lin-bg2_tweaks-v16.tar.gz" \
+-C "$INSTALL_DIR/$GAME_NAME/game"
 
-if [ ! -f $DOWNLOAD_DIR'/_distr/BGT118-Install.rar' ]; then
-	curl -L -o $DOWNLOAD_DIR'/_distr/baldurs_gate_2_complete/BGT118-Install.rar' -C - \
-	'http://www.shsforums.net/files/download/54-baldurs-gate-trilogy-weidu/'
-fi
+7z x -aoa -o"$INSTALL_DIR/$GAME_NAME/game" \
+"$DOWNLOAD_DIR/_distr/$GAME_NAME/BGT118-Install.rar"
+chmod +x "$INSTALL_DIR/$GAME_NAME/game/bgt/install/unix/x86/"*
+cp "$INSTALL_DIR/$GAME_NAME/game/bgt/install/unix/x86/"* \
+"$INSTALL_DIR/$GAME_NAME/game/"
 
-if [ ! -f $DOWNLOAD_DIR'/_distr/BG2-Bigger-Fonts.rar' ]; then
-	curl -L -o $DOWNLOAD_DIR'/_distr/baldurs_gate_2_complete/BG2-Bigger-Fonts.rar' -C - \
-	'http://www.shsforums.net/index.php?app=core&module=attach&section=attach&attach_id=23681'
-fi
+7z x -aoa -o"$INSTALL_DIR/$GAME_NAME/game" \
+"$DOWNLOAD_DIR/_distr/baldurs_gate_the_original_saga/bg1ub-v14.zip"
 
-mkdir -p $DOWNLOAD_DIR'/_distr/baldurs_gate_the_original_saga'
-
-if [ ! -f $DOWNLOAD_DIR'/_distr/baldurs_gate_the_original_saga/bg1ub-v14.zip' ]; then
-	curl -L -o $DOWNLOAD_DIR'/_distr/baldurs_gate_the_original_saga/bg1ub-v14.zip' -C - \
-	'http://mods.pocketplane.net/bg1ubfiles/bg1ub-v14.zip'
-fi
-
-7z e -aoa -o$INSTALL_DIR'/baldurs_gate_2_complete/game' \
-$DOWNLOAD_DIR'/_distr/WeiDU-Linux-240.zip' \
-'WeiDU-Linux/bin/i386/weidu' 'WeiDU-Linux/bin/i386/tolower'
-
-tar -xzvf $DOWNLOAD_DIR'/_distr/lin-widescreen-v3.07.tar.gz' \
--C $INSTALL_DIR'/baldurs_gate_2_complete/game'
-
-tar -xzvf $DOWNLOAD_DIR'/_distr/baldurs_gate_2_complete/lin-bg2fixpack-v10.tar.gz' \
--C $INSTALL_DIR'/baldurs_gate_2_complete/game'
-
-7z x -aoa -o$INSTALL_DIR'/baldurs_gate_2_complete/game' \
-$DOWNLOAD_DIR'/_distr/baldurs_gate_2_complete/UnfinishedBusiness-v26.zip'
-
-tar -xzvf $DOWNLOAD_DIR'/_distr/baldurs_gate_2_complete/lin-bg2_tweaks-v16.tar.gz' \
--C $INSTALL_DIR'/baldurs_gate_2_complete/game'
-
-7z x -aoa -o$INSTALL_DIR'/baldurs_gate_2_complete/game' \
-$DOWNLOAD_DIR'/_distr/baldurs_gate_2_complete/BGT118-Install.rar'
-chmod +x $INSTALL_DIR'/baldurs_gate_2_complete/game/bgt/install/unix/x86/'*
-cp $INSTALL_DIR'/baldurs_gate_2_complete/game/bgt/install/unix/x86/'* \
-$INSTALL_DIR'/baldurs_gate_2_complete/game/'
-
-7z x -aoa -o$INSTALL_DIR'/baldurs_gate_2_complete/game' \
-$DOWNLOAD_DIR'/_distr/baldurs_gate_2_complete/bg1ub-v14.zip'
-
-7z x -aoa -o$INSTALL_DIR'/baldurs_gate_2_complete/game' \
-$DOWNLOAD_DIR'/_distr/baldurs_gate_2_complete/BG2-Bigger-Fonts.rar'
-
-echo -e '#!/bin/bash
-./tolower
-./weidu ./widescreen/widescreen.tp2' > \
-$INSTALL_DIR'/baldurs_gate_2_complete/game/widescreen.sh'
-chmod +x $INSTALL_DIR'/baldurs_gate_2_complete/game/widescreen.sh'
-
-echo -e '#!/bin/bash
-./tolower
-./weidu ./bg2fixpack/setup-bg2fixpack.tp2' > \
-$INSTALL_DIR'/baldurs_gate_2_complete/game/fixpack.sh'
-chmod +x $INSTALL_DIR'/baldurs_gate_2_complete/game/fixpack.sh'
-
-echo -e '#!/bin/bash
-./tolower
-./weidu ./ub/setup-ub.tp2' > \
-$INSTALL_DIR'/baldurs_gate_2_complete/game/ub.sh'
-chmod +x $INSTALL_DIR'/baldurs_gate_2_complete/game/ub.sh'
-
-echo -e '#!/bin/bash
-./tolower
-./weidu ./bg2_tweaks/setup-bg2_tweaks.tp2' > \
-$INSTALL_DIR'/baldurs_gate_2_complete/game/tweakpack.sh'
-chmod +x $INSTALL_DIR'/baldurs_gate_2_complete/game/tweakpack.sh'
-
-echo -e '#!/bin/bash
-./tolower
-./weidu ./setup-bgt.tp2' > \
-$INSTALL_DIR'/baldurs_gate_2_complete/game/trilogy.sh'
-chmod +x $INSTALL_DIR'/baldurs_gate_2_complete/game/trilogy.sh'
-
-echo -e '#!/bin/bash
-./tolower
-./weidu ./bg1ub/setup-bg1ub.tp2' > \
-$INSTALL_DIR'/baldurs_gate_2_complete/game/bg1ub.sh'
-chmod +x $INSTALL_DIR'/baldurs_gate_2_complete/game/bg1ub.sh'
-
-echo -e '#!/bin/bash
-./tolower
-./weidu ./setup-bg2-bigger-fonts.tp2' > \
-$INSTALL_DIR'/baldurs_gate_2_complete/game/bigger_fonts.sh'
-chmod +x $INSTALL_DIR'/baldurs_gate_2_complete/game/bigger_fonts.sh'
+7z x -aoa -o"$INSTALL_DIR/$GAME_NAME/game" \
+"$DOWNLOAD_DIR/_distr/$GAME_NAME/BG2-Bigger-Fonts.rar"
 
 echo "[Alias]
-HD0:=C:\Games\baldurs_gate_2_complete
-CD1:=C:\Games\baldurs_gate_2_complete\data
-CD2:=C:\Games\baldurs_gate_2_complete\data
-CD3:=C:\Games\baldurs_gate_2_complete\data
-CD4:=C:\Games\baldurs_gate_2_complete\data
-CD5:=C:\Games\baldurs_gate_2_complete\data
-CD6:=C:\Games\baldurs_gate_2_complete\data
+HD0:=C:\Games\\$GAME_NAME
+CD1:=C:\Games\\$GAME_NAME\data
+CD2:=C:\Games\\$GAME_NAME\data
+CD3:=C:\Games\\$GAME_NAME\data
+CD4:=C:\Games\\$GAME_NAME\data
+CD5:=C:\Games\\$GAME_NAME\data
+CD6:=C:\Games\\$GAME_NAME\data
 [Program Options]
-3D Acceleration=1" > $INSTALL_DIR'/baldurs_gate_2_complete/game/baldur.ini'
+3D Acceleration=1" > "$INSTALL_DIR/$GAME_NAME/game/baldur.ini"
 
-echo "CD1:=$INSTALL_DIR/baldurs_gate_2_complete/game
-CD1:=$INSTALL_DIR/baldurs_gate_2_complete/game/data
-CD1:=$INSTALL_DIR/baldurs_gate_2_complete/game/data
-CD1:=$INSTALL_DIR/baldurs_gate_2_complete/game/data
-CD1:=$INSTALL_DIR/baldurs_gate_2_complete/game/data
-CD1:=$INSTALL_DIR/baldurs_gate_2_complete/game/data
-CD1:=$INSTALL_DIR/baldurs_gate_2_complete/game/data" > \
-$INSTALL_DIR'/baldurs_gate_2_complete/game/linux.ini'
+echo "CD1:=$INSTALL_DIR/$GAME_NAME/game
+CD1:=$INSTALL_DIR/$GAME_NAME/game/data
+CD1:=$INSTALL_DIR/$GAME_NAME/game/data
+CD1:=$INSTALL_DIR/$GAME_NAME/game/data
+CD1:=$INSTALL_DIR/$GAME_NAME/game/data
+CD1:=$INSTALL_DIR/$GAME_NAME/game/data
+CD1:=$INSTALL_DIR/$GAME_NAME/game/data" > \
+"$INSTALL_DIR/$GAME_NAME/game/linux.ini"
 
-echo -e '#!/bin/bash
-NEBULA_DIR=$2
-python $NEBULA_DIR/launcher_wine.py baldurs_gate_2_complete BGMain.exe' > \
-$INSTALL_DIR'/baldurs_gate_2_complete/start.sh'
-chmod +x $INSTALL_DIR'/baldurs_gate_2_complete/start.sh'
+cd "$INSTALL_DIR/$GAME_NAME/game"
+printf 'y\nn\n' | ./tolower
 
 echo -e '#!/bin/bash
-INSTALL_DIR=$1
-WINEPREFIX_DIR=$3
-rm $WINEPREFIX_DIR/drive_c/Games/baldurs_gate_2_complete
-mkdir -p $WINEPREFIX_DIR/drive_c/Games
-ln -s $INSTALL_DIR/baldurs_gate_2_complete/game \
-$WINEPREFIX_DIR/drive_c/Games/baldurs_gate_2_complete
+cd "$INSTALL_DIR/$GAME_NAME/game"
+printf "y\nn\n" | ./tolower
+./weidu ./widescreen/widescreen.tp2' > \
+"$INSTALL_DIR/$GAME_NAME/game/widescreen.sh"
+chmod +x "$INSTALL_DIR/$GAME_NAME/game/widescreen.sh"
 
-if [ ! -f $INSTALL_DIR/baldurs_gate_2_complete/.trilogy_installed ]; then
-zenity --question \
---text="'"Install Baldur's Gate Trilogy?\n(You need unmodified Baldur's Gate The Original Saga installation)"'" \
---ok-label="Yes" --cancel-label="No"
-if [ $? == 0 ]; then
-cd $INSTALL_DIR/baldurs_gate_2_complete/game
-xterm -fg green -bg black -fn 10x20 -e ./trilogy.sh
-zenity --question \
---text="Install BG1 Unfinished Business?" --ok-label="Yes" --cancel-label="No"
-if [ $? == 0 ]; then
-cd $INSTALL_DIR/baldurs_gate_2_complete/game
-xterm -fg green -bg black -fn 10x20 -e ./bg1ub.sh
-fi
-touch $INSTALL_DIR/baldurs_gate_2_complete/.trilogy_installed
-fi
-fi
+echo -e '#!/bin/bash
+cd "$INSTALL_DIR/$GAME_NAME/game"
+printf "y\nn\n" | ./tolower
+./weidu ./bg2fixpack/setup-bg2fixpack.tp2' > \
+"$INSTALL_DIR/$GAME_NAME/game/fixpack.sh"
+chmod +x "$INSTALL_DIR/$GAME_NAME/game/fixpack.sh"
 
-if [ ! -f $INSTALL_DIR/baldurs_gate_2_complete/.widescreen_installed ]; then
-zenity --question \
---text="Install Widescreen Mod?" \
---ok-label="Yes" --cancel-label="No"
-if [ $? == 0 ]; then
-cd $INSTALL_DIR/baldurs_gate_2_complete/game
-xterm -fg green -bg black -fn 10x20 -e ./widescreen.sh
-touch $INSTALL_DIR/baldurs_gate_2_complete/.widescreen_installed
-fi
-fi
+echo -e '#!/bin/bash
+cd "$INSTALL_DIR/$GAME_NAME/game"
+printf "y\nn\n" | ./tolower
+./weidu ./ub/setup-ub.tp2' > \
+"$INSTALL_DIR/$GAME_NAME/game/ub.sh"
+chmod +x "$INSTALL_DIR/$GAME_NAME/game/ub.sh"
 
-if [ ! -f $INSTALL_DIR/baldurs_gate_2_complete/.fixpack_installed ]; then
-zenity --question \
---text="Install BG2 Fixpack?" \
---ok-label="Yes" --cancel-label="No"
-if [ $? == 0 ]; then
-cd $INSTALL_DIR/baldurs_gate_2_complete/game
-xterm -fg green -bg black -fn 10x20 -e ./fixpack.sh
-touch $INSTALL_DIR/baldurs_gate_2_complete/.fixpack_installed
-fi
-fi
+echo -e '#!/bin/bash
+cd "$INSTALL_DIR/$GAME_NAME/game"
+printf "y\nn\n" | ./tolower
+./weidu ./bg2_tweaks/setup-bg2_tweaks.tp2' > \
+"$INSTALL_DIR/$GAME_NAME/game/tweakpack.sh"
+chmod +x "$INSTALL_DIR/$GAME_NAME/game/tweakpack.sh"
 
-if [ ! -f $INSTALL_DIR/baldurs_gate_2_complete/.ub_installed ]; then
-zenity --question \
---text="Install BG2 Unfinished Business?" \
---ok-label="Yes" --cancel-label="No"
-if [ $? == 0 ]; then
-cd $INSTALL_DIR/baldurs_gate_2_complete/game
-xterm -fg green -bg black -fn 10x20 -e ./ub.sh
-touch $INSTALL_DIR/baldurs_gate_2_complete/.ub_installed
-fi
-fi
+echo -e '#!/bin/bash
+cd "$INSTALL_DIR/$GAME_NAME/game"
+printf "y\nn\n" | ./tolower
+./weidu ./setup-bgt.tp2' > \
+"$INSTALL_DIR/$GAME_NAME/game/trilogy.sh"
+chmod +x "$INSTALL_DIR/$GAME_NAME/game/trilogy.sh"
 
-if [ ! -f $INSTALL_DIR/baldurs_gate_2_complete/.tweaks_installed ]; then
-zenity --question \
---text="Install BG2 Tweak Pack?" \
---ok-label="Yes" --cancel-label="No"
-if [ $? == 0 ]; then
-cd $INSTALL_DIR/baldurs_gate_2_complete/game
-xterm -fg green -bg black -fn 10x20 -e ./tweakpack.sh
-touch $INSTALL_DIR/baldurs_gate_2_complete/.tweaks_installed
-fi
-fi
+echo -e '#!/bin/bash
+cd "$INSTALL_DIR/$GAME_NAME/game"
+printf "y\nn\n" | ./tolower
+./weidu ./bg1ub/setup-bg1ub.tp2' > \
+"$INSTALL_DIR/$GAME_NAME/game/bg1ub.sh"
+chmod +x "$INSTALL_DIR/$GAME_NAME/game/bg1ub.sh"
 
-if [ ! -f $INSTALL_DIR/baldurs_gate_2_complete/.bigger_fonts_installed ]; then
-zenity --question \
---text="Install BG2 Bigger Fonts Mod?" \
---ok-label="Yes" --cancel-label="No"
-if [ $? == 0 ]; then
-cd $INSTALL_DIR/baldurs_gate_2_complete/game
-xterm -fg green -bg black -fn 10x20 -e ./bigger_fonts.sh
-touch $INSTALL_DIR/baldurs_gate_2_complete/.bigger_fonts_installed
-fi
-fi' > $INSTALL_DIR'/baldurs_gate_2_complete/additions.sh'
-chmod +x $INSTALL_DIR'/baldurs_gate_2_complete/additions.sh'
+echo -e '#!/bin/bash
+cd "$INSTALL_DIR/$GAME_NAME/game"
+printf "y\nn\n" | ./tolower
+./weidu ./setup-bg2-bigger-fonts.tp2' > \
+"$INSTALL_DIR/$GAME_NAME/game/bigger_fonts.sh"
+chmod +x "$INSTALL_DIR/$GAME_NAME/game/bigger_fonts.sh"

@@ -1,41 +1,24 @@
 #!/bin/bash
-
-INSTALL_DIR=$2
-
-mv $INSTALL_DIR'/tyrian_2000/tmp/app' $INSTALL_DIR'/tyrian_2000/game'
-rm -R -f $INSTALL_DIR'/tyrian_2000/tmp'
-
-echo '#!/bin/bash
-INSTALL_DIR=$1
-NEBULA_DIR=$2
-rm $HOME/.games_nebula/games/.dosbox/tyrian_2000
-mkdir -p $HOME/.games_nebula/games/.dosbox
-ln -s $INSTALL_DIR/tyrian_2000/game \
-$HOME/.games_nebula/games/.dosbox/tyrian_2000
-python $NEBULA_DIR/launcher_dosbox.py tyrian_2000' > \
-$INSTALL_DIR'/tyrian_2000/start.sh'
-chmod +x $INSTALL_DIR'/tyrian_2000/start.sh'
-
 echo "[autoexec]
 @echo off
-mount C $HOME/.games_nebula/games/.dosbox/tyrian_2000
+mount c $HOME/.games_nebula/games/.dosbox/$GAME_NAME
 c:
 cls
 
 echo.
 echo.
-ECHO  --------------------------------- 
+ECHO  ---------------------------------
 ECHO  Tyrian 2000
-ECHO  --------------------------------- 
+ECHO  ---------------------------------
 ECHO  1) Tyrian 2000
-ECHO  2) Tyrian 2000 Editor              
-ECHO  --------------------------------- 
-ECHO  3) exit program                  
-ECHO  --------------------------------- 
+ECHO  2) Tyrian 2000 Editor
+ECHO  ---------------------------------
+ECHO  3) Exit program
+ECHO  ---------------------------------
 echo.
 echo.
 
-choice /c123 /s Which application do you want to run? [1-3]: /n 
+choice /c123 /s Which application do you want to run? [1-3]: /n
 if errorlevel 3 goto exit
 if errorlevel 2 goto editor
 if errorlevel 1 goto game
@@ -51,11 +34,4 @@ SHIPEDIT.EXE
 exit
 
 :exit
-exit" > $INSTALL_DIR'/tyrian_2000/dosbox_game.conf'
-
-echo "[autoexec]
-mount C $HOME/.games_nebula/games/.dosbox/tyrian_2000
-c:
-cls
-setup.exe
-exit" > $INSTALL_DIR'/tyrian_2000/dosbox_settings.conf'
+exit" > "$DOSBOX_GAME_CONF"

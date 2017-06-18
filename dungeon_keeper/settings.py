@@ -1,5 +1,5 @@
 #!/usr/bin/env python2
-# -*- Mode: Python; coding: utf-8; indent-tabs-install_mode: t; c-basic-offset: 4; tab-width: 4 -*-
+# -*- Mode: Python; coding: utf-8; -*-
 
 import sys, os
 import gi
@@ -7,6 +7,16 @@ gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk
 import ConfigParser
 import gettext
+import imp
+
+nebula_dir = os.getenv('NEBULA_DIR')
+
+modules_dir = nebula_dir + '/modules'
+set_visuals = imp.load_source('set_visuals', modules_dir + '/set_visuals.py')
+
+gettext.bindtextdomain('games_nebula', nebula_dir + '/locale')
+gettext.textdomain('games_nebula')
+_ = gettext.gettext
 
 current_dir = sys.path[0]
 
@@ -38,21 +48,14 @@ dict_lang = {
 
 class GUI:
 
-    def __init__(self, nebula_dir):
-
-        gettext.bindtextdomain('games_nebula', nebula_dir + '/locale')
-        gettext.textdomain('games_nebula')
-        self._ = gettext.gettext
-
-
-        self.get_global_settings()
+    def __init__(self):
         self.config_load()
         self.create_main_window()
 
     def create_main_window(self):
 
         self.main_window = Gtk.Window(
-            title = self._("Dungeon Keeper"),
+            title = _("Dungeon Keeper"),
             type = Gtk.WindowType.TOPLEVEL,
             window_position = Gtk.WindowPosition.CENTER_ALWAYS,
             resizable = False,
@@ -70,11 +73,11 @@ class GUI:
 
         label_game_res = Gtk.Label(
             halign = Gtk.Align.START,
-            label = self._("In-game resolution")
+            label = _("In-game resolution")
             )
 
         self.entry_game_width = Gtk.Entry(
-            placeholder_text = self._("Width"),
+            placeholder_text = _("Width"),
             xalign = 0.5,
             max_length = 4,
             text = self.game_width
@@ -82,7 +85,7 @@ class GUI:
         self.entry_game_width.connect('changed', self.cb_entries_res)
 
         self.entry_game_height = Gtk.Entry(
-            placeholder_text = self._("Height"),
+            placeholder_text = _("Height"),
             xalign = 0.5,
             max_length = 4,
             text = self.game_height
@@ -91,11 +94,11 @@ class GUI:
 
         label_menu_res = Gtk.Label(
             halign = Gtk.Align.START,
-            label = self._("Menu resolution")
+            label = _("Menu resolution")
             )
 
         self.entry_menu_width = Gtk.Entry(
-            placeholder_text = self._("Width"),
+            placeholder_text = _("Width"),
             xalign = 0.5,
             max_length = 4,
             text = self.menu_width
@@ -103,7 +106,7 @@ class GUI:
         self.entry_menu_width.connect('changed', self.cb_entries_res)
 
         self.entry_menu_height = Gtk.Entry(
-            placeholder_text = self._("Height"),
+            placeholder_text = _("Height"),
             xalign = 0.5,
             max_length = 4,
             text = self.menu_height
@@ -112,11 +115,11 @@ class GUI:
 
         label_movies_res = Gtk.Label(
             halign = Gtk.Align.START,
-            label = self._("Movies resolution")
+            label = _("Movies resolution")
             )
 
         self.entry_movies_width = Gtk.Entry(
-            placeholder_text = self._("Width"),
+            placeholder_text = _("Width"),
             xalign = 0.5,
             max_length = 4,
             text = self.movies_width
@@ -124,7 +127,7 @@ class GUI:
         self.entry_movies_width.connect('changed', self.cb_entries_res)
 
         self.entry_movies_height = Gtk.Entry(
-            placeholder_text = self._("Height"),
+            placeholder_text = _("Height"),
             xalign = 0.5,
             max_length = 4,
             text = self.movies_height
@@ -133,11 +136,11 @@ class GUI:
 
         label_failure_res = Gtk.Label(
             halign = Gtk.Align.START,
-            label = self._("Failure resolution")
+            label = _("Failure resolution")
             )
 
         self.entry_failure_width = Gtk.Entry(
-            placeholder_text = self._("Width"),
+            placeholder_text = _("Width"),
             xalign = 0.5,
             max_length = 4,
             text = self.failure_width
@@ -145,7 +148,7 @@ class GUI:
         self.entry_failure_width.connect('changed', self.cb_entries_res)
 
         self.entry_failure_height = Gtk.Entry(
-            placeholder_text = self._("Height"),
+            placeholder_text = _("Height"),
             xalign = 0.5,
             max_length = 4,
             text = self.failure_height
@@ -154,7 +157,7 @@ class GUI:
 
         label_speed = Gtk.Label(
             halign = Gtk.Align.START,
-            label = self._("Game speed")
+            label = _("Game speed")
             )
 
         self.adj_speed = Gtk.Adjustment(int(self.speed), 1, 100, 1, 10)
@@ -171,7 +174,7 @@ class GUI:
 
         label_msensitivity = Gtk.Label(
             halign = Gtk.Align.START,
-            label = self._("Mouse sensitivity")
+            label = _("Mouse sensitivity")
             )
 
         self.adj_msensitivity = Gtk.Adjustment(int(self.msensitivity), 1, 100, 1, 10)
@@ -188,7 +191,7 @@ class GUI:
 
         label_nointro = Gtk.Label(
             halign = Gtk.Align.START,
-            label = self._("Skip intro animation")
+            label = _("Skip intro animation")
             )
 
         self.switch_nointro = Gtk.Switch(
@@ -198,7 +201,7 @@ class GUI:
 
         label_smooth = Gtk.Label(
             halign = Gtk.Align.START,
-            label = self._("Smoothen video")
+            label = _("Smoothen video")
             )
 
         self.switch_smooth = Gtk.Switch(
@@ -208,7 +211,7 @@ class GUI:
 
         label_nosound = Gtk.Label(
             halign = Gtk.Align.START,
-            label = self._("Disable sound")
+            label = _("Disable sound")
             )
 
         self.switch_nosound = Gtk.Switch(
@@ -218,7 +221,7 @@ class GUI:
 
         label_censorship = Gtk.Label(
             halign = Gtk.Align.START,
-            label = self._("Censorship")
+            label = _("Censorship")
             )
 
         self.switch_censorship = Gtk.Switch(
@@ -228,7 +231,7 @@ class GUI:
 
         label_screenshots = Gtk.Label(
             halign = Gtk.Align.START,
-            label = self._("Screenshots format")
+            label = _("Screenshots format")
             )
 
         self.combobox_screenshots = Gtk.ComboBoxText()
@@ -243,7 +246,7 @@ class GUI:
 
         label_lang = Gtk.Label(
             halign = Gtk.Align.START,
-            label = self._("Language")
+            label = _("Language")
             )
 
         self.combobox_lang = Gtk.ComboBoxText()
@@ -259,16 +262,16 @@ class GUI:
 
         label_sessions = Gtk.Label(
             halign = Gtk.Align.START,
-            label = self._("TCP/IP sessions")
+            label = _("TCP/IP sessions")
             )
 
         self.entry_sessions = Gtk.Entry(
-            placeholder_text = self._("IP address"),
+            placeholder_text = _("IP address"),
             text = self.sessions
             )
 
         button_save = Gtk.Button(
-            label = self._("Save and quit"),
+            label = _("Save and quit"),
             )
         button_save.connect('clicked', self.cb_button_save)
 
@@ -306,22 +309,6 @@ class GUI:
 
         self.main_window.add(grid)
         self.main_window.show_all()
-
-    def get_global_settings(self):
-
-        global_config_file = os.getenv('HOME') + '/.games_nebula/config/config.ini'
-        global_config_parser = ConfigParser.ConfigParser()
-        global_config_parser.read(global_config_file)
-        gtk_theme = global_config_parser.get('visuals', 'gtk_theme')
-        gtk_dark = global_config_parser.getboolean('visuals', 'gtk_dark')
-        icon_theme = global_config_parser.get('visuals', 'icon_theme')
-        font = global_config_parser.get('visuals','font')
-        screen = Gdk.Screen.get_default()
-        gsettings = Gtk.Settings.get_for_screen(screen)
-        gsettings.set_property('gtk-theme-name', gtk_theme)
-        gsettings.set_property('gtk-application-prefer-dark-theme', gtk_dark)
-        gsettings.set_property('gtk-icon-theme-name', icon_theme)
-        gsettings.set_property('gtk-font-name', font)
 
     def config_load(self):
 
@@ -585,7 +572,7 @@ class GUI:
 
 def main():
     import sys
-    app = GUI(sys.argv[1])
+    app = GUI()
     Gtk.main()
 
 if __name__ == '__main__':

@@ -1,65 +1,19 @@
 #!/bin/bash
 
-INSTALL_DIR=$2
+source "$NEBULA_DIR/scripts/shell_functions.sh"
 
-mv $INSTALL_DIR'/beyond_good_and_evil/tmp/app' $INSTALL_DIR'/beyond_good_and_evil/game'
-cp $INSTALL_DIR'/beyond_good_and_evil/game/__support/dll/eax.dll' $INSTALL_DIR'/beyond_good_and_evil/game'
-rm -R -f $INSTALL_DIR'/beyond_good_and_evil/tmp'
+get_from_mega 'bge_widescreen.7z' \
+'https://mega.nz/#!yZRQyAAD!slkCYrNFbKw1RfNlY1LPVyir9axaPoToHENbSSDzsQ8' \
 
-echo -e '#!/bin/bash
-NEBULA_DIR=$2
-python $NEBULA_DIR/launcher_wine.py beyond_good_and_evil BGE.exe' > \
-$INSTALL_DIR'/beyond_good_and_evil/start.sh'
-chmod +x $INSTALL_DIR'/beyond_good_and_evil/start.sh'
+7z x -aoa -o"$INSTALL_DIR/$GAME_NAME/game/" \
+"$DOWNLOAD_DIR/_distr/$GAME_NAME/bge_widescreen.7z" \
+'bge.7z'
 
-echo -e '#!/bin/bash
-INSTALL_DIR=$1
-WINE_DIR=$2
-WINEPREFIX_DIR=$3
-
-if [ $WINE_DIR == "wine" ]; then
-	export WINELOADER=$WINE_DIR
-	export WINEPREFIX=$WINEPREFIX_DIR
-else
-	export WINE=$WINE_DIR/bin/wine
-	export WINELOADER=$WINE_DIR/bin/wine
-	export WINESERVER=$WINE_DIR/bin/wineserver
-	export WINEDLLPATH=$WINE_DIR/lib
-	export WINEPREFIX=$WINEPREFIX_DIR
-fi
-
-cd $INSTALL_DIR/beyond_good_and_evil/game
-$WINELOADER SettingsApplication.exe' > \
-$INSTALL_DIR'/beyond_good_and_evil/settings.sh'
-chmod +x $INSTALL_DIR'/beyond_good_and_evil/settings.sh'
+7z x -aoa -p'bge' -o"$INSTALL_DIR/$GAME_NAME/game/" \
+"$INSTALL_DIR/$GAME_NAME/game/bge.7z"
 
 echo -e '#!/bin/bash
-INSTALL_DIR=$1
-WINE_DIR=$2
-WINEPREFIX_DIR=$3
-INSTALL_DIR_WIN=$(echo Z:$INSTALL_DIR | sed -e s=/=\\\\\\\\=g)
-
-if [ $WINE_DIR == "wine" ]; then
-	export WINELOADER=$WINE_DIR
-	export WINEPREFIX=$WINEPREFIX_DIR
-else
-	export WINE=$WINE_DIR/bin/wine
-	export WINELOADER=$WINE_DIR/bin/wine
-	export WINESERVER=$WINE_DIR/bin/wineserver
-	export WINEDLLPATH=$WINE_DIR/lib
-	export WINEPREFIX=$WINEPREFIX_DIR
-fi
-
-$WINELOADER reg add "HKEY_LOCAL_MACHINE\Software\\Ubisoft\Beyond Good & Evil" /v \
-"Install path" /t REG_SZ /d $INSTALL_DIR_WIN\\\\beyond_good_and_evil\\\\game /f
-$WINELOADER reg add "HKEY_LOCAL_MACHINE\Software\\Ubisoft\Beyond Good & Evil" /v \
-"Uninstall path" /t REG_SZ /d $INSTALL_DIR_WIN\\\\beyond_good_and_evil\\\\game\\\\unins000.exe /f
-cd $INSTALL_DIR/beyond_good_and_evil/game
-$WINELOADER SettingsApplication.exe
-
-rm $WINEPREFIX_DIR/drive_c/Games/beyond_good_and_evil
-mkdir -p $WINEPREFIX_DIR/drive_c/Games
-ln -s $INSTALL_DIR/beyond_good_and_evil/game \
-$WINEPREFIX_DIR/drive_c/Games/beyond_good_and_evil' > \
-$INSTALL_DIR'/beyond_good_and_evil/additions.sh'
-chmod +x $INSTALL_DIR'/beyond_good_and_evil/additions.sh'
+export WINEDLLOVERRIDES="bgew=n,b"
+export WINEDLLOVERRIDES="d3d9=n,b"
+python2 "$NEBULA_DIR/launcher_wine.py" '"$GAME_NAME"' "BGE.exe"' > \
+"$START_FILE"

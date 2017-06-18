@@ -7,6 +7,16 @@ gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk
 import ConfigParser
 import gettext
+import imp
+
+nebula_dir = os.getenv('NEBULA_DIR')
+
+modules_dir = nebula_dir + '/modules'
+set_visuals = imp.load_source('set_visuals', modules_dir + '/set_visuals.py')
+
+gettext.bindtextdomain('games_nebula', nebula_dir + '/locale')
+gettext.textdomain('games_nebula')
+_ = gettext.gettext
 
 current_dir = sys.path[0]
 
@@ -28,31 +38,9 @@ dict_lang = {
 
 class GUI:
 
-    def __init__(self, nebula_dir):
-        
-        gettext.bindtextdomain('games_nebula', nebula_dir + '/locale')
-        gettext.textdomain('games_nebula')
-        self._ = gettext.gettext
-
-        self.get_global_settings()
+    def __init__(self):
         self.config_load()
         self.create_main_window()
-
-    def get_global_settings(self):
-
-        global_config_file = os.getenv('HOME') + '/.games_nebula/config/config.ini'
-        global_config_parser = ConfigParser.ConfigParser()
-        global_config_parser.read(global_config_file)
-        gtk_theme = global_config_parser.get('visuals', 'gtk_theme')
-        gtk_dark = global_config_parser.getboolean('visuals', 'gtk_dark')
-        icon_theme = global_config_parser.get('visuals', 'icon_theme')
-        font = global_config_parser.get('visuals','font')
-        screen = Gdk.Screen.get_default()
-        gsettings = Gtk.Settings.get_for_screen(screen)
-        gsettings.set_property('gtk-theme-name', gtk_theme)
-        gsettings.set_property('gtk-application-prefer-dark-theme', gtk_dark)
-        gsettings.set_property('gtk-icon-theme-name', icon_theme)
-        gsettings.set_property('gtk-font-name', font)
 
     def config_load(self):
 
@@ -105,7 +93,7 @@ class GUI:
     def create_main_window(self):
 
         self.main_window = Gtk.Window(
-            title = self._("Saints Row 2"),
+            title = _("Saints Row 2"),
             type = Gtk.WindowType.TOPLEVEL,
             window_position = Gtk.WindowPosition.CENTER_ALWAYS,
             resizable = False,
@@ -123,10 +111,11 @@ class GUI:
             )
 
         self.label_language = Gtk.Label(
-            label = self._("Language")
+            label = _("Language")
             )
 
         self.combobox_language = Gtk.ComboBoxText()
+        active_lang = 0
         i = 0
         for lang in sorted(dict_lang):
             self.combobox_language.append_text(lang)
@@ -138,13 +127,13 @@ class GUI:
         self.combobox_language.connect('changed', self.cb_combobox_language)
 
         self.checkbutton_custom_res = Gtk.CheckButton(
-            label = self._("Custom resolution"),
+            label = _("Custom resolution"),
             active = self.custom_res,
             )
         self.checkbutton_custom_res.connect('toggled', self.cb_checkbutton_custom_res)
 
         self.entry_custom_width = Gtk.Entry(
-            placeholder_text = self._("Width"),
+            placeholder_text = _("Width"),
             no_show_all = True,
             max_length = 4,
             xalign = 0.5,
@@ -154,7 +143,7 @@ class GUI:
         self.entry_custom_width.connect('changed', self.cb_entry_custom_width)
 
         self.entry_custom_height = Gtk.Entry(
-            placeholder_text = self._("Height"),
+            placeholder_text = _("Height"),
             no_show_all = True,
             max_length = 4,
             xalign = 0.5,
@@ -164,14 +153,9 @@ class GUI:
         self.entry_custom_height.connect('changed', self.cb_entry_custom_height)
 
         self.button_save = Gtk.Button(
-            label = self._("Save and quit")
+            label = _("Save and quit")
             )
         self.button_save.connect('clicked', self.cb_button_save)
-
-        self.button_quit = Gtk.Button(
-            label = self._("Quit without saving")
-            )
-        self.button_quit.connect('clicked', Gtk.main_quit)
 
         self.grid.attach(self.label_language, 0, 0, 1, 1)
         self.grid.attach(self.combobox_language, 1, 0, 1, 1)
@@ -179,7 +163,6 @@ class GUI:
         self.grid.attach(self.entry_custom_width, 0, 2, 1, 1)
         self.grid.attach(self.entry_custom_height, 1, 2, 1, 1)
         self.grid.attach(self.button_save, 0, 3, 2, 1)
-        self.grid.attach(self.button_quit, 0, 4, 2, 1)
 
         self.main_window.add(self.grid)
 
@@ -264,7 +247,7 @@ class GUI:
 
 def main():
     import sys
-    app = GUI(sys.argv[1])
+    app = GUI()
     Gtk.main()
 
 if __name__ == '__main__':

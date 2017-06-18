@@ -1,5 +1,5 @@
 #!/usr/bin/env python2
-# -*- Mode: Python; coding: utf-8; indent-tabs-install_mode: t; c-basic-offset: 4; tab-custom_width: 4 -*-
+# -*- Mode: Python; coding: utf-8 -*-
 
 import sys, os
 import gi
@@ -7,36 +7,24 @@ gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk
 import ConfigParser
 import gettext
+import imp
+
+nebula_dir = os.getenv('NEBULA_DIR')
+
+modules_dir = nebula_dir + '/modules'
+set_visuals = imp.load_source('set_visuals', modules_dir + '/set_visuals.py')
+
+gettext.bindtextdomain('games_nebula', nebula_dir + '/locale')
+gettext.textdomain('games_nebula')
+_ = gettext.gettext
 
 current_dir = sys.path[0]
 
 class GUI:
 
-    def __init__(self, nebula_dir):
-
-        gettext.bindtextdomain('games_nebula', nebula_dir + '/locale')
-        gettext.textdomain('games_nebula')
-        self._ = gettext.gettext
-
-        self.get_global_settings()
+    def __init__(self):
         self.config_load()
         self.create_main_window()
-
-    def get_global_settings(self):
-
-        global_config_file = os.getenv('HOME') + '/.games_nebula/config/config.ini'
-        global_config_parser = ConfigParser.ConfigParser()
-        global_config_parser.read(global_config_file)
-        gtk_theme = global_config_parser.get('visuals', 'gtk_theme')
-        gtk_dark = global_config_parser.getboolean('visuals', 'gtk_dark')
-        icon_theme = global_config_parser.get('visuals', 'icon_theme')
-        font = global_config_parser.get('visuals','font')
-        screen = Gdk.Screen.get_default()
-        gsettings = Gtk.Settings.get_for_screen(screen)
-        gsettings.set_property('gtk-theme-name', gtk_theme)
-        gsettings.set_property('gtk-application-prefer-dark-theme', gtk_dark)
-        gsettings.set_property('gtk-icon-theme-name', icon_theme)
-        gsettings.set_property('gtk-font-name', font)
 
     def config_load(self):
 
@@ -78,6 +66,7 @@ class GUI:
         config_parser.read(config_file)
         config_parser.set('VideoState', 'width', self.custom_width)
         config_parser.set('VideoState', 'height', self.custom_height)
+        config_parser.set('VideoState', 'hardwaretl', 1)
         new_config_file = open(config_file, 'w')
         config_parser.write(new_config_file)
         new_config_file.close()
@@ -88,7 +77,7 @@ class GUI:
     def create_main_window(self):
 
         self.main_window = Gtk.Window(
-            title = self._("Battle Realms: Winter of the Wolf"),
+            title = _("Battle Realms: Winter of the Wolf"),
             type = Gtk.WindowType.TOPLEVEL,
             window_position = Gtk.WindowPosition.CENTER_ALWAYS,
             resizable = False,
@@ -106,11 +95,11 @@ class GUI:
             )
 
         label_custom_res = Gtk.Label(
-            label = self._("Set custom resolution:")
+            label = _("Set custom resolution:")
             )
 
         entry_custom_width = Gtk.Entry(
-            placeholder_text = self._("Width"),
+            placeholder_text = _("Width"),
             max_length = 4,
             xalign = 0.5,
             text = self.custom_width
@@ -118,7 +107,7 @@ class GUI:
         entry_custom_width.connect('changed', self.cb_entry_custom_width)
 
         entry_custom_height = Gtk.Entry(
-            placeholder_text = self._("Height"),
+            placeholder_text = _("Height"),
             max_length = 4,
             xalign = 0.5,
             text = self.custom_height
@@ -126,7 +115,7 @@ class GUI:
         entry_custom_height.connect('changed', self.cb_entry_custom_height)
 
         button_patch = Gtk.Button(
-            label = self._("Patch")
+            label = _("Patch")
             )
         button_patch.connect('clicked', self.cb_button_patch)
 
@@ -159,9 +148,14 @@ class GUI:
                 0,
                 Gtk.MessageType.ERROR,
                 Gtk.ButtonsType.OK,
-                self._("Error")
+                _("Error")
                 )
-            message_dialog.format_secondary_text(self._("You have to set width and height."))
+            message_dialog.format_secondary_text(_("You have to set width and height."))
+            content_area = message_dialog.get_content_area()
+            content_area.set_property('margin-left', 10)
+            content_area.set_property('margin-right', 10)
+            content_area.set_property('margin-top', 10)
+            content_area.set_property('margin-bottom', 10)
             message_dialog.run()
             message_dialog.destroy()
 
@@ -221,7 +215,7 @@ class GUI:
 
 def main():
     import sys
-    app = GUI(sys.argv[1])
+    app = GUI()
     Gtk.main()
 
 if __name__ == '__main__':
