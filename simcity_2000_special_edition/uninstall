@@ -1,3 +1,0 @@
-#!/bin/bash
-
-rm $HOME'/.games_nebula/games/.dosbox/simcity_2000_special_edition'

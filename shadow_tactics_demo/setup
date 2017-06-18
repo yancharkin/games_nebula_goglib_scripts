@@ -1,8 +1,0 @@
-#!/bin/bash
-
-INSTALL_DIR=$2
-
-mv $INSTALL_DIR'/shadow_tactics_demo/tmp/data/noarch/'* $INSTALL_DIR'/shadow_tactics_demo/'
-rm -R -f $INSTALL_DIR'/shadow_tactics_demo/tmp'
-
-chmod +x $INSTALL_DIR'/shadow_tactics_demo/start.sh'

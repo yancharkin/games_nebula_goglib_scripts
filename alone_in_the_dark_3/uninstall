@@ -1,3 +1,0 @@
-#!/bin/bash
-
-rm $HOME'/.games_nebula/games/.dosbox/alone_in_the_dark_3'

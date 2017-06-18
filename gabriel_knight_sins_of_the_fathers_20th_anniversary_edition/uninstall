@@ -1,3 +1,0 @@
-#!/bin/bash
-
-rm $HOME'/.games_nebula/wine_prefix/drive_c/Games/gabriel_knight_sins_of_the_fathers_20th_anniversary_edition'

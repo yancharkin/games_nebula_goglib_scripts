@@ -1,3 +1,0 @@
-#!/bin/bash
-
-rm $HOME'/.games_nebula/games/.dosbox/akalabeth_world_of_doom'

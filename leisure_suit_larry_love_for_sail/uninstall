@@ -1,3 +1,0 @@
-#!/bin/bash
-rm -r $HOME'/.games_nebula/games/.dosbox/leisure_suit_larry_love_for_sail'
-

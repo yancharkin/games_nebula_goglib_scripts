@@ -1,7 +1,0 @@
-#!/bin/bash
-
-INSTALL_DIR=$2
-
-mv $INSTALL_DIR'/zombasite_demo/tmp/data/noarch/'* $INSTALL_DIR'/zombasite_demo/'
-rm -R -f $INSTALL_DIR'/zombasite_demo/tmp'
-chmod +x $INSTALL_DIR'/zombasite_demo/start.sh'

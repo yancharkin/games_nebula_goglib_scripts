@@ -1,7 +1,0 @@
-#!/bin/bash
-
-INSTALL_DIR=$2
-
-mv $INSTALL_DIR'/the_witcher_2/tmp/data/noarch/'* $INSTALL_DIR'/the_witcher_2/'
-rm -R -f $INSTALL_DIR'/the_witcher_2/tmp'
-chmod +x $INSTALL_DIR'/the_witcher_2/start.sh'

@@ -1,3 +1,0 @@
-#!/bin/bash
-
-rm $HOME'/.games_nebula/games/.dosbox/softporn_adventure'

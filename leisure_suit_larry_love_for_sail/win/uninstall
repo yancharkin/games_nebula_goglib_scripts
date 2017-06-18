@@ -1,3 +1,0 @@
-#!/bin/bash
-
-rm $HOME'/.games_nebula/wine_prefix/drive_c/Games/leisure_suit_larry_love_for_sail'

@@ -1,8 +1,0 @@
-#!/bin/bash
-
-INSTALL_DIR=$2
-
-mv $INSTALL_DIR'/surgeon_simulator_2013/tmp/data/noarch/'* $INSTALL_DIR'/surgeon_simulator_2013/'
-rm -R -f $INSTALL_DIR'/surgeon_simulator_2013/tmp'
-chmod +x $INSTALL_DIR'/surgeon_simulator_2013/start.sh'
-

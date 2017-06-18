@@ -1,3 +1,0 @@
-#!/bin/bash
-
-rm $HOME'/.games_nebula/games/.dosbox/worlds_of_ultima_the_savage_empire'
