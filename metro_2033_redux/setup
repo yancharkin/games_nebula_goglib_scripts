@@ -1,6 +1,0 @@
-#!/bin/bash
-
-echo -e '#!/bin/bash
-export WINEARCH=win64
-python2 "$NEBULA_DIR/launcher_wine.py" metro_2033_redux metro.exe' > \
-"$START_FILE" && chmod +x "$START_FILE"
