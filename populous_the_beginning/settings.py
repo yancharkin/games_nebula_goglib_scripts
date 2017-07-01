@@ -162,7 +162,7 @@ class GUI:
 
     def modify_start_file(self):
 
-        new_launch_command = 'python "$NEBULA_DIR/launcher_wine.py" populous_the_beginning "' \
+        new_launch_command = 'python2 "$NEBULA_DIR/launcher_wine.py" populous_the_beginning "' \
         + self.exe + ' -allres"'
 
         start_file = open(current_dir + '/start.sh', 'r')
