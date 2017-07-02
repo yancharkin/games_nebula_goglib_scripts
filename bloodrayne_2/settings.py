@@ -176,7 +176,7 @@ class GUI:
                     0,
                     Gtk.MessageType.ERROR,
                     Gtk.ButtonsType.OK,
-                    _("Patch not found in download directory")
+                    _("Patch not found in download directory.")
                     )
                 content_area = message_dialog.get_content_area()
                 content_area.set_property('margin-left', 10)

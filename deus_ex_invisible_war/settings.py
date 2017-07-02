@@ -48,7 +48,7 @@ class GUI:
                 0,
                 Gtk.MessageType.INFO,
                 Gtk.ButtonsType.OK,
-                _("Launch the game at least once before using this tool.")
+                _("Launch the game at least once before using this utility.")
                 )
             content_area = message_dialog.get_content_area()
             content_area.set_property('margin-left', 10)

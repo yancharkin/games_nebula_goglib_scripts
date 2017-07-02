@@ -635,13 +635,13 @@ class GUI:
 
         combobox_quickload = Gtk.ComboBoxText()
 
-        intervals = [_("disabled"),
+        options = [_("disabled"),
         _("F5 QuickSave, F9 QuickLoad"),
         _("F5 QuickSave, F10 QuickLoad")
         ]
 
-        for interval in intervals:
-            combobox_quickload.append_text(interval)
+        for option in options:
+            combobox_quickload.append_text(option)
         combobox_quickload.set_active(self.quickload)
 
         combobox_quickload.connect('changed', self.cb_combobox_quickload)
