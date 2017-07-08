@@ -1,0 +1,59 @@
+#!/bin/bash
+
+cp "$INSTALL_DIR/$GAME_NAME/game/__support/app/"* "$INSTALL_DIR/$GAME_NAME/game/SSHOCK"
+
+echo -e '#!/bin/bash
+python2 "$NEBULA_DIR/launcher_dosbox.py" '"$GAME_NAME" > "$START_FILE"
+chmod +x "$START_FILE"
+
+echo "[autoexec]
+@echo off
+mount C $HOME/.games_nebula/games/.dosbox/$GAME_NAME/SSHOCK -freesize 1000
+c:
+imgmount d $HOME/.games_nebula/games/.dosbox/$GAME_NAME/CD/SystemShock.bin -t iso
+cls
+INSTALL.EXE
+exit" > "$DOSBOX_SETTINGS_CONF"
+
+echo "[autoexec]
+@echo off
+mount C $HOME/.games_nebula/games/.dosbox/$GAME_NAME/SSHOCK
+c:
+imgmount d $HOME/.games_nebula/games/.dosbox/$GAME_NAME/CD/SystemShock.bin -t iso
+cls
+
+@ECHO [40;1m
+@ECHO  ----------------------------
+@ECHO  System Shock: Classic Edition
+@ECHO  ----------------------------
+@ECHO on
+@ECHO off
+@ECHO  1) CD-ROM version
+@ECHO  2) Floppy version
+@ECHO on
+@ECHO off
+@ECHO  ----------------------------
+@ECHO  3) Exit program
+@ECHO  ----------------------------
+@ECHO [0m
+@ECHO on
+@ECHO off
+@choice /c1234 /s Which game do you want to run? [1-3]: /n
+if errorlevel 3 goto exit
+if errorlevel 2 goto floppy
+if errorlevel 1 goto cdrom
+
+:cdrom
+cls
+@echo off
+CALL CDSHOCK.BAT
+exit
+
+:floppy
+cls
+@echo off
+CALL SSHOCK.BAT
+exit
+
+:exit
+exit" > "$DOSBOX_GAME_CONF"
