@@ -1,0 +1,9 @@
+#!/bin/bash
+
+echo "[autoexec]
+@echo off
+mount c /home/$USER/.games_nebula/games/.dosbox/$GAME_NAME
+c:
+cls
+INSTALL.EXE
+exit" > "$DOSBOX_SETTINGS_CONF"
