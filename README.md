@@ -6,7 +6,7 @@ Also this repository contains gui utilities (written in python) for configuratin
 
 
 ## autosetup.ini
-####Available option:
+#### Available option:
 
 - **image** - image url. If option exists ‘Games Nebula’ will download this image and use it to represent game in you library.
 - **native_exe** - path to main executable (linux) (1)
@@ -23,10 +23,11 @@ Also this repository contains gui utilities (written in python) for configuratin
 - **win_reg1, win_reg2, etc.** - keys to add to registry (windows) (2). **This option(s) should be at the end!**
 
 *(1) - path relative to 'game' directory*
+
 *(2) - see existing examples*
 ## Bash scripts
 If for some reason **autosetup.ini** is not enough, it's possible to use bash script. It will be executed during installation. See existing examples.
-####Available environment variables:
+#### Available environment variables:
 - **$DOWNLOAD_DIR** - absolute path to download directory
 - **$INSTALL_DIR** - absolute path to install directory
 - **$WINE_PATH** - absolute path to directory containing wine or 'wine' if system wine version used
