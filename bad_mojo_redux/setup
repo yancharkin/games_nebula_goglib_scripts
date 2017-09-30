@@ -1,0 +1,24 @@
+#!/bin/bash
+
+echo '[booger]
+BACKGROUND=C:\Games\'"$GAME_NAME"'\OVER;C:\Games\'"$GAME_NAME"'\BACKGND
+TOPO=C:\Games\'"$GAME_NAME"'\TOPO
+BTC=C:\Games\'"$GAME_NAME"'\BTC
+PALETTE=C:\Games\'"$GAME_NAME"'\PALETTE
+SCRIBBLE=C:\Games\'"$GAME_NAME"'\OVER;C:\Games\'"$GAME_NAME"'\SCRIBBLE
+CEL=C:\Games\'"$GAME_NAME"'\OVER;C:\Games\'"$GAME_NAME"'\CEL
+SCRIPT=C:\Games\'"$GAME_NAME"'\SCRIPT
+ROACH=C:\Games\'"$GAME_NAME"'\ROACHD
+MOVIE=C:\Games\'"$GAME_NAME"'\OVER;C:\Games\'"$GAME_NAME"'\MOVIE
+MASH=C:\Games\'"$GAME_NAME"'\OVER;C:\Games\'"$GAME_NAME"'\MASH
+SOUND=C:\Games\'"$GAME_NAME"'\SOUND
+SAVE=C:\Games\'"$GAME_NAME"'\SAVE
+[SoundMix]
+SoundOn=1
+BetweenScreens=1
+SmallChunkSize=3
+BigChunkSize=26
+BigChunkMethod=0
+DumbSound=0
+[badmojo]
+Preferences=1111112' > "$INSTALL_DIR/$GAME_NAME/game/badmojo.ini"
