@@ -16,9 +16,3 @@ get_from_mega 'pop3_widescreen.7z' \
 
 7z x -aoa -p'pop3' -o"$INSTALL_DIR/$GAME_NAME/game/" \
 "$INSTALL_DIR/$GAME_NAME/game/pop3.7z"
-
-echo -e '#!/bin/bash
-export WINEDLLOVERRIDES="pop3w=n,b"
-export WINEDLLOVERRIDES="d3d9=n,b"
-python2 "$NEBULA_DIR/launcher_wine.py" '"$GAME_NAME"' "PrinceOfPersia.exe"' > \
-"$START_FILE"

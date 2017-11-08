@@ -1,6 +1,0 @@
-#!/bin/bash
-
-echo -e '#!/bin/bash
-export WINEDLLOVERRIDES="dbghelp=n,b"
-python2 "$NEBULA_DIR/launcher_wine.py" '"$GAME_NAME"' "vampire.exe -game Unofficial_Patch"' > \
-"$START_FILE" && chmod +x "$START_FILE"

@@ -13,7 +13,3 @@ cd "$WINEPREFIX/drive_c/Program Files/LAVFilters"
 "$WINELOADER" regsvr32.exe LAVVideo.ax
 "$WINELOADER" regsvr32.exe LAVAudio.ax' >> \
 "$ADDITIONS_FILE" && chmod +x "$ADDITIONS_FILE"
-
-echo -e '#!/bin/bash
-export WINEDLLOVERRIDES="d3d8=n,b"
-python2 "$NEBULA_DIR/launcher_wine.py" bloodrayne_2 "br2.exe"' > "$START_FILE"

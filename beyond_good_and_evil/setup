@@ -11,9 +11,3 @@ get_from_mega 'bge_widescreen.7z' \
 
 7z x -aoa -p'bge' -o"$INSTALL_DIR/$GAME_NAME/game/" \
 "$INSTALL_DIR/$GAME_NAME/game/bge.7z"
-
-echo -e '#!/bin/bash
-export WINEDLLOVERRIDES="bgew=n,b"
-export WINEDLLOVERRIDES="d3d9=n,b"
-python2 "$NEBULA_DIR/launcher_wine.py" '"$GAME_NAME"' "BGE.exe"' > \
-"$START_FILE"
