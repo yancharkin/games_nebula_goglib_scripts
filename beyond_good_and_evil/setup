@@ -3,7 +3,7 @@
 source "$NEBULA_DIR/scripts/shell_functions.sh"
 
 get_from_mega 'bge_widescreen.7z' \
-'https://mega.nz/#!yZRQyAAD!slkCYrNFbKw1RfNlY1LPVyir9axaPoToHENbSSDzsQ8' \
+'https://mega.nz/#!yZRQyAAD!slkCYrNFbKw1RfNlY1LPVyir9axaPoToHENbSSDzsQ8'
 
 7z x -aoa -o"$INSTALL_DIR/$GAME_NAME/game/" \
 "$DOWNLOAD_DIR/_distr/$GAME_NAME/bge_widescreen.7z" \
