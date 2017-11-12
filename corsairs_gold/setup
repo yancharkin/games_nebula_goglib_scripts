@@ -18,7 +18,9 @@ PATHDATA=c:\Games\corsairs_gold\DATA\
 PATHSAVE=c:\Games\corsairs_gold\SAVINGS\
 PATHCDROM=c:\Games\corsairs_gold\
 PATHBOOK=c:\Games\corsairs_gold\BOOK\
-PATHSOUND=c:\Games\corsairs_gold\SOUND\' > \
+PATHSOUND=c:\Games\corsairs_gold\SOUND\
+[GENERAL]
+LANGUAGE=English' > \
 "$INSTALL_DIR/$GAME_NAME/game/corsairs.ini"
 
 fi
