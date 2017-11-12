@@ -183,12 +183,11 @@ class GUI:
 
     def cb_button_save(self, button):
 
-        if not os.path.exists(game_dir + '/nosferatu.exe.original'):
-            os.system('mv ' + game_dir + '/nosferatu.exe ' + game_dir + '/nosferatu.exe.original')
+        if not os.path.exists(game_dir + '/Nosferatu.exe.original'):
+            os.system('mv ' + game_dir + '/Nosferatu.exe ' + game_dir + '/Nosferatu.exe.original')
 
         selected_resolution = self.combobox_resolution.get_active_text()
-        os.system('cp ' + game_dir + '/res_patch/' + selected_resolution + '/Nosferatu.exe ' +
-        game_dir + '/nosferatu.exe')
+        os.system('cp ' + game_dir + '/res_patch/' + selected_resolution + '/Nosferatu.exe ' + game_dir)
 
         config_file = current_dir + '/settings.ini'
         config_parser = ConfigParser.ConfigParser()

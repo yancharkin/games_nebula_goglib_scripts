@@ -21,16 +21,16 @@ _ = gettext.gettext
 current_dir = sys.path[0]
 install_dir = os.getenv('INSTALL_DIR')
 game_dir = install_dir + '/pathologic_classic_hd_game/game'
-video_dir = game_dir + '/data/video'
+video_dir = game_dir + '/data/Video'
 video_dir_bak = video_dir + '/bak'
 
 list_480 = ['aglaja.wmv', 'army.wmv', 'death.wmv', 'death_fail.wmv', 'fin_beda.wmv',
             'fin_smiren.wmv', 'fin_termit.wmv', 'fin_utop.wmv', 'intro.wmv',
-            'intro_danko.wmv', 'nightmasks6.wmv', 'nightmasks7.wmv', 'nightmasks8.wmv', 'nightmasks9.wmv', 'nightmasks10.wmv','nightmasks11.wmv']
+            'intro_danko.wmv', 'NightMasks6.wmv', 'NightMasks7.wmv', 'NightMasks8.wmv', 'NightMasks9.wmv', 'NightMasks10.wmv','NightMasks11.wmv']
 
 list_600 = ['aglaya.wmv', 'intro_burah.wmv', 'intro_klara.wmv',
-            'nightmasks1.wmv', 'nightmasks2.wmv', 'nightmasks3.wmv', 'nightmasks4.wmv',
-            'nightmasks5.wmv']
+            'NightMasks1.wmv', 'NightMasks2.wmv', 'NightMasks3.wmv', 'NightMasks4.wmv',
+            'NightMasks5.wmv']
 
 full_list = list_480 + list_600
 
