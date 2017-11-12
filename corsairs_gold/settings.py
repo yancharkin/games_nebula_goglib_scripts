@@ -34,7 +34,7 @@ class GUI:
         config_parser.read(config_file)
 
         if not config_parser.has_section('GENERAL'):
-            self.lang = 'ENGLISH'
+            self.lang = 'English'
 
             config_parser.add_section('LANGUAGE')
             config_parser.set('GENERAL', 'LANGUAGE', self.lang)
@@ -81,17 +81,17 @@ class GUI:
             column_homogeneous = True,
             )
 
-        label_custom_lang = Gtk.Label(
+        label_lang = Gtk.Label(
             label = _("Language:")
             )
 
-        lang_list = ['DUTCH', 'ENGLISH', 'GERMAN', 'FRENCH', 'ITALIAN', 'POLISH',
-                    'PORTUGUESE', 'SPANISH']
+        lang_list = ['Dutch', 'English', 'German', 'French', 'Italian', 'Polish',
+                    'Portuguese', 'Spanish']
 
         combobox_lang = Gtk.ComboBoxText()
         index = 1
-        for i in (len(lang_list)):
-            combobox_lang.append(lang_list[i])
+        for i in range(len(lang_list)):
+            combobox_lang.append_text(lang_list[i])
             if self.lang == lang_list[i]:
                 index = i
         combobox_lang.set_active(index)
@@ -100,12 +100,11 @@ class GUI:
         button_save = Gtk.Button(
             label = _("Save and quit")
             )
-        button_patch.connect('clicked', self.cb_button_save)
+        button_save.connect('clicked', self.cb_button_save)
 
-        grid.attach(label_custom_res, 0, 0, 2, 1)
-        grid.attach(entry_custom_width, 0, 1, 1, 1)
-        grid.attach(entry_custom_height, 1, 1, 1, 1)
-        grid.attach(button_patch, 0, 2, 2, 1)
+        grid.attach(label_lang, 0, 0, 1, 1)
+        grid.attach(combobox_lang, 1, 0, 1, 1)
+        grid.attach(button_save, 0, 1, 2, 1)
 
         self.main_window.add(grid)
 
