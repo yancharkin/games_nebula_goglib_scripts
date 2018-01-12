@@ -1,9 +1,8 @@
 # Scripts for ['Games Nebula'](https://github.com/yancharkin/games_nebula) (GOG games)
 
-All linux native games, scummvm and dosbox wrapped games, some windows games will work out of the box. For games that doesn't work or require additional components there are two solutions in 'Games Nebula':  **autosetup.ini** and **bash scripts**.
+All linux native games, ScummVM and DOSBox wrappers, as well as some windows games should work out of the box. For games that doesn't work or require additional components there are two solutions in 'Games Nebula':  **autosetup.ini** and **bash scripts**.
 
 Also this repository contains gui utilities (written in python) for configurating and (sometimes) patching games.
-
 
 ## autosetup.ini
 #### Available option:
@@ -13,6 +12,7 @@ Also this repository contains gui utilities (written in python) for configuratin
 - **native_settings_exe** - path to configuration utility (linux) (1)
 - **win_exe** - path to main executable (windows) (1)
 - **win_settings_exe** - path to configuration utility (windows) (1)
+- **winedlloverrides** - value of WINEDLLOVERRIDES environment variable can be set here
 - **winetricks** - components to install with winetricks
 - **dos_iso** - path to disk image (1)
 - **dos_exe** - path to main executable (dos) (1)
@@ -25,12 +25,13 @@ Also this repository contains gui utilities (written in python) for configuratin
 *(1) - path relative to 'game' directory*
 
 *(2) - see existing examples*
+
 ## Bash scripts
 If for some reason **autosetup.ini** is not enough, it's possible to use bash script. It will be executed during installation. See existing examples.
-#### Available environment variables:
+#### Environment variables that already set by 'Games Nebula':
 - **$DOWNLOAD_DIR** - absolute path to download directory
 - **$INSTALL_DIR** - absolute path to install directory
-- **$WINE_PATH** - absolute path to directory containing wine or 'wine' if system wine version used
+- **$WINE_PATH** - absolute path to directory containing wine binary or 'wine' if system version used
 - **$GAME_NAME** - game id used by gog
 - **$START_FILE** - absolute path to 'start.sh'
 - **$START_GOG_FILE** - absolute path to 'start_gog.sh'
@@ -39,3 +40,6 @@ If for some reason **autosetup.ini** is not enough, it's possible to use bash sc
 - **$ADDITIONS_FILE** - absolute path to 'additions.sh'
 - **$DOSBOX_GAME_CONF** - absolute path to 'dosbox_game.conf'
 - **$DOSBOX_SETTINGS_CONF** - absolute path to 'dosbox_settings.conf'
+- **$NEBULA_DIR** - path to root directory of 'Games Nebula'
+- **$WINEARCH** - value of WINEARCH environment variable
+
