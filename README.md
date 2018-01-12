@@ -50,7 +50,6 @@ Few simple functions that can be used in bash scripts.
 - **get_arch** - return OS architecture.
 - **get_common_file** - download file to "$DOWNLOAD_DIR/_distr/" using curl. Usable for downloading files required by more than one game.
 - **get_file** - download file to "$DOWNLOAD_DIR/_distr/$GAME_NAME/". Usable for downloading game specific files (like patches or mods).
-- **get_mylib_distr** - download file to "$DOWNLOAD_DIR/$GAME_NAME/". Usable for downloading game installers.
 - **get_java_i586** - download 32-bit version of JRE to "$DOWNLOAD_DIR/_distr/" and unpack it to "$INSTALL_DIR/$GAME_NAME/jre".
 - **get_java_x64** - download 64-bit version of JRE to "$DOWNLOAD_DIR/_distr/" and unpack it to "$INSTALL_DIR/$GAME_NAME/jre".
 - **get_from_mega** - download file to "$DOWNLOAD_DIR/_distr/$GAME_NAME/" using megadl (megtools).
