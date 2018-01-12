@@ -43,3 +43,21 @@ If for some reason **autosetup.ini** is not enough, it's possible to use bash sc
 - **$NEBULA_DIR** - path to root directory of 'Games Nebula'
 - **$WINEARCH** - value of WINEARCH environment variable
 
+#### Shell functions
+Few simple functions that can be used in bash scripts.
+
+- **proc_timer** - simple timer, its main purpose to indicate that process didn't stalled.
+- **get_arch** - return OS architecture.
+- **get_common_file** - download file to "$DOWNLOAD_DIR/_distr/" using curl. Usable for downloading files required by more than one game.
+- **get_file** - download file to "$DOWNLOAD_DIR/_distr/$GAME_NAME/". Usable for downloading game specific files (like patches or mods).
+- **get_mylib_distr** - download file to "$DOWNLOAD_DIR/$GAME_NAME/". Usable for downloading game installers.
+- **get_java_i586** - download 32-bit version of JRE to "$DOWNLOAD_DIR/_distr/" and unpack it to "$INSTALL_DIR/$GAME_NAME/jre".
+- **get_java_x64** - download 64-bit version of JRE to "$DOWNLOAD_DIR/_distr/" and unpack it to "$INSTALL_DIR/$GAME_NAME/jre".
+- **get_from_mega** - download file to "$DOWNLOAD_DIR/_distr/$GAME_NAME/" using megadl (megtools).
+- **get_weidu** - download WeiDU and upack it to "$INSTALL_DIR/$GAME_NAME/game".
+- **get_upx** - download UPX and upack it to "$INSTALL_DIR/$GAME_NAME/game".
+- **setup_lavfilters** - download, unpack and setup LAVFilters (wine).
+
+Before using them you have to add to your script:
+
+    source "$NEBULA_DIR/scripts/shell_functions.sh"
