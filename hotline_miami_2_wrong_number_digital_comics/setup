@@ -27,5 +27,5 @@ echo -e '#!/bin/bash
 fi
 
 echo -e '#!/bin/bash
-python2 "$NEBULA_DIR/launcher_native.py" '"$GAME_NAME" > \
+python "$NEBULA_DIR/launcher_native.py" '"$GAME_NAME" > \
 "$START_FILE" && chmod +x "$START_FILE"

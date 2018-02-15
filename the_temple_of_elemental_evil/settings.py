@@ -1,12 +1,8 @@
-#!/usr/bin/env python2
-# -*- Mode: Python; coding: utf-8; -*-
-
 import sys, os
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk, GLib
 import gettext
-import ConfigParser
 import imp
 
 nebula_dir = os.getenv('NEBULA_DIR')
@@ -862,7 +858,7 @@ class GUI:
 
                 return False
 
-        print io.readline().strip('\n')
+        print(io.readline().strip('\n'))
 
         if process_name == 'extracting std':
             self.progressbar_std.pulse()

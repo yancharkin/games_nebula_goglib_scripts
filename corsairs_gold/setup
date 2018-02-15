@@ -2,7 +2,7 @@
 
 source "$NEBULA_DIR/scripts/shell_functions.sh"
 
-VER=$(python2 "$NEBULA_DIR/dialogs.py" list "GOG, GameCopyWorld")
+VER=$(python "$NEBULA_DIR/dialogs.py" list "GOG, GameCopyWorld")
 
 if [ "$VER" == "GameCopyWorld" ]; then
 

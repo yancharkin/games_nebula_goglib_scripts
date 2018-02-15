@@ -17,7 +17,7 @@ mkdir -p "$INSTALL_DIR/$GAME_NAME/lib"
 lwjgl-2.7.1/native/linux/*
 
 echo -e '#!/bin/bash
-python2 "$NEBULA_DIR/launcher_native.py" '"$GAME_NAME" > \
+python "$NEBULA_DIR/launcher_native.py" '"$GAME_NAME" > \
 "$START_FILE" && chmod +x "$START_FILE"
 
 echo -e '#!/bin/bash

@@ -1,13 +1,14 @@
-#!/usr/bin/env python2
-# -*- Mode: Python; coding: utf-8 -*-
-
 import sys, os
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk
-import ConfigParser
 import gettext
 import imp
+
+try:
+    from ConfigParser import ConfigParser as ConfigParser
+except:
+    from configparser import ConfigParser as ConfigParser
 
 nebula_dir = os.getenv('NEBULA_DIR')
 
@@ -30,14 +31,14 @@ class GUI:
     def config_load(self):
 
         config_file = game_dir + '/corsairs.ini'
-        config_parser = ConfigParser.ConfigParser()
+        config_parser = ConfigParser()
         config_parser.read(config_file)
 
         if not config_parser.has_section('GENERAL'):
             self.lang = 'English'
 
             config_parser.add_section('LANGUAGE')
-            config_parser.set('GENERAL', 'LANGUAGE', self.lang)
+            config_parser.set('GENERAL', 'LANGUAGE', str(self.lang))
 
             new_config_file = open(config_file, 'w')
             config_parser.write(new_config_file)
@@ -49,10 +50,10 @@ class GUI:
     def config_save(self):
 
         config_file = game_dir + '/corsairs.ini'
-        config_parser = ConfigParser.ConfigParser()
+        config_parser = ConfigParser()
         config_parser.read(config_file)
 
-        config_parser.set('GENERAL', 'LANGUAGE', self.lang)
+        config_parser.set('GENERAL', 'LANGUAGE', str(self.lang))
 
         new_config_file = open(config_file, 'w')
         config_parser.write(new_config_file)

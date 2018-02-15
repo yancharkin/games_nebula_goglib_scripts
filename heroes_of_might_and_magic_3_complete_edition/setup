@@ -13,11 +13,11 @@ rm -R "$INSTALL_DIR/$GAME_NAME/tmp"
 
 echo -e '#!/bin/bash
 if [ -f "$INSTALL_DIR/'"$GAME_NAME"'/game/Heroes3 HD.exe" ]; then
-python2 "$NEBULA_DIR/launcher_wine.py" '"$GAME_NAME"' "Heroes3 HD.exe"
+python "$NEBULA_DIR/launcher_wine.py" '"$GAME_NAME"' "Heroes3 HD.exe"
 else
 if [ -f "$INSTALL_DIR/'"$GAME_NAME"'/game/HD_Launcher.exe" ]; then
-python2 "$NEBULA_DIR/launcher_wine.py" '"$GAME_NAME"' "HD_Launcher.exe"
+python "$NEBULA_DIR/launcher_wine.py" '"$GAME_NAME"' "HD_Launcher.exe"
 else
-python2 "$NEBULA_DIR/launcher_wine.py" '"$GAME_NAME"' "Heroes3.exe"
+python "$NEBULA_DIR/launcher_wine.py" '"$GAME_NAME"' "Heroes3.exe"
 fi
 fi' > "$START_FILE" && chmod +x "$START_FILE"

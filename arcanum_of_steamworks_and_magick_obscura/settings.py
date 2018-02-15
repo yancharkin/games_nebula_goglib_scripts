@@ -1,13 +1,14 @@
-#!/usr/bin/env python2
-# -*- Mode: Python; coding: utf-8; -*-
-
 import sys, os
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk
-import ConfigParser
 import gettext
 import imp
+
+try:
+    from ConfigParser import ConfigParser as ConfigParser
+except:
+    from configparser import ConfigParser as ConfigParser
 
 nebula_dir = os.getenv('NEBULA_DIR')
 
@@ -30,7 +31,7 @@ class GUI:
     def config_load(self):
 
         config_file = current_dir + '/settings.ini'
-        config_parser = ConfigParser.ConfigParser()
+        config_parser = ConfigParser()
         config_parser.read(config_file)
 
         if not config_parser.has_section('Settings'):
@@ -38,73 +39,73 @@ class GUI:
 
         if not config_parser.has_option('Settings', 'module'):
             self.module = 'arcanum'
-            config_parser.set('Settings', 'module', self.module)
+            config_parser.set('Settings', 'module', str(self.module))
         else:
             self.module = config_parser.get('Settings', 'module')
 
         if not config_parser.has_option('Settings', 'scrolling_distance'):
             self.scrolling_distance = 10
-            config_parser.set('Settings', 'scrolling_distance', self.scrolling_distance)
+            config_parser.set('Settings', 'scrolling_distance', str(self.scrolling_distance))
         else:
             self.scrolling_distance = config_parser.getint('Settings', 'scrolling_distance')
 
         if not config_parser.has_option('Settings', 'scrolling_speed'):
             self.scrolling_speed = 35
-            config_parser.set('Settings', 'scrolling_speed', self.scrolling_speed)
+            config_parser.set('Settings', 'scrolling_speed', str(self.scrolling_speed))
         else:
             self.scrolling_speed = config_parser.getint('Settings', 'scrolling_speed')
 
         if not config_parser.has_option('Settings', 'no3d'):
             self.no3d = False
-            config_parser.set('Settings', 'no3d', self.no3d)
+            config_parser.set('Settings', 'no3d', str(self.no3d))
         else:
             self.no3d = config_parser.getboolean('Settings', 'no3d')
 
         if not config_parser.has_option('Settings', 'doublebuffer'):
             self.doublebuffer = False
-            config_parser.set('Settings', 'doublebuffer', self.doublebuffer)
+            config_parser.set('Settings', 'doublebuffer', str(self.doublebuffer))
         else:
             self.doublebuffer = config_parser.getboolean('Settings', 'doublebuffer')
 
         if not config_parser.has_option('Settings', 'fullscreen'):
             self.fullscreen = False
-            config_parser.set('Settings', 'fullscreen', self.fullscreen)
+            config_parser.set('Settings', 'fullscreen', str(self.fullscreen))
         else:
             self.fullscreen = config_parser.getboolean('Settings', 'fullscreen')
 
         if not config_parser.has_option('Settings', 'nosound'):
             self.nosound = False
-            config_parser.set('Settings', 'nosound', self.nosound)
+            config_parser.set('Settings', 'nosound', str(self.nosound))
         else:
             self.nosound = config_parser.getboolean('Settings', 'nosound')
 
         if not config_parser.has_option('Settings', 'norandom'):
             self.norandom = False
-            config_parser.set('Settings', 'norandom', self.norandom)
+            config_parser.set('Settings', 'norandom', str(self.norandom))
         else:
             self.norandom = config_parser.getboolean('Settings', 'norandom')
 
         if not config_parser.has_option('Settings', 'fps'):
             self.fps = False
-            config_parser.set('Settings', 'fps', self.fps)
+            config_parser.set('Settings', 'fps', str(self.fps))
         else:
             self.fps = config_parser.getboolean('Settings', 'fps')
 
         if not config_parser.has_option('Settings', 'msmousez'):
             self.msmousez = False
-            config_parser.set('Settings', 'msmousez', self.msmousez)
+            config_parser.set('Settings', 'msmousez', str(self.msmousez))
         else:
             self.msmousez = config_parser.getboolean('Settings', 'msmousez')
 
         if not config_parser.has_option('Settings', 'mpautojoin'):
             self.mpautojoin = False
-            config_parser.set('Settings', 'mpautojoin', self.mpautojoin)
+            config_parser.set('Settings', 'mpautojoin', str(self.mpautojoin))
         else:
             self.mpautojoin = config_parser.getboolean('Settings', 'mpautojoin')
 
         if not config_parser.has_option('Settings', 'mpnobcast'):
             self.mpnobcast = False
-            config_parser.set('Settings', 'mpnobcast', self.mpnobcast)
+            config_parser.set('Settings', 'mpnobcast', str(self.mpnobcast))
         else:
             self.mpnobcast = config_parser.getboolean('Settings', 'mpnobcast')
 
@@ -119,31 +120,31 @@ class GUI:
 
         if not config_parser.has_option('HiRes Patch', 'width'):
             self.width = ''
-            config_parser.set('HiRes Patch', 'width', self.width)
+            config_parser.set('HiRes Patch', 'width', str(self.width))
         else:
             self.width = config_parser.get('HiRes Patch', 'width')
 
         if not config_parser.has_option('HiRes Patch', 'height'):
             self.height = ''
-            config_parser.set('HiRes Patch', 'height', self.height)
+            config_parser.set('HiRes Patch', 'height', str(self.height))
         else:
             self.height = config_parser.get('HiRes Patch', 'height')
 
         if not config_parser.has_option('HiRes Patch', 'dialog_font'):
             self.dialog_font = _("default")
-            config_parser.set('HiRes Patch', 'dialog_font', self.dialog_font)
+            config_parser.set('HiRes Patch', 'dialog_font', str(self.dialog_font))
         else:
             self.dialog_font = config_parser.get('HiRes Patch', 'dialog_font')
 
         if not config_parser.has_option('HiRes Patch', 'large_logbook'):
             self.large_logbook = False
-            config_parser.set('HiRes Patch', 'large_logbook', self.large_logbook)
+            config_parser.set('HiRes Patch', 'large_logbook', str(self.large_logbook))
         else:
             self.large_logbook = config_parser.getboolean('HiRes Patch', 'large_logbook')
 
         if not config_parser.has_option('HiRes Patch', 'compact'):
             self.compact = False
-            config_parser.set('HiRes Patch', 'compact', self.compact)
+            config_parser.set('HiRes Patch', 'compact', str(self.compact))
         else:
             self.compact = config_parser.getboolean('HiRes Patch', 'compact')
 
@@ -205,7 +206,7 @@ class GUI:
 
         parameters_str = ' '.join(parameters_list)
 
-        new_launch_command = 'python2 "$NEBULA_DIR/launcher_wine.py" ' + \
+        new_launch_command = 'python "$NEBULA_DIR/launcher_wine.py" ' + \
         'arcanum_of_steamworks_and_magick_obscura "arcanum.exe' + ' ' + parameters_str + '"'
 
         start_file = open(current_dir + '/start.sh', 'r')
@@ -221,30 +222,30 @@ class GUI:
         start_file.close()
 
         config_file = current_dir + '/settings.ini'
-        config_parser = ConfigParser.ConfigParser()
+        config_parser = ConfigParser()
         config_parser.read(config_file)
 
-        config_parser.set('Settings', 'module', self.module)
-        config_parser.set('Settings', 'scrolling_distance', self.scrolling_distance)
-        config_parser.set('Settings', 'scrolling_speed', self.scrolling_speed)
-        config_parser.set('Settings', 'no3d', self.no3d)
-        config_parser.set('Settings', 'doublebuffer', self.doublebuffer)
-        config_parser.set('Settings', 'fullscreen', self.fullscreen)
-        config_parser.set('Settings', 'nosound', self.nosound)
-        config_parser.set('Settings', 'norandom', self.norandom)
-        config_parser.set('Settings', 'fps', self.fps)
-        config_parser.set('Settings', 'msmousez', self.msmousez)
-        config_parser.set('Settings', 'mpautojoin', self.mpautojoin)
-        config_parser.set('Settings', 'mpnobcast', self.mpnobcast)
+        config_parser.set('Settings', 'module', str(self.module))
+        config_parser.set('Settings', 'scrolling_distance', str(self.scrolling_distance))
+        config_parser.set('Settings', 'scrolling_speed', str(self.scrolling_speed))
+        config_parser.set('Settings', 'no3d', str(self.no3d))
+        config_parser.set('Settings', 'doublebuffer', str(self.doublebuffer))
+        config_parser.set('Settings', 'fullscreen', str(self.fullscreen))
+        config_parser.set('Settings', 'nosound', str(self.nosound))
+        config_parser.set('Settings', 'norandom', str(self.norandom))
+        config_parser.set('Settings', 'fps', str(self.fps))
+        config_parser.set('Settings', 'msmousez', str(self.msmousez))
+        config_parser.set('Settings', 'mpautojoin', str(self.mpautojoin))
+        config_parser.set('Settings', 'mpnobcast', str(self.mpnobcast))
 
         if not config_parser.has_section('HiRes Patch'):
             config_parser.add_section('HiRes Patch')
 
-        config_parser.set('HiRes Patch', 'width', self.width)
-        config_parser.set('HiRes Patch', 'height', self.height)
-        config_parser.set('HiRes Patch', 'dialog_font', self.dialog_font)
-        config_parser.set('HiRes Patch', 'large_logbook', self.large_logbook)
-        config_parser.set('HiRes Patch', 'compact', self.compact)
+        config_parser.set('HiRes Patch', 'width', str(self.width))
+        config_parser.set('HiRes Patch', 'height', str(self.height))
+        config_parser.set('HiRes Patch', 'dialog_font', str(self.dialog_font))
+        config_parser.set('HiRes Patch', 'large_logbook', str(self.large_logbook))
+        config_parser.set('HiRes Patch', 'compact', str(self.compact))
 
         new_config_file = open(config_file, 'w')
         config_parser.write(new_config_file)
@@ -694,12 +695,12 @@ class GUI:
         os.system(cd_command + ' && ' + patch_command)
 
         config_file = current_dir + '/settings.ini'
-        config_parser = ConfigParser.ConfigParser()
+        config_parser = ConfigParser()
         config_parser.read(config_file)
 
         if not config_parser.has_section('HiRes Patch'):
             config_parser.add_section('HiRes Patch')
-        config_parser.set('HiRes Patch', 'hires_applied', True)
+        config_parser.set('HiRes Patch', 'hires_applied', 'True')
 
         new_config_file = open(config_file, 'w')
         config_parser.write(new_config_file)

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo -e '#!/bin/bash
-python2 "$NEBULA_DIR/launcher_scummvm.py" '"$GAME_NAME"' teenagent' > \
+python "$NEBULA_DIR/launcher_scummvm.py" '"$GAME_NAME"' teenagent' > \
 "$START_FILE" && chmod +x "$START_FILE"
 
 echo "[teenagent]

@@ -3,7 +3,7 @@
 cp "$INSTALL_DIR/$GAME_NAME/game/__support/app/"* "$INSTALL_DIR/$GAME_NAME/game/SSHOCK"
 
 echo -e '#!/bin/bash
-python2 "$NEBULA_DIR/launcher_dosbox.py" '"$GAME_NAME" > "$START_FILE"
+python "$NEBULA_DIR/launcher_dosbox.py" '"$GAME_NAME" > "$START_FILE"
 chmod +x "$START_FILE"
 
 echo "[autoexec]

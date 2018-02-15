@@ -2,7 +2,7 @@
 
 source "$NEBULA_DIR/scripts/shell_functions.sh"
 
-VER=$(python2 "$NEBULA_DIR/dialogs.py" list "Windows, Linux (+13 Mb)")
+VER=$(python "$NEBULA_DIR/dialogs.py" list "Windows, Linux (+13 Mb)")
 
 if [ "$VER" == "Linux (+13 Mb)" ]; then
 
@@ -63,7 +63,7 @@ done
 echo "Done"
 
 echo -e '#!/bin/bash
-python2 "$NEBULA_DIR/launcher_native.py" '"$GAME_NAME" > \
+python "$NEBULA_DIR/launcher_native.py" '"$GAME_NAME" > \
 "$START_FILE"
 
 echo -e '#!/bin/bash

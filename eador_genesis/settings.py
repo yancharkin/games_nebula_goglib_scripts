@@ -1,13 +1,14 @@
-#!/usr/bin/env python2
-# -*- Mode: Python; coding: utf-8; -*-
-
 import sys, os
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk
-import ConfigParser
 import gettext
 import imp
+
+try:
+    from ConfigParser import ConfigParser as ConfigParser
+except:
+    from configparser import ConfigParser as ConfigParser
 
 nebula_dir = os.getenv('NEBULA_DIR')
 
@@ -29,7 +30,7 @@ class GUI:
     def config_load(self):
 
         config_file = current_dir + '/settings.ini'
-        config_parser = ConfigParser.ConfigParser()
+        config_parser = ConfigParser()
         config_parser.read(config_file)
 
         if not config_parser.has_section('Settings'):
@@ -37,7 +38,7 @@ class GUI:
 
         if not config_parser.has_option('Settings', 'fullscreen'):
             self.fullscreen = False
-            config_parser.set('Settings', 'fullscreen', self.fullscreen)
+            config_parser.set('Settings', 'fullscreen', str(self.fullscreen))
         else:
             self.fullscreen = config_parser.getboolean('Settings', 'fullscreen')
 
@@ -48,9 +49,9 @@ class GUI:
     def config_save(self):
 
         if self.fullscreen:
-            new_launch_command = 'python2 "$NEBULA_DIR/launcher_wine.py" eador_genesis "Eador.exe f"'
+            new_launch_command = 'python "$NEBULA_DIR/launcher_wine.py" eador_genesis "Eador.exe f"'
         else:
-            new_launch_command = 'python2 "$NEBULA_DIR/launcher_wine.py" eador_genesis "Eador.exe"'
+            new_launch_command = 'python "$NEBULA_DIR/launcher_wine.py" eador_genesis "Eador.exe"'
 
         start_file = open(current_dir + '/start.sh', 'r')
         start_file_content = start_file.readlines()
@@ -65,10 +66,10 @@ class GUI:
         start_file.close()
 
         config_file = current_dir + '/settings.ini'
-        config_parser = ConfigParser.ConfigParser()
+        config_parser = ConfigParser()
         config_parser.read(config_file)
 
-        config_parser.set('Settings', 'fullscreen', self.fullscreen)
+        config_parser.set('Settings', 'fullscreen', str(self.fullscreen))
 
         new_config_file = open(config_file, 'w')
         config_parser.write(new_config_file)

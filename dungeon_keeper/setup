@@ -2,7 +2,7 @@
 
 source "$NEBULA_DIR/scripts/shell_functions.sh"
 
-VER=$(python2 "$NEBULA_DIR/dialogs.py" list "DOSBox, KeeperFX (+400 Mb)")
+VER=$(python "$NEBULA_DIR/dialogs.py" list "DOSBox, KeeperFX (+400 Mb)")
 
 if [ "$VER" == "KeeperFX (+400 Mb)" ]; then
 
@@ -18,7 +18,7 @@ cp "$HOME/.games_nebula/scripts/goglib/$GAME_NAME/settings.dat" \
 "$INSTALL_DIR/$GAME_NAME/game/save"
 
 echo -e '#!/bin/bash
-python2 "$NEBULA_DIR/launcher_wine.py" '"$GAME_NAME"' "keeperfx.exe -nocd"' > \
+python "$NEBULA_DIR/launcher_wine.py" '"$GAME_NAME"' "keeperfx.exe -nocd"' > \
 "$START_FILE"
 
 else

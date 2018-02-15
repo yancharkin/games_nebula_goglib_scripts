@@ -1,13 +1,14 @@
-#!/usr/bin/env python2
-# -*- Mode: Python; coding: utf-8 -*-
-
 import sys, os
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk
-import ConfigParser
 import gettext
 import imp
+
+try:
+    from ConfigParser import ConfigParser as ConfigParser
+except:
+    from configparser import ConfigParser as ConfigParser
 
 nebula_dir = os.getenv('NEBULA_DIR')
 
@@ -29,7 +30,7 @@ class GUI:
     def config_load(self):
 
         config_file = current_dir + '/settings.ini'
-        config_parser = ConfigParser.ConfigParser()
+        config_parser = ConfigParser()
         config_parser.read(config_file)
 
         if not config_parser.has_section('Settings'):
@@ -37,8 +38,8 @@ class GUI:
             self.custom_height = ''
 
             config_parser.add_section('Settings')
-            config_parser.set('Settings', 'custom_width', self.custom_width)
-            config_parser.set('Settings', 'custom_height', self.custom_height)
+            config_parser.set('Settings', 'custom_width', str(self.custom_width))
+            config_parser.set('Settings', 'custom_height', str(self.custom_height))
 
             new_config_file = open(config_file, 'w')
             config_parser.write(new_config_file)
@@ -51,22 +52,22 @@ class GUI:
     def config_save(self):
 
         config_file = current_dir + '/settings.ini'
-        config_parser = ConfigParser.ConfigParser()
+        config_parser = ConfigParser()
         config_parser.read(config_file)
 
-        config_parser.set('Settings', 'custom_width', self.custom_width)
-        config_parser.set('Settings', 'custom_height', self.custom_height)
+        config_parser.set('Settings', 'custom_width', str(self.custom_width))
+        config_parser.set('Settings', 'custom_height', str(self.custom_height))
 
         new_config_file = open(config_file, 'w')
         config_parser.write(new_config_file)
         new_config_file.close()
 
         config_file = current_dir + '/game/Battle_Realms.ini'
-        config_parser = ConfigParser.ConfigParser()
+        config_parser = ConfigParser()
         config_parser.read(config_file)
-        config_parser.set('VideoState', 'width', self.custom_width)
-        config_parser.set('VideoState', 'height', self.custom_height)
-        config_parser.set('VideoState', 'hardwaretl', 1)
+        config_parser.set('VideoState', 'width', str(self.custom_width))
+        config_parser.set('VideoState', 'height', str(self.custom_height))
+        config_parser.set('VideoState', 'hardwaretl', '1')
         new_config_file = open(config_file, 'w')
         config_parser.write(new_config_file)
         new_config_file.close()
@@ -201,17 +202,28 @@ class GUI:
 
         for offset in width_offsets:
             exe_file.seek(offset[0])
-            exe_file.write(chr(int(width_offset1_value, 16)))
+            width_offset1_value_b = self.to_bytes(int(width_offset1_value, 16))
+            exe_file.write(width_offset1_value_b)
             exe_file.seek(offset[1])
-            exe_file.write(chr(int(width_offset2_value, 16)))
+            width_offset2_value_b = self.to_bytes(int(width_offset2_value, 16))
+            exe_file.write(width_offset2_value_b)
 
         for offset in height_offsets:
             exe_file.seek(offset[0])
-            exe_file.write(chr(int(height_offset1_value, 16)))
+            height_offset1_value_b = self.to_bytes(int(height_offset1_value, 16))
+            exe_file.write(height_offset1_value_b)
             exe_file.seek(offset[1])
-            exe_file.write(chr(int(height_offset2_value, 16)))
+            height_offset2_value_b = self.to_bytes(int(height_offset2_value, 16))
+            exe_file.write(height_offset2_value_b)
 
         exe_file.close()
+
+    def to_bytes(self, value):
+
+        if sys.version_info[0] == 2:
+            return chr(value)
+        elif sys.version_info[0] == 3:
+            return bytes([value])
 
 def main():
     import sys

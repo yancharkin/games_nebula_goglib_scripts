@@ -1,13 +1,14 @@
-#!/usr/bin/env python2
-# -*- Mode: Python; coding: utf-8; -*-
-
 import sys, os
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk, GLib
 import gettext
-import ConfigParser
 import imp
+
+try:
+    from ConfigParser import ConfigParser as ConfigParser
+except:
+    from configparser import ConfigParser as ConfigParser
 
 nebula_dir = os.getenv('NEBULA_DIR')
 
@@ -294,7 +295,7 @@ class GUI:
     def config_load(self):
 
         config_file_path = game_dir + '/data/config.ini'
-        config_parser = ConfigParser.ConfigParser()
+        config_parser = ConfigParser()
         config_parser.read(config_file_path)
 
         if not config_parser.has_section('Video'):
@@ -302,7 +303,7 @@ class GUI:
 
         if not config_parser.has_option('Video', 'XRes'):
             self.xres = '1366'
-            config_parser.set('Video', 'XRes', self.xres)
+            config_parser.set('Video', 'XRes', str(self.xres))
         else:
             self.xres = config_parser.get('Video', 'XRes')
             if (self.xres == '800') or (self.xres == '1024'):
@@ -310,7 +311,7 @@ class GUI:
 
         if not config_parser.has_option('Video', 'YRes'):
             self.yres = '768'
-            config_parser.set('Video', 'YRes', self.yres)
+            config_parser.set('Video', 'YRes', str(self.yres))
         else:
             self.yres = config_parser.get('Video', 'YRes')
             if self.yres == '600':
@@ -318,7 +319,7 @@ class GUI:
 
         if not config_parser.has_option('Video', 'depth32'):
             self.depth32 = '0'
-            config_parser.set('Video', 'depth32', self.depth32)
+            config_parser.set('Video', 'depth32', str(self.depth32))
         else:
             self.depth32 = config_parser.get('Video', 'depth32')
 
@@ -334,67 +335,67 @@ class GUI:
 
         if not config_parser.has_option('Video', 'antialias'):
             self.antialias = 0
-            config_parser.set('Video', 'antialias', self.antialias)
+            config_parser.set('Video', 'antialias', str(self.antialias))
         else:
             self.antialias = config_parser.getint('Video', 'antialias')
 
         if not config_parser.has_option('Video', 'distance'):
             self.distance = 0
-            config_parser.set('Video', 'distance', self.distance)
+            config_parser.set('Video', 'distance', str(self.distance))
         else:
             self.distance = config_parser.getint('Video', 'distance')
 
         if not config_parser.has_option('Video', 'texanisotropy'):
             self.anisotropy = 0
-            config_parser.set('Video', 'texanisotropy', self.anisotropy)
+            config_parser.set('Video', 'texanisotropy', str(self.anisotropy))
         else:
             self.anisotropy = config_parser.getint('Video', 'texanisotropy')
 
         if not config_parser.has_option('Video', 'texturequality'):
             self.tex = 1
-            config_parser.set('Video', 'texturequality', self.tex)
+            config_parser.set('Video', 'texturequality', str(self.tex))
         else:
             self.tex = config_parser.getint('Video', 'texturequality')
 
         if not config_parser.has_option('Video', 'lightmapquality'):
             self.lightmap = 2
-            config_parser.set('Video', 'lightmapquality', self.lightmap)
+            config_parser.set('Video', 'lightmapquality', str(self.lightmap))
         else:
             self.lightmap = config_parser.getint('Video', 'lightmapquality')
 
         if not config_parser.has_option('Video', 'nocompressedtextures'):
             self.tex_comp = -1
-            config_parser.set('Video', 'nocompressedtextures', self.tex_comp)
+            config_parser.set('Video', 'nocompressedtextures', str(self.tex_comp))
         else:
             self.tex_comp = config_parser.getint('Video', 'nocompressedtextures')
 
         if not config_parser.has_option('Video', 'eyecandy'):
             self.decor = 0
-            config_parser.set('Video', 'eyecandy', self.decor)
+            config_parser.set('Video', 'eyecandy', str(self.decor))
         else:
             self.decor = config_parser.getint('Video', 'eyecandy')
 
         if not config_parser.has_option('Video', 'eyecandy'):
             self.decor = 0
-            config_parser.set('Video', 'eyecandy', self.decor)
+            config_parser.set('Video', 'eyecandy', str(self.decor))
         else:
             self.decor = config_parser.getint('Video', 'eyecandy')
 
         if not config_parser.has_option('Video', 'nobumpmapping'):
             self.nobumpmapping = 1
-            config_parser.set('Video', 'nobumpmapping', self.nobumpmapping)
+            config_parser.set('Video', 'nobumpmapping', str(self.nobumpmapping))
         else:
             self.nobumpmapping = config_parser.getint('Video', 'nobumpmapping')
 
         if not config_parser.has_option('Video', 'waterreflections'):
             self.waterreflections = 0
-            config_parser.set('Video', 'waterreflections', self.waterreflections)
+            config_parser.set('Video', 'waterreflections', str(self.waterreflections))
         else:
             self.waterreflections = config_parser.getint('Video', 'waterreflections')
 
         if not config_parser.has_option('Video', 'enb'):
             self.enb = 0
-            config_parser.set('Video', 'enb', self.enb)
+            config_parser.set('Video', 'enb', str(self.enb))
         else:
             self.enb = config_parser.getint('Video', 'enb')
 
@@ -407,29 +408,29 @@ class GUI:
     def config_save(self):
 
         config_file_path = game_dir + '/data/config.ini' # remove
-        config_parser = ConfigParser.ConfigParser()
+        config_parser = ConfigParser()
         config_parser.read(config_file_path) # remove
 
-        config_parser.set('Video', 'XRes', self.xres)
-        config_parser.set('Video', 'YRes', self.yres)
-        config_parser.set('Video', 'depth32', self.depth32)
+        config_parser.set('Video', 'XRes', str(self.xres))
+        config_parser.set('Video', 'YRes', str(self.yres))
+        config_parser.set('Video', 'depth32', str(self.depth32))
 
         if self.vsync == True:
             vsync_value = '1'
         else:
             vsync_value = '0'
-        config_parser.set('Video', 'vsync', vsync_value)
+        config_parser.set('Video', 'vsync', str(vsync_value))
 
-        config_parser.set('Video', 'antialias', self.antialias)
-        config_parser.set('Video', 'distance', self.distance)
-        config_parser.set('Video', 'texanisotropy', self.anisotropy)
-        config_parser.set('Video', 'texturequality', self.tex)
-        config_parser.set('Video', 'lightmapquality', self.lightmap)
-        config_parser.set('Video', 'nocompressedtextures', self.tex_comp)
-        config_parser.set('Video', 'eyecandy', self.decor)
-        config_parser.set('Video', 'nobumpmapping', self.nobumpmapping)
-        config_parser.set('Video', 'waterreflections', self.waterreflections)
-        config_parser.set('Video', 'enb', self.enb)
+        config_parser.set('Video', 'antialias', str(self.antialias))
+        config_parser.set('Video', 'distance', str(self.distance))
+        config_parser.set('Video', 'texanisotropy', str(self.anisotropy))
+        config_parser.set('Video', 'texturequality', str(self.tex))
+        config_parser.set('Video', 'lightmapquality', str(self.lightmap))
+        config_parser.set('Video', 'nocompressedtextures', str(self.tex_comp))
+        config_parser.set('Video', 'eyecandy', str(self.decor))
+        config_parser.set('Video', 'nobumpmapping', str(self.nobumpmapping))
+        config_parser.set('Video', 'waterreflections', str(self.waterreflections))
+        config_parser.set('Video', 'enb', str(self.enb))
 
         self.setup_enb()
 
@@ -594,9 +595,9 @@ class GUI:
                 os.system('rm -r ' + game_dir + '/tmp')
                 os.system('mv ' + game_dir + '/bin/Final/Config.exe ' + \
                         game_dir + '/bin/Final/Config.exe.bak ')
-                os.execl(sys.executable, 'python2', __file__)
+                os.execl(sys.executable, sys.executable, __file__)
 
-        print io.readline().strip('\n')
+        print(io.readline().strip('\n'))
 
         if process_name == 'extracting':
             self.progressbar.pulse()

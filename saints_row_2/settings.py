@@ -1,13 +1,14 @@
-#!/usr/bin/env python2
-# -*- Mode: Python; coding: utf-8; indent-tabs-install_mode: t; c-basic-offset: 4; tab-custom_width: 4 -*-
-
 import sys, os
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk
-import ConfigParser
 import gettext
 import imp
+
+try:
+    from ConfigParser import ConfigParser as ConfigParser
+except:
+    from configparser import ConfigParser as ConfigParser
 
 nebula_dir = os.getenv('NEBULA_DIR')
 
@@ -45,7 +46,7 @@ class GUI:
     def config_load(self):
 
         config_file = current_dir + '/settings.ini'
-        config_parser = ConfigParser.ConfigParser()
+        config_parser = ConfigParser()
         config_parser.read(config_file)
 
         if not config_parser.has_section('Settings'):
@@ -55,10 +56,10 @@ class GUI:
             self.custom_height = 768
 
             config_parser.add_section('Settings')
-            config_parser.set('Settings', 'language', self.language)
-            config_parser.set('Settings', 'custom_res', self.custom_res)
-            config_parser.set('Settings', 'custom_width', self.custom_width)
-            config_parser.set('Settings', 'custom_height', self.custom_height)
+            config_parser.set('Settings', 'language', str(self.language))
+            config_parser.set('Settings', 'custom_res', str(self.custom_res))
+            config_parser.set('Settings', 'custom_width', str(self.custom_width))
+            config_parser.set('Settings', 'custom_height', str(self.custom_height))
 
             new_config_file = open(config_file, 'w')
             config_parser.write(new_config_file)
@@ -73,13 +74,13 @@ class GUI:
     def config_save(self):
 
         config_file = current_dir + '/settings.ini'
-        config_parser = ConfigParser.ConfigParser()
+        config_parser = ConfigParser()
         config_parser.read(config_file)
 
-        config_parser.set('Settings', 'language', self.language)
-        config_parser.set('Settings', 'custom_res', self.custom_res)
-        config_parser.set('Settings', 'custom_width', self.custom_width)
-        config_parser.set('Settings', 'custom_height', self.custom_height)
+        config_parser.set('Settings', 'language', str(self.language))
+        config_parser.set('Settings', 'custom_res', str(self.custom_res))
+        config_parser.set('Settings', 'custom_width', str(self.custom_width))
+        config_parser.set('Settings', 'custom_height', str(self.custom_height))
 
         new_config_file = open(config_file, 'w')
         config_parser.write(new_config_file)

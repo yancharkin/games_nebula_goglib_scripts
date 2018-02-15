@@ -1,13 +1,14 @@
-#!/usr/bin/env python2
-# -*- Mode: Python; coding: utf-8; -*-
-
 import sys, os
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk
-import ConfigParser
 import gettext
 import imp
+
+try:
+    from ConfigParser import ConfigParser as ConfigParser
+except:
+    from configparser import ConfigParser as ConfigParser
 
 nebula_dir = os.getenv('NEBULA_DIR')
 
@@ -29,7 +30,7 @@ class GUI:
     def config_load(self):
 
         config_file = current_dir + '/settings.ini'
-        config_parser = ConfigParser.ConfigParser()
+        config_parser = ConfigParser()
         config_parser.read(config_file)
 
         if not config_parser.has_section('Settings'):
@@ -37,13 +38,13 @@ class GUI:
 
         if not config_parser.has_option('Settings', 'mode'):
             self.mode = 'windowed1'
-            config_parser.set('Settings', 'mode', self.mode)
+            config_parser.set('Settings', 'mode', str(self.mode))
         else:
             self.mode = config_parser.get('Settings', 'mode')
 
         if not config_parser.has_option('Settings', 'monitor_index'):
             self.monitor_index = 0
-            config_parser.set('Settings', 'monitor_index', self.monitor_index)
+            config_parser.set('Settings', 'monitor_index', str(self.monitor_index))
         else:
             self.monitor_index = config_parser.getint('Settings', 'monitor_index')
 
@@ -74,11 +75,11 @@ class GUI:
         start_file.close()
 
         config_file = current_dir + '/settings.ini'
-        config_parser = ConfigParser.ConfigParser()
+        config_parser = ConfigParser()
         config_parser.read(config_file)
 
-        config_parser.set('Settings', 'mode', self.mode)
-        config_parser.set('Settings', 'monitor_index', self.monitor_index)
+        config_parser.set('Settings', 'mode', str(self.mode))
+        config_parser.set('Settings', 'monitor_index', str(self.monitor_index))
 
         new_config_file = open(config_file, 'w')
         config_parser.write(new_config_file)

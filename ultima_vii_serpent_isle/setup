@@ -2,7 +2,7 @@
 
 source "$NEBULA_DIR/scripts/shell_functions.sh"
 
-VER=$(python2 "$NEBULA_DIR/dialogs.py" list "DOSBox, Exult")
+VER=$(python "$NEBULA_DIR/dialogs.py" list "DOSBox, Exult")
 
 if [ "$VER" == "Exult" ]; then
 
@@ -11,7 +11,7 @@ rm -r "$INSTALL_DIR/exult/data/silverseed"
 ln -s "$INSTALL_DIR/$GAME_NAME/game" "$INSTALL_DIR/exult/data/silverseed"
 
 echo -e '#!/bin/bash
-python2 "$NEBULA_DIR/launcher_native.py" '"$GAME_NAME" > \
+python "$NEBULA_DIR/launcher_native.py" '"$GAME_NAME" > \
 "$START_FILE"
 
 echo '#!/bin/bash
@@ -22,7 +22,7 @@ write_exult_cfg
 
 get_exult
 
-AUDIO=$(python2 "$NEBULA_DIR/dialogs.py" question "Audio Data packs")
+AUDIO=$(python "$NEBULA_DIR/dialogs.py" question "Audio Data packs")
 
 if [ "$AUDIO" == "Yes" ]; then
 get_exult_audio

@@ -1,13 +1,14 @@
-#!/usr/bin/env python2
-# -*- Mode: Python; coding: utf-8; -*-
-
 import sys, os
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk, GLib
 import gettext
-import ConfigParser
 import imp
+
+try:
+    from ConfigParser import ConfigParser as ConfigParser
+except:
+    from configparser import ConfigParser as ConfigParser
 
 nebula_dir = os.getenv('NEBULA_DIR')
 
@@ -45,7 +46,7 @@ class GUI:
     def config_load(self):
 
         config_file = current_dir + '/settings.ini'
-        config_parser = ConfigParser.ConfigParser()
+        config_parser = ConfigParser()
         config_parser.read(config_file)
 
         if not config_parser.has_section('Settings'):
@@ -53,7 +54,7 @@ class GUI:
 
         if not config_parser.has_option('Settings', 'resolution'):
             self.resolution = 0
-            config_parser.set('Settings', 'resolution', self.resolution)
+            config_parser.set('Settings', 'resolution', str(self.resolution))
         else:
             self.resolution = config_parser.getint('Settings', 'resolution')
 
@@ -191,10 +192,10 @@ class GUI:
         game_dir + '/Game')
 
         config_file = current_dir + '/settings.ini'
-        config_parser = ConfigParser.ConfigParser()
+        config_parser = ConfigParser()
         config_parser.read(config_file)
 
-        config_parser.set('Settings', 'resolution', self.resolution)
+        config_parser.set('Settings', 'resolution', str(self.resolution))
 
         new_config_file = open(config_file, 'w')
         config_parser.write(new_config_file)

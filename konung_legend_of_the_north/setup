@@ -2,10 +2,10 @@
 
 if [ -d "$INSTALL_DIR/$GAME_NAME/game/MUSIC" ]; then
 echo -e '#!/bin/bash
-python2 "$NEBULA_DIR/launcher_wine.py" "$GAME_NAME" "KONUNG.EXE"' > "$START_FILE"
+python "$NEBULA_DIR/launcher_wine.py" "$GAME_NAME" "KONUNG.EXE"' > "$START_FILE"
 else
 echo -e '#!/bin/bash
-python2 "$NEBULA_DIR/launcher_wine.py" "$GAME_NAME" "konung.exe"' > "$START_FILE"
+python "$NEBULA_DIR/launcher_wine.py" "$GAME_NAME" "konung.exe"' > "$START_FILE"
 fi
 
 if [ -d "$INSTALL_DIR/$GAME_NAME/game/MUSIC" ]; then

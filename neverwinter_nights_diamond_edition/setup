@@ -2,7 +2,7 @@
 
 source "$NEBULA_DIR/scripts/shell_functions.sh"
 
-VER=$(python2 "$NEBULA_DIR/dialogs.py" list "Windows, Linux (+490 Mb)")
+VER=$(python "$NEBULA_DIR/dialogs.py" list "Windows, Linux (+490 Mb)")
 
 if [ "$VER" == "Linux (+490 Mb)" ]; then
 
@@ -112,7 +112,7 @@ else
 fi' > "$START_GN_FILE" && chmod +x "$START_GN_FILE"
 
 echo '#!/bin/sh
-python2 "$NEBULA_DIR/launcher_native.py" '"$GAME_NAME" > "$START_FILE"
+python "$NEBULA_DIR/launcher_native.py" '"$GAME_NAME" > "$START_FILE"
 
 rm "$SETTINGS_FILE" "$ADDITIONS_FILE"
 

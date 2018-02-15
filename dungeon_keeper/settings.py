@@ -1,13 +1,14 @@
-#!/usr/bin/env python2
-# -*- Mode: Python; coding: utf-8; -*-
-
 import sys, os
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk
-import ConfigParser
 import gettext
 import imp
+
+try:
+    from ConfigParser import ConfigParser as ConfigParser
+except:
+    from configparser import ConfigParser as ConfigParser
 
 nebula_dir = os.getenv('NEBULA_DIR')
 
@@ -313,7 +314,7 @@ class GUI:
     def config_load(self):
 
         config_file = current_dir + '/settings.ini'
-        config_parser = ConfigParser.ConfigParser()
+        config_parser = ConfigParser()
         config_parser.read(config_file)
 
         if not config_parser.has_section('Settings'):
@@ -321,103 +322,103 @@ class GUI:
 
         if not config_parser.has_option('Settings', 'game_width'):
             self.game_width = 640
-            config_parser.set('Settings', 'game_width', self.game_width)
+            config_parser.set('Settings', 'game_width', str(self.game_width))
         else:
             self.game_width = config_parser.get('Settings', 'game_width')
 
         if not config_parser.has_option('Settings', 'game_height'):
             self.game_height = 480
-            config_parser.set('Settings', 'game_height', self.game_height)
+            config_parser.set('Settings', 'game_height', str(self.game_height))
         else:
             self.game_height = config_parser.get('Settings', 'game_height')
 
         if not config_parser.has_option('Settings', 'menu_width'):
             self.menu_width = 640
-            config_parser.set('Settings', 'menu_width', self.menu_width)
+            config_parser.set('Settings', 'menu_width', str(self.menu_width))
         else:
             self.menu_width = config_parser.get('Settings', 'menu_width')
 
         if not config_parser.has_option('Settings', 'menu_height'):
             self.menu_height = 480
-            config_parser.set('Settings', 'menu_height', self.menu_height)
+            config_parser.set('Settings', 'menu_height', str(self.menu_height))
         else:
             self.menu_height = config_parser.get('Settings', 'menu_height')
 
         if not config_parser.has_option('Settings', 'movies_width'):
             self.movies_width = 640
-            config_parser.set('Settings', 'movies_width', self.movies_width)
+            config_parser.set('Settings', 'movies_width', str(self.movies_width))
         else:
             self.movies_width = config_parser.get('Settings', 'movies_width')
 
         if not config_parser.has_option('Settings', 'movies_height'):
             self.movies_height = 480
-            config_parser.set('Settings', 'movies_height', self.movies_height)
+            config_parser.set('Settings', 'movies_height', str(self.movies_height))
         else:
             self.movies_height = config_parser.get('Settings', 'movies_height')
 
         if not config_parser.has_option('Settings', 'failure_width'):
             self.failure_width = 640
-            config_parser.set('Settings', 'failure_width', self.failure_width)
+            config_parser.set('Settings', 'failure_width', str(self.failure_width))
         else:
             self.failure_width = config_parser.get('Settings', 'failure_width')
 
         if not config_parser.has_option('Settings', 'failure_height'):
             self.failure_height = 480
-            config_parser.set('Settings', 'failure_height', self.failure_height)
+            config_parser.set('Settings', 'failure_height', str(self.failure_height))
         else:
             self.failure_height = config_parser.get('Settings', 'failure_height')
 
         if not config_parser.has_option('Settings', 'speed'):
             self.speed = 20
-            config_parser.set('Settings', 'speed', self.speed)
+            config_parser.set('Settings', 'speed', str(self.speed))
         else:
             self.speed = config_parser.getint('Settings', 'speed')
 
         if not config_parser.has_option('Settings', 'msensitivity'):
             self.msensitivity = 100
-            config_parser.set('Settings', 'msensitivity', self.msensitivity)
+            config_parser.set('Settings', 'msensitivity', str(self.msensitivity))
         else:
             self.msensitivity = config_parser.getint('Settings', 'msensitivity')
 
         if not config_parser.has_option('Settings', 'nointro'):
             self.nointro = False
-            config_parser.set('Settings', 'nointro', self.nointro)
+            config_parser.set('Settings', 'nointro', str(self.nointro))
         else:
             self.nointro = config_parser.getboolean('Settings', 'nointro')
 
         if not config_parser.has_option('Settings', 'smooth'):
             self.smooth = False
-            config_parser.set('Settings', 'smooth', self.smooth)
+            config_parser.set('Settings', 'smooth', str(self.smooth))
         else:
             self.smooth = config_parser.getboolean('Settings', 'smooth')
 
         if not config_parser.has_option('Settings', 'nosound'):
             self.nosound = False
-            config_parser.set('Settings', 'nosound', self.nosound)
+            config_parser.set('Settings', 'nosound', str(self.nosound))
         else:
             self.nosound = config_parser.getboolean('Settings', 'nosound')
 
         if not config_parser.has_option('Settings', 'censorship'):
             self.censorship = False
-            config_parser.set('Settings', 'censorship', self.censorship)
+            config_parser.set('Settings', 'censorship', str(self.censorship))
         else:
             self.censorship = config_parser.getboolean('Settings', 'censorship')
 
         if not config_parser.has_option('Settings', 'screenshots'):
             self.screenshots = 'BMP'
-            config_parser.set('Settings', 'screenshots', self.screenshots)
+            config_parser.set('Settings', 'screenshots', str(self.screenshots))
         else:
             self.screenshots = config_parser.get('Settings', 'screenshots')
 
         if not config_parser.has_option('Settings', 'language'):
             self.language = 'English'
-            config_parser.set('Settings', 'language', self.language)
+            config_parser.set('Settings', 'language', str(self.language))
         else:
             self.language = config_parser.get('Settings', 'language')
 
         if not config_parser.has_option('Settings', 'sessions'):
             self.sessions = ''
-            config_parser.set('Settings', 'sessions', self.sessions)
+            config_parser.set('Settings', 'sessions', str(self.sessions))
         else:
             self.sessions = config_parser.get('Settings', 'sessions')
 
@@ -447,27 +448,27 @@ class GUI:
         self.sessions = self.entry_sessions.get_text()
 
         config_file = current_dir + '/settings.ini'
-        config_parser = ConfigParser.ConfigParser()
+        config_parser = ConfigParser()
         config_parser.read(config_file)
 
-        config_parser.set('Settings', 'language', self.language)
-        config_parser.set('Settings', 'screenshots', self.screenshots)
-        config_parser.set('Settings', 'game_width', self.game_width)
-        config_parser.set('Settings', 'game_height', self.game_height)
-        config_parser.set('Settings', 'menu_width', self.menu_width)
-        config_parser.set('Settings', 'menu_height', self.menu_height)
-        config_parser.set('Settings', 'movies_width', self.movies_width)
-        config_parser.set('Settings', 'movies_height', self.movies_height)
-        config_parser.set('Settings', 'failure_width', self.failure_width)
-        config_parser.set('Settings', 'failure_height', self.failure_height)
-        config_parser.set('Settings', 'msensitivity', self.msensitivity)
-        config_parser.set('Settings', 'censorship', self.censorship)
+        config_parser.set('Settings', 'language', str(self.language))
+        config_parser.set('Settings', 'screenshots', str(self.screenshots))
+        config_parser.set('Settings', 'game_width', str(self.game_width))
+        config_parser.set('Settings', 'game_height', str(self.game_height))
+        config_parser.set('Settings', 'menu_width', str(self.menu_width))
+        config_parser.set('Settings', 'menu_height', str(self.menu_height))
+        config_parser.set('Settings', 'movies_width', str(self.movies_width))
+        config_parser.set('Settings', 'movies_height', str(self.movies_height))
+        config_parser.set('Settings', 'failure_width', str(self.failure_width))
+        config_parser.set('Settings', 'failure_height', str(self.failure_height))
+        config_parser.set('Settings', 'msensitivity', str(self.msensitivity))
+        config_parser.set('Settings', 'censorship', str(self.censorship))
 
-        config_parser.set('Settings', 'speed', self.speed)
-        config_parser.set('Settings', 'nointro', self.nointro)
-        config_parser.set('Settings', 'smooth', self.smooth)
-        config_parser.set('Settings', 'nosound', self.nosound)
-        config_parser.set('Settings', 'sessions', self.sessions)
+        config_parser.set('Settings', 'speed', str(self.speed))
+        config_parser.set('Settings', 'nointro', str(self.nointro))
+        config_parser.set('Settings', 'smooth', str(self.smooth))
+        config_parser.set('Settings', 'nosound', str(self.nosound))
+        config_parser.set('Settings', 'sessions', str(self.sessions))
 
         new_config_file = open(config_file, 'w')
         config_parser.write(new_config_file)
@@ -543,7 +544,7 @@ class GUI:
 
         parameters_str = ' '.join(parameters_list)
 
-        new_launch_command = 'python2 "$NEBULA_DIR/launcher_wine.py" ' + \
+        new_launch_command = 'python "$NEBULA_DIR/launcher_wine.py" ' + \
         'dungeon_keeper "keeperfx.exe' + ' ' + parameters_str + '"'
 
         start_file = open(current_dir + '/start.sh', 'r')

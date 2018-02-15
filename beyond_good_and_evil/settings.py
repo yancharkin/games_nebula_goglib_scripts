@@ -1,13 +1,14 @@
-#!/usr/bin/env python2
-# -*- Mode: Python; coding: utf-8; -*-
-
 import sys, os
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk
-import ConfigParser
 import gettext
 import imp
+
+try:
+    from ConfigParser import ConfigParser as ConfigParser
+except:
+    from configparser import ConfigParser as ConfigParser
 
 nebula_dir = os.getenv('NEBULA_DIR')
 
@@ -29,7 +30,7 @@ class GUI:
     def config_load(self):
 
         config_file = current_dir + '/game/bge.ini'
-        config_parser = ConfigParser.ConfigParser()
+        config_parser = ConfigParser()
         config_parser.read(config_file)
 
         if not config_parser.has_section('MAIN'):
@@ -37,13 +38,13 @@ class GUI:
 
         if not config_parser.has_option('MAIN', 'Width'):
             self.width = '1280'
-            config_parser.set('MAIN', 'Width', self.width)
+            config_parser.set('MAIN', 'Width', str(self.width))
         else:
             self.width = config_parser.get('MAIN', 'Width')
 
         if not config_parser.has_option('MAIN', 'Height'):
             self.height = '720'
-            config_parser.set('MAIN', 'Height', self.height)
+            config_parser.set('MAIN', 'Height', str(self.height))
         else:
             self.height = config_parser.get('MAIN', 'Height')
 
@@ -52,7 +53,7 @@ class GUI:
 
         if not config_parser.has_option('HUD', 'HUD_posX_auto'):
             self.hud_posx = '1'
-            config_parser.set('HUD', 'HUD_posX_auto', self.hud_posx)
+            config_parser.set('HUD', 'HUD_posX_auto', str(self.hud_posx))
         else:
             self.hud_posx = config_parser.get('HUD', 'HUD_posX_auto').split(' // ')[0]
 
@@ -61,13 +62,13 @@ class GUI:
 
         if not config_parser.has_option('MISC', 'PillarBox'):
             self.pillarbox = '1'
-            config_parser.set('MISC', 'PillarBox', self.pillarbox)
+            config_parser.set('MISC', 'PillarBox', str(self.pillarbox))
         else:
             self.pillarbox = config_parser.get('MISC', 'PillarBox').split(' // ')[0]
 
         if not config_parser.has_option('MISC', 'Gameplay_FOV'):
             self.fov = '1'
-            config_parser.set('MISC', 'Gameplay_FOV', self.fov)
+            config_parser.set('MISC', 'Gameplay_FOV', str(self.fov))
         else:
             self.fov = config_parser.get('MISC', 'Gameplay_FOV').split(' // ')[0]
 
@@ -78,14 +79,14 @@ class GUI:
     def config_save(self):
 
         config_file = current_dir + '/game/bge.ini'
-        config_parser = ConfigParser.ConfigParser()
+        config_parser = ConfigParser()
         config_parser.read(config_file)
 
-        config_parser.set('MAIN', 'Width', self.width)
-        config_parser.set('MAIN', 'Height', self.height)
-        config_parser.set('HUD', 'HUD_posX_auto', self.hud_posx)
-        config_parser.set('MISC', 'PillarBox', self.pillarbox)
-        config_parser.set('MISC', 'Gameplay_FOV', self.fov)
+        config_parser.set('MAIN', 'Width', str(self.width))
+        config_parser.set('MAIN', 'Height', str(self.height))
+        config_parser.set('HUD', 'HUD_posX_auto', str(self.hud_posx))
+        config_parser.set('MISC', 'PillarBox', str(self.pillarbox))
+        config_parser.set('MISC', 'Gameplay_FOV', str(self.fov))
 
         new_config_file = open(config_file, 'w')
         config_parser.write(new_config_file)

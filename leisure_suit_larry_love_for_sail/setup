@@ -2,7 +2,7 @@
 
 source "$NEBULA_DIR/scripts/shell_functions.sh"
 
-VER=$(python2 "$NEBULA_DIR/dialogs.py" list "Windows, DOS (+0.5 Mb)")
+VER=$(python "$NEBULA_DIR/dialogs.py" list "Windows, DOS (+0.5 Mb)")
 
 if [ "$VER" == "DOS (+0.5 Mb)" ]; then
 
@@ -14,7 +14,7 @@ get_file 'dos_binaries.zip' \
 & proc_timer $! "Extracting dos_binaries.zip"
 
 echo '#!/bin/bash
-python2 "$NEBULA_DIR/launcher_dosbox.py" '"$GAME_NAME" > "$START_FILE"
+python "$NEBULA_DIR/launcher_dosbox.py" '"$GAME_NAME" > "$START_FILE"
 
 echo "[autoexec]
 @echo off

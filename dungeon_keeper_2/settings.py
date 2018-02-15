@@ -1,13 +1,14 @@
-#!/usr/bin/env python2
-# -*- Mode: Python; coding: utf-8; -*-
-
 import sys, os
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk
-import ConfigParser
 import gettext
 import imp
+
+try:
+    from ConfigParser import ConfigParser as ConfigParser
+except:
+    from configparser import ConfigParser as ConfigParser
 
 nebula_dir = os.getenv('NEBULA_DIR')
 
@@ -135,7 +136,7 @@ class GUI:
     def config_load(self):
 
         config_file = current_dir + '/settings.ini'
-        config_parser = ConfigParser.ConfigParser()
+        config_parser = ConfigParser()
         config_parser.read(config_file)
 
         if not config_parser.has_section('Settings'):
@@ -143,19 +144,19 @@ class GUI:
 
         if not config_parser.has_option('Settings', 'exe'):
             self.exe = 'DKII-DX.exe'
-            config_parser.set('Settings', 'exe', self.exe)
+            config_parser.set('Settings', 'exe', str(self.exe))
         else:
             self.exe = config_parser.get('Settings', 'exe')
 
         if not config_parser.has_option('Settings', 'width'):
             self.width = 640
-            config_parser.set('Settings', 'width', self.width)
+            config_parser.set('Settings', 'width', str(self.width))
         else:
             self.width = config_parser.get('Settings', 'width')
 
         if not config_parser.has_option('Settings', 'height'):
             self.height = 480
-            config_parser.set('Settings', 'height', self.height)
+            config_parser.set('Settings', 'height', str(self.height))
         else:
             self.height = config_parser.get('Settings', 'height')
 
@@ -165,7 +166,7 @@ class GUI:
 
     def modify_start_file(self):
 
-        new_launch_command = 'python2 "$NEBULA_DIR/launcher_wine.py" dungeon_keeper_2 ' + self.exe
+        new_launch_command = 'python "$NEBULA_DIR/launcher_wine.py" dungeon_keeper_2 ' + self.exe
 
         start_file = open(current_dir + '/start.sh', 'r')
         start_file_content = start_file.readlines()
@@ -206,12 +207,12 @@ class GUI:
     def cb_button_save(self, button):
 
         config_file = current_dir + '/settings.ini'
-        config_parser = ConfigParser.ConfigParser()
+        config_parser = ConfigParser()
         config_parser.read(config_file)
 
-        config_parser.set('Settings', 'exe', self.exe)
-        config_parser.set('Settings', 'width', self.width)
-        config_parser.set('Settings', 'height', self.height)
+        config_parser.set('Settings', 'exe', str(self.exe))
+        config_parser.set('Settings', 'width', str(self.width))
+        config_parser.set('Settings', 'height', str(self.height))
 
         new_config_file = open(config_file, 'w')
         config_parser.write(new_config_file)

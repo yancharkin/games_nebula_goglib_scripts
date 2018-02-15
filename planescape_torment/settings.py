@@ -1,13 +1,14 @@
-#!/usr/bin/env python2
-# -*- Mode: Python; coding: utf-8; -*-
-
 import sys, os
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk, GLib
-import ConfigParser
 import gettext
 import imp
+
+try:
+    from ConfigParser import ConfigParser as ConfigParser
+except:
+    from configparser import ConfigParser as ConfigParser
 
 nebula_dir = os.getenv('NEBULA_DIR')
 
@@ -30,7 +31,7 @@ class GUI:
     def config_load(self):
 
         config_file = current_dir + '/settings.ini'
-        config_parser = ConfigParser.ConfigParser()
+        config_parser = ConfigParser()
         config_parser.read(config_file)
 
         if not config_parser.has_section('Settings'):
@@ -38,193 +39,193 @@ class GUI:
 
         if not config_parser.has_option('Settings', 'widescreen_applied'):
             self.widescreen_applied = False
-            config_parser.set('Settings', 'widescreen_applied', self.widescreen_applied)
+            config_parser.set('Settings', 'widescreen_applied', str(self.widescreen_applied))
         else:
             self.widescreen_applied = config_parser.getboolean('Settings', 'widescreen_applied')
 
         if not config_parser.has_option('Settings', 'width'):
             self.width = 640
-            config_parser.set('Settings', 'width', self.width)
+            config_parser.set('Settings', 'width', str(self.width))
         else:
             self.width = config_parser.get('Settings', 'width')
 
         if not config_parser.has_option('Settings', 'height'):
             self.height = 480
-            config_parser.set('Settings', 'height', self.height)
+            config_parser.set('Settings', 'height', str(self.height))
         else:
             self.height = config_parser.get('Settings', 'height')
 
         if not config_parser.has_option('Settings', 'guifix_applied'):
             self.guifix_applied = False
-            config_parser.set('Settings', 'guifix_applied', self.guifix_applied)
+            config_parser.set('Settings', 'guifix_applied', str(self.guifix_applied))
         else:
             self.guifix_applied = config_parser.getboolean('Settings', 'guifix_applied')
 
         if not config_parser.has_option('Settings', 'font_size'):
             self.font_size = 0
-            config_parser.set('Settings', 'font_size', self.font_size)
+            config_parser.set('Settings', 'font_size', str(self.font_size))
         else:
             self.font_size = config_parser.getint('Settings', 'font_size')
 
         if not config_parser.has_option('Settings', 'fixpack_installed'):
             self.fixpack_installed = False
-            config_parser.set('Settings', 'fixpack_installed', self.fixpack_installed)
+            config_parser.set('Settings', 'fixpack_installed', str(self.fixpack_installed))
         else:
             self.fixpack_installed = config_parser.getboolean('Settings', 'fixpack_installed')
 
         if not config_parser.has_option('Settings', 'grammar'):
             self.grammar = False
-            config_parser.set('Settings', 'grammar', self.grammar)
+            config_parser.set('Settings', 'grammar', str(self.grammar))
         else:
             self.grammar = config_parser.getboolean('Settings', 'grammar')
 
         if not config_parser.has_option('Settings', 'subtitles'):
             self.subtitles = False
-            config_parser.set('Settings', 'subtitles', self.subtitles)
+            config_parser.set('Settings', 'subtitles', str(self.subtitles))
         else:
             self.subtitles = config_parser.getboolean('Settings', 'subtitles')
 
         if not config_parser.has_option('Settings', 'ub_installed'):
             self.ub_installed = False
-            config_parser.set('Settings', 'ub_installed', self.ub_installed)
+            config_parser.set('Settings', 'ub_installed', str(self.ub_installed))
         else:
             self.ub_installed = config_parser.getboolean('Settings', 'ub_installed')
 
         if not config_parser.has_option('Settings', 'ub_recommended'):
             self.ub_recommended = False
-            config_parser.set('Settings', 'ub_recommended', self.ub_recommended)
+            config_parser.set('Settings', 'ub_recommended', str(self.ub_recommended))
         else:
             self.ub_recommended = config_parser.getboolean('Settings', 'ub_recommended')
 
         if not config_parser.has_option('Settings', 'ub_deionarra'):
             self.ub_deionarra = False
-            config_parser.set('Settings', 'ub_deionarra', self.ub_deionarra)
+            config_parser.set('Settings', 'ub_deionarra', str(self.ub_deionarra))
         else:
             self.ub_deionarra = config_parser.getboolean('Settings', 'ub_deionarra')
 
         if not config_parser.has_option('Settings', 'ub_cheat'):
             self.ub_cheat = False
-            config_parser.set('Settings', 'ub_cheat', self.ub_cheat)
+            config_parser.set('Settings', 'ub_cheat', str(self.ub_cheat))
         else:
             self.ub_cheat = config_parser.getboolean('Settings', 'ub_cheat')
 
         if not config_parser.has_option('Settings', 'tp_installed'):
             self.tp_installed = False
-            config_parser.set('Settings', 'tp_installed', self.tp_installed)
+            config_parser.set('Settings', 'tp_installed', str(self.tp_installed))
         else:
             self.tp_installed = config_parser.getboolean('Settings', 'tp_installed')
 
         if not config_parser.has_option('Settings', 'banter'):
             self.banter = 0
-            config_parser.set('Settings', 'banter', self.banter)
+            config_parser.set('Settings', 'banter', str(self.banter))
         else:
             self.banter = config_parser.getint('Settings', 'banter')
 
         if not config_parser.has_option('Settings', 'robes'):
             self.robes = False
-            config_parser.set('Settings', 'robes', self.robes)
+            config_parser.set('Settings', 'robes', str(self.robes))
         else:
             self.robes = config_parser.getboolean('Settings', 'robes')
 
         if not config_parser.has_option('Settings', 'bg2thac0'):
             self.bg2thac0 = False
-            config_parser.set('Settings', 'bg2thac0', self.bg2thac0)
+            config_parser.set('Settings', 'bg2thac0', str(self.bg2thac0))
         else:
             self.bg2thac0 = config_parser.getboolean('Settings', 'bg2thac0')
 
         if not config_parser.has_option('Settings', 'stackable'):
             self.stackable = False
-            config_parser.set('Settings', 'stackable', self.stackable)
+            config_parser.set('Settings', 'stackable', str(self.stackable))
         else:
             self.stackable = config_parser.getboolean('Settings', 'stackable')
 
         if not config_parser.has_option('Settings', 'city_areas'):
             self.city_areas = False
-            config_parser.set('Settings', 'city_areas', self.city_areas)
+            config_parser.set('Settings', 'city_areas', str(self.city_areas))
         else:
             self.city_areas = config_parser.getboolean('Settings', 'city_areas')
 
         if not config_parser.has_option('Settings', 'souls'):
             self.souls = False
-            config_parser.set('Settings', 'souls', self.souls)
+            config_parser.set('Settings', 'souls', str(self.souls))
         else:
             self.souls = config_parser.getboolean('Settings', 'souls')
 
         if not config_parser.has_option('Settings', 'nordom'):
             self.nordom = False
-            config_parser.set('Settings', 'nordom', self.nordom)
+            config_parser.set('Settings', 'nordom', str(self.nordom))
         else:
             self.nordom = config_parser.getboolean('Settings', 'nordom')
 
         if not config_parser.has_option('Settings', 'stat_min'):
             self.stat_min = False
-            config_parser.set('Settings', 'stat_min', self.stat_min)
+            config_parser.set('Settings', 'stat_min', str(self.stat_min))
         else:
             self.stat_min = config_parser.getboolean('Settings', 'stat_min')
 
         if not config_parser.has_option('Settings', 'max_hp'):
             self.max_hp = False
-            config_parser.set('Settings', 'max_hp', self.max_hp)
+            config_parser.set('Settings', 'max_hp', str(self.max_hp))
         else:
             self.max_hp = config_parser.getboolean('Settings', 'max_hp')
 
         if not config_parser.has_option('Settings', 'max_spell'):
             self.max_spell = False
-            config_parser.set('Settings', 'max_spell', self.max_spell)
+            config_parser.set('Settings', 'max_spell', str(self.max_spell))
         else:
             self.max_spell = config_parser.getboolean('Settings', 'max_spell')
 
         if not config_parser.has_option('Settings', 'no_music'):
             self.no_music = False
-            config_parser.set('Settings', 'no_music', self.no_music)
+            config_parser.set('Settings', 'no_music', str(self.no_music))
         else:
             self.no_music = config_parser.getboolean('Settings', 'no_music')
 
         if not config_parser.has_option('Settings', 'floating_text'):
             self.floating_text = False
-            config_parser.set('Settings', 'floating_text', self.floating_text)
+            config_parser.set('Settings', 'floating_text', str(self.floating_text))
         else:
             self.floating_text = config_parser.getboolean('Settings', 'floating_text')
 
         if not config_parser.has_option('Settings', 'all_items'):
             self.all_items = False
-            config_parser.set('Settings', 'all_items', self.all_items)
+            config_parser.set('Settings', 'all_items', str(self.all_items))
         else:
             self.all_items = config_parser.getboolean('Settings', 'all_items')
 
         if not config_parser.has_option('Settings', 'glabrezus'):
             self.glabrezus = False
-            config_parser.set('Settings', 'glabrezus', self.glabrezus)
+            config_parser.set('Settings', 'glabrezus', str(self.glabrezus))
         else:
             self.glabrezus = config_parser.getboolean('Settings', 'glabrezus')
 
         if not config_parser.has_option('Settings', 'annah'):
             self.annah = False
-            config_parser.set('Settings', 'annah', self.annah)
+            config_parser.set('Settings', 'annah', str(self.annah))
         else:
             self.annah = config_parser.getboolean('Settings', 'annah')
 
         if not config_parser.has_option('Settings', 'morte'):
             self.morte = False
-            config_parser.set('Settings', 'morte', self.morte)
+            config_parser.set('Settings', 'morte', str(self.morte))
         else:
             self.morte = config_parser.getboolean('Settings', 'morte')
 
         if not config_parser.has_option('Settings', 'quickload'):
             self.quickload = 0
-            config_parser.set('Settings', 'quickload', self.quickload)
+            config_parser.set('Settings', 'quickload', str(self.quickload))
         else:
             self.quickload = config_parser.getint('Settings', 'quickload')
 
         if not config_parser.has_option('Settings', 'rest'):
             self.rest = False
-            config_parser.set('Settings', 'rest', self.rest)
+            config_parser.set('Settings', 'rest', str(self.rest))
         else:
             self.rest = config_parser.getboolean('Settings', 'rest')
 
         if not config_parser.has_option('Settings', 'cheats_tom'):
             self.cheats_tom = False
-            config_parser.set('Settings', 'cheats_tom', self.cheats_tom)
+            config_parser.set('Settings', 'cheats_tom', str(self.cheats_tom))
         else:
             self.cheats_tom = config_parser.getboolean('Settings', 'cheats_tom')
 
@@ -263,41 +264,41 @@ class GUI:
     def config_save(self):
 
         config_file = current_dir + '/settings.ini'
-        config_parser = ConfigParser.ConfigParser()
+        config_parser = ConfigParser()
         config_parser.read(config_file)
 
-        config_parser.set('Settings', 'widescreen_applied', self.widescreen_applied)
-        config_parser.set('Settings', 'width', self.width)
-        config_parser.set('Settings', 'height', self.height)
-        config_parser.set('Settings', 'guifix_applied', self.guifix_applied)
-        config_parser.set('Settings', 'font_size', self.font_size)
-        config_parser.set('Settings', 'fixpack_installed', self.fixpack_installed)
-        config_parser.set('Settings', 'grammar', self.grammar)
-        config_parser.set('Settings', 'subtitles', self.subtitles)
-        config_parser.set('Settings', 'ub_recommended', self.ub_recommended)
-        config_parser.set('Settings', 'ub_deionarra', self.ub_deionarra)
-        config_parser.set('Settings', 'ub_cheat', self.ub_cheat)
-        config_parser.set('Settings', 'ub_installed', self.ub_installed)
-        config_parser.set('Settings', 'tp_installed', self.tp_installed)
-        config_parser.set('Settings', 'banter', self.banter)
-        config_parser.set('Settings', 'robes', self.robes)
-        config_parser.set('Settings', 'bg2thac0', self.bg2thac0)
-        config_parser.set('Settings', 'stackable', self.stackable)
-        config_parser.set('Settings', 'city_areas', self.city_areas)
-        config_parser.set('Settings', 'souls', self.souls)
-        config_parser.set('Settings', 'nordom', self.nordom)
-        config_parser.set('Settings', 'stat_min', self.stat_min)
-        config_parser.set('Settings', 'max_hp', self.max_hp)
-        config_parser.set('Settings', 'max_spell', self.max_spell)
-        config_parser.set('Settings', 'no_music', self.no_music)
-        config_parser.set('Settings', 'floating_text', self.floating_text)
-        config_parser.set('Settings', 'all_items', self.all_items)
-        config_parser.set('Settings', 'glabrezus', self.glabrezus)
-        config_parser.set('Settings', 'annah', self.annah)
-        config_parser.set('Settings', 'morte', self.morte)
-        config_parser.set('Settings', 'quickload', self.quickload)
-        config_parser.set('Settings', 'rest', self.rest)
-        config_parser.set('Settings', 'cheats_tom', self.cheats_tom)
+        config_parser.set('Settings', 'widescreen_applied', str(self.widescreen_applied))
+        config_parser.set('Settings', 'width', str(self.width))
+        config_parser.set('Settings', 'height', str(self.height))
+        config_parser.set('Settings', 'guifix_applied', str(self.guifix_applied))
+        config_parser.set('Settings', 'font_size', str(self.font_size))
+        config_parser.set('Settings', 'fixpack_installed', str(self.fixpack_installed))
+        config_parser.set('Settings', 'grammar', str(self.grammar))
+        config_parser.set('Settings', 'subtitles', str(self.subtitles))
+        config_parser.set('Settings', 'ub_recommended', str(self.ub_recommended))
+        config_parser.set('Settings', 'ub_deionarra', str(self.ub_deionarra))
+        config_parser.set('Settings', 'ub_cheat', str(self.ub_cheat))
+        config_parser.set('Settings', 'ub_installed', str(self.ub_installed))
+        config_parser.set('Settings', 'tp_installed', str(self.tp_installed))
+        config_parser.set('Settings', 'banter', str(self.banter))
+        config_parser.set('Settings', 'robes', str(self.robes))
+        config_parser.set('Settings', 'bg2thac0', str(self.bg2thac0))
+        config_parser.set('Settings', 'stackable', str(self.stackable))
+        config_parser.set('Settings', 'city_areas', str(self.city_areas))
+        config_parser.set('Settings', 'souls', str(self.souls))
+        config_parser.set('Settings', 'nordom', str(self.nordom))
+        config_parser.set('Settings', 'stat_min', str(self.stat_min))
+        config_parser.set('Settings', 'max_hp', str(self.max_hp))
+        config_parser.set('Settings', 'max_spell', str(self.max_spell))
+        config_parser.set('Settings', 'no_music', str(self.no_music))
+        config_parser.set('Settings', 'floating_text', str(self.floating_text))
+        config_parser.set('Settings', 'all_items', str(self.all_items))
+        config_parser.set('Settings', 'glabrezus', str(self.glabrezus))
+        config_parser.set('Settings', 'annah', str(self.annah))
+        config_parser.set('Settings', 'morte', str(self.morte))
+        config_parser.set('Settings', 'quickload', str(self.quickload))
+        config_parser.set('Settings', 'rest', str(self.rest))
+        config_parser.set('Settings', 'cheats_tom', str(self.cheats_tom))
 
         new_config_file = open(config_file, 'w')
         config_parser.write(new_config_file)
@@ -1193,7 +1194,7 @@ class GUI:
 
             return False
 
-        print io.readline().strip('\n')
+        print(io.readline().strip('\n'))
 
         self.progressbar.pulse()
 
