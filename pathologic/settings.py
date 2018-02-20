@@ -173,6 +173,7 @@ class GUI:
         label_distance = Gtk.Label(label="Detail objects distance", xalign = 0)
 
         adj_distance = Gtk.Adjustment(self.distance, 0, 50, 1, 10)
+
         spinbutton_distance = Gtk.SpinButton(
             adjustment = adj_distance,
             numeric=True,
@@ -184,6 +185,7 @@ class GUI:
         label_anisotropy = Gtk.Label(label="Anisotropic filtering", xalign = 0)
 
         adj_anisotropy = Gtk.Adjustment(self.anisotropy, 0, 16, 1, 2)
+
         spinbutton_anisotropy = Gtk.SpinButton(
             adjustment = adj_anisotropy,
             numeric=True,
@@ -288,6 +290,9 @@ class GUI:
         grid.attach(label_enb, 0, 12, 1, 1)
         grid.attach(switch_enb, 1, 12, 1, 1)
         grid.attach(button_save, 0, 13, 2, 1)
+
+        adj_distance.set_value(self.distance)
+        adj_anisotropy.set_value(self.anisotropy)
 
         self.main_window.add(grid)
         self.main_window.show_all()

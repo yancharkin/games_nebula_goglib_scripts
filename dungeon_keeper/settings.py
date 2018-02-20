@@ -161,7 +161,7 @@ class GUI:
             label = _("Game speed")
             )
 
-        self.adj_speed = Gtk.Adjustment(int(self.speed), 1, 100, 1, 10)
+        self.adj_speed = Gtk.Adjustment(self.speed, 1, 100, 1, 10)
 
         scale_speed = Gtk.Scale(
             adjustment = self.adj_speed,
@@ -178,7 +178,7 @@ class GUI:
             label = _("Mouse sensitivity")
             )
 
-        self.adj_msensitivity = Gtk.Adjustment(int(self.msensitivity), 1, 100, 1, 10)
+        self.adj_msensitivity = Gtk.Adjustment(self.msensitivity, 1, 100, 1, 10)
 
         scale_msensitivity = Gtk.Scale(
             adjustment = self.adj_msensitivity,
@@ -307,6 +307,9 @@ class GUI:
         grid.attach(label_sessions, 0, 12, 1, 1)
         grid.attach(self.entry_sessions, 1, 12, 2, 1)
         grid.attach(button_save, 0, 13, 3, 1)
+
+        self.adj_speed.set_value(self.speed)
+        self.adj_msensitivity.set_value(self.msensitivity)
 
         self.main_window.add(grid)
         self.main_window.show_all()

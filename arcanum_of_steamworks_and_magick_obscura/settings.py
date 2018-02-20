@@ -280,7 +280,7 @@ class GUI:
             label = _("Scrolling distance:"),
             )
 
-        self.adjustment_scrolling_distance = Gtk.Adjustment(int(self.scrolling_distance), 0, 100, 1, 10)
+        self.adjustment_scrolling_distance = Gtk.Adjustment(self.scrolling_distance, 0, 100, 1, 10)
 
         scale_scrolling_distance = Gtk.Scale(
             width_request = 150,
@@ -299,7 +299,7 @@ class GUI:
             label = _("Scrolling speed:")
             )
 
-        self.adjustment_scrolling_speed = Gtk.Adjustment(int(self.scrolling_speed), 0, 100, 1, 10)
+        self.adjustment_scrolling_speed = Gtk.Adjustment(self.scrolling_speed, 0, 100, 1, 10)
 
         self.scale_scrolling_speed = Gtk.Scale(
             width_request = 150,
@@ -390,6 +390,9 @@ class GUI:
         grid1.attach(self.scale_scrolling_speed, 1, 2, 1, 1)
         grid1.attach(self.checkbutton_no3d, 0, 3, 2, 1)
         grid1.attach(self.checkbutton_doublebuffer, 0, 4, 2, 1)
+
+        self.adjustment_scrolling_distance.set_value(self.scrolling_distance)
+        self.adjustment_scrolling_speed.set_value(self.scrolling_speed)
 
         expander = Gtk.Expander(
             label = _("More options"),
