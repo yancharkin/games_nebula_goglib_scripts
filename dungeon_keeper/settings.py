@@ -1,3 +1,5 @@
+# -*- Mode: Python; coding: utf-8; -*-
+
 import sys, os
 import gi
 gi.require_version('Gtk', '3.0')
