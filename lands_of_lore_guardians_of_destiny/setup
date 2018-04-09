@@ -1,0 +1,9 @@
+#!/bin/bash
+
+echo -e "[autoexec]
+mount c $HOME/.games_nebula/games/.dosbox/lands_of_lore_guardians_of_destiny
+mount d $HOME/.games_nebula/games/.dosbox/lands_of_lore_guardians_of_destiny -t cdrom
+c:
+cls
+install.exe
+exit" > "$DOSBOX_SETTINGS_CONF"
