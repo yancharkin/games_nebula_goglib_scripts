@@ -1,0 +1,19 @@
+#!/bin/bash
+
+source "$NEBULA_DIR/scripts/shell_functions.sh"
+
+get_file "Mafia.WidescreenFix.zip" \
+'https://github.com/ThirteenAG/WidescreenFixesPack/releases/download/mafia/Mafia.WidescreenFix.zip'
+
+get_from_mega 'bge_widescreen.7z' \
+'https://mega.nz/#!LxQXnSCC!tDqt9tKzuZzmJQBGy6ZNMdPY2df-j8RVhRQ-UqflDy0'
+
+7z x -aoa -o"$INSTALL_DIR/$GAME_NAME/game/" \
+"$DOWNLOAD_DIR/_distr/$GAME_NAME/Mafia.WidescreenFix.zip"
+
+mv "$INSTALL_DIR/$GAME_NAME/game/Mafia.WidescreenFix/"* "$INSTALL_DIR/$GAME_NAME/game/"
+mv "$INSTALL_DIR/$GAME_NAME/game/scripts/modupdater.asi" "$INSTALL_DIR/$GAME_NAME/game/scripts/modupdater.asi.bak"
+rm -r "$INSTALL_DIR/$GAME_NAME/game/Mafia.WidescreenFix/"
+
+7z x -aoa -o"$INSTALL_DIR/$GAME_NAME/game/" \
+"$DOWNLOAD_DIR/_distr/$GAME_NAME/mafia_music.7z"
