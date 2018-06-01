@@ -27,7 +27,7 @@ wineloader = os.getenv('WINELOADER')
 video_dir = current_dir + '/game/video'
 video_dir_bak = video_dir + '/bak'
 
-os.system('mkdir -p ' + download_dir + '/_distr/bloodrayne_2')
+os.system('mkdir -p "' + download_dir + '/_distr/bloodrayne_2"')
 
 class GUI:
 
@@ -231,25 +231,25 @@ class GUI:
                     for file_name in os.listdir(video_dir):
                         if '.mpg' in file_name:
                             self.n_files += 1
-                            os.system('rm ' + video_dir + '/' + file_name)
-                    os.system('mv ' + video_dir_bak + '/* ' + video_dir)
-                    os.system('rm -r ' + video_dir_bak)
+                            os.system('rm "' + video_dir + '/' + file_name + '"')
+                    os.system('mv "' + video_dir_bak + '/"* "' + video_dir + '"')
+                    os.system('rm -r "' + video_dir_bak + '"')
 
                 self.config_save_crop(self.crop)
 
             else:
 
                 if not os.path.exists(video_dir_bak):
-                    os.system('mkdir -p ' + video_dir_bak)
+                    os.system('mkdir -p "' + video_dir_bak + '"')
                     for file_name in os.listdir(video_dir):
                         if '.mpg' in file_name:
                             self.n_files += 1
-                            os.system('mv ' + video_dir + '/' + file_name + ' ' + video_dir_bak)
+                            os.system('mv "' + video_dir + '/' + file_name + '" "' + video_dir_bak + '"')
                 else:
                     for file_name in os.listdir(video_dir):
                         if '.mpg' in file_name:
                             self.n_files += 1
-                            os.system('rm ' + video_dir + '/' + file_name)
+                            os.system('rm "' + video_dir + '/' + file_name + '"')
 
                 for file_name in os.listdir(video_dir_bak):
                     if '.mpg' in file_name:
@@ -306,7 +306,7 @@ class GUI:
         while Gtk.events_pending():
             Gtk.main_iteration_do(False)
 
-        os.system(wineloader + ' ' + game_dir + '/br2fsaaConfig.exe')
+        os.system(wineloader + ' "' + game_dir + '/br2fsaaConfig.exe"')
         self.main_window.show()
 
     def watch_process(self, io, condition, process_name):

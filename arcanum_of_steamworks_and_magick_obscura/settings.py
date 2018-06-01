@@ -549,7 +549,7 @@ class GUI:
             if ('dat' in file_name) and (file_name.split('.')[0] not in modules_list):
                 module_name = file_name.split('.')[0]
                 modules_list.append(module_name)
-                os.system('mkdir -p ' + path + '/' + module_name)
+                os.system('mkdir -p "' + path + '/' + module_name + '"')
 
         modules_list = sorted(modules_list)
 

@@ -26,7 +26,7 @@ game_dir = install_dir + '/konung_2_blood_of_titans/game'
 patch_path = download_dir + '/_distr/konung_2_blood_of_titans/k2.zip'
 link_patch = 'http://steamcommunity.com/sharedfiles/filedetails/?id=277480651'
 
-os.system('mkdir -p ' + download_dir + '/_distr/konung_2_blood_of_titans')
+os.system('mkdir -p "' + download_dir + '/_distr/konung_2_blood_of_titans"')
 
 class GUI:
 
@@ -36,7 +36,7 @@ class GUI:
 
         if os.path.exists(patch_path):
             if not os.path.exists(game_dir + '/res_patch'):
-                os.system('7z x -aoa -o' + game_dir + '/res_patch ' + patch_path)
+                os.system('7z x -aoa -o"' + game_dir + '/res_patch" "' + patch_path + '"')
             self.create_set_res_window()
             self.set_res_window.show_all()
         else:
@@ -170,7 +170,7 @@ class GUI:
             self.download_window.show()
 
         else:
-            os.system('7z x -aoa -o' + game_dir + '/res_patch ' + patch_path)
+            os.system('7z x -aoa -o"' + game_dir + '/res_patch" "' + patch_path + '"')
 
             while Gtk.events_pending():
                 Gtk.main_iteration()
@@ -189,10 +189,10 @@ class GUI:
         config_parser.read(config_file)
 
         if not os.path.exists(game_dir + '/Konung2.exe.original'):
-            os.system('mv ' + game_dir + '/Konung2.exe ' + game_dir + '/Konung2.exe.original')
+            os.system('mv "' + game_dir + '/Konung2.exe" "' + game_dir + '/Konung2.exe.original"')
 
         selected_resolution = self.combobox_resolution.get_active_text()
-        os.system('cp ' + game_dir + '/res_patch/' + selected_resolution + '/* ' + game_dir)
+        os.system('cp "' + game_dir + '/res_patch/' + selected_resolution + '"/* "' + game_dir + '"')
 
         config_parser.set('Settings', 'resolution', str(self.resolution))
 

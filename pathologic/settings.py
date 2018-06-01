@@ -27,7 +27,7 @@ wineloader = os.getenv('WINELOADER')
 video_dir = current_dir + '/game/data/Video'
 video_dir_bak = video_dir + '/bak'
 
-os.system('mkdir -p ' + download_dir + '/_distr/pathologic')
+os.system('mkdir -p "' + download_dir + '/_distr/pathologic"')
 
 class GUI:
 
@@ -562,7 +562,7 @@ class GUI:
         while Gtk.events_pending():
             Gtk.main_iteration_do(False)
 
-        os.system(wineloader + ' ' + game_dir + '/bin/Final/Config.exe')
+        os.system(wineloader + ' "' + game_dir + '/bin/Final/Config.exe"')
         self.main_window.show()
 
     def cb_button_save(self, button):
@@ -578,28 +578,28 @@ class GUI:
 
             if process_name == 'extracting':
 
-                os.system('touch ' + install_dir + '/pathologic/.ws_addon_installed')
-                os.system('mv ' + game_dir + '/tmp/app/bin/Final/* ' + game_dir + '/bin/Final/')
-                os.system('mkdir -p ' + game_dir + '/data/Scripts/')
-                os.system('mv ' + game_dir + '/tmp/app/data/Scripts/* ' + game_dir + '/data/Scripts/')
-                os.system('mkdir -p ' + game_dir + '/data/Textures/PL/')
-                os.system('mv ' + game_dir + '/tmp/app/data/Textures/PL/* ' + game_dir + '/data/Textures/PL/')
-                os.system('rm -r ' + game_dir + '/tmp/app/data/Textures/PL/')
-                os.system('mkdir -p ' + game_dir + '/data/Textures/UI/')
-                os.system('mv ' + game_dir + '/tmp/app/data/Textures/UI/* ' + game_dir + '/data/Textures/UI/')
-                os.system('rm -r ' + game_dir + '/tmp/app/data/Textures/UI/')
-                os.system('mv ' + game_dir + '/tmp/app/data/Textures/* ' + game_dir + '/data/Textures/')
-                os.system('mkdir -p ' + game_dir + '/data/UI/')
-                os.system('mv ' + game_dir + '/tmp/app/data/UI/* ' + game_dir + '/data/UI/')
-                os.system('rm -r ' + game_dir + '/tmp/app/data/UI')
-                os.system('mv ' + game_dir + '/tmp/app/data/Video/* ' + game_dir + '/data/Video/')
-                os.system('rm -r ' + game_dir + '/tmp/app/data/Video')
-                os.system('rm -r ' + game_dir + '/tmp/app/data')
-                os.system('rm -r ' + game_dir + '/tmp/app/bin')
-                os.system('mv ' + game_dir + '/tmp/app/* ' + game_dir)
-                os.system('rm -r ' + game_dir + '/tmp')
-                os.system('mv ' + game_dir + '/bin/Final/Config.exe ' + \
-                        game_dir + '/bin/Final/Config.exe.bak ')
+                os.system('touch "' + install_dir + '/pathologic/.ws_addon_installed"')
+                os.system('mv "' + game_dir + '/tmp/app/bin/Final/"* "' + game_dir + '/bin/Final/"')
+                os.system('mkdir -p "' + game_dir + '/data/Scripts/"')
+                os.system('mv "' + game_dir + '/tmp/app/data/Scripts/"* "' + game_dir + '/data/Scripts/"')
+                os.system('mkdir -p "' + game_dir + '/data/Textures/PL/"')
+                os.system('mv "' + game_dir + '/tmp/app/data/Textures/PL/"* "' + game_dir + '/data/Textures/PL/"')
+                os.system('rm -r "' + game_dir + '/tmp/app/data/Textures/PL/"')
+                os.system('mkdir -p "' + game_dir + '/data/Textures/UI/"')
+                os.system('mv "' + game_dir + '/tmp/app/data/Textures/UI/"* "' + game_dir + '/data/Textures/UI/"')
+                os.system('rm -r "' + game_dir + '/tmp/app/data/Textures/UI/"')
+                os.system('mv "' + game_dir + '/tmp/app/data/Textures/"* "' + game_dir + '/data/Textures/"')
+                os.system('mkdir -p "' + game_dir + '/data/UI/"')
+                os.system('mv "' + game_dir + '/tmp/app/data/UI/"* "' + game_dir + '/data/UI/"')
+                os.system('rm -r "' + game_dir + '/tmp/app/data/UI"')
+                os.system('mv "' + game_dir + '/tmp/app/data/Video/"* "' + game_dir + '/data/Video/"')
+                os.system('rm -r "' + game_dir + '/tmp/app/data/Video"')
+                os.system('rm -r "' + game_dir + '/tmp/app/data"')
+                os.system('rm -r "' + game_dir + '/tmp/app/bin"')
+                os.system('mv "' + game_dir + '/tmp/app/* "' + game_dir + '"')
+                os.system('rm -r "' + game_dir + '/tmp"')
+                os.system('mv "' + game_dir + '/bin/Final/Config.exe" "' + \
+                        game_dir + '/bin/Final/Config.exe.bak"')
                 os.execl(sys.executable, sys.executable, __file__)
 
         print(io.readline().strip('\n'))
@@ -611,13 +611,13 @@ class GUI:
 
     def setup_enb(self):
 
-        d3d9_path = game_dir + '/bin/Final/d3d9.dll'
-        d3d9_enb_path = game_dir + '/bin/Final/d3d9.dll.enb'
+        d3d9_path = '"' + game_dir + '/bin/Final/d3d9.dll"'
+        d3d9_enb_path = '"' + game_dir + '/bin/Final/d3d9.dll.enb"'
         if self.enb == 1:
             if os.path.exists(d3d9_enb_path):
-                os.system('mv ' + d3d9_enb_path + ' ' + d3d9_path)
+                os.system('mv "' + d3d9_enb_path + '" "' + d3d9_path + '"')
         else:
-            os.system('mv ' + d3d9_path + ' ' + d3d9_enb_path)
+            os.system('mv "' + d3d9_path + '" "' + d3d9_enb_path + '"')
 
 def main():
     import sys

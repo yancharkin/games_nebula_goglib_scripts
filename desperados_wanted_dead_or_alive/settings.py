@@ -26,7 +26,7 @@ game_dir = install_dir + '/desperados_wanted_dead_or_alive/game'
 link_patch = 'http://www.wsgf.org/dr/desperados-wanted-dead-or-alive/en'
 patch_path = download_dir + '/_distr/desperados_wanted_dead_or_alive/Desperados_0.7z'
 
-os.system('mkdir -p ' + download_dir + '/_distr/desperados_wanted_dead_or_alive')
+os.system('mkdir -p "' + download_dir + '/_distr/desperados_wanted_dead_or_alive"')
 
 class GUI:
 
@@ -36,7 +36,7 @@ class GUI:
 
         if os.path.exists(patch_path):
             if not os.path.exists(game_dir + '/res_patch'):
-                os.system('7z x -aoa -o' + game_dir + '/res_patch ' + patch_path)
+                os.system('7z x -aoa -o"' + game_dir + '/res_patch" "' + patch_path + '"')
             self.create_set_res_window()
             self.set_res_window.show_all()
         else:
@@ -170,7 +170,7 @@ class GUI:
             self.download_window.show()
 
         else:
-            os.system('7z x -aoa -o' + game_dir + '/res_patch ' + patch_path)
+            os.system('7z x -aoa -o"' + game_dir + '/res_patch" "' + patch_path + '"')
 
             while Gtk.events_pending():
                 Gtk.main_iteration()
@@ -185,11 +185,10 @@ class GUI:
     def cb_button_save(self, button):
 
         if not os.path.exists(game_dir + '/Game/game.exe.original'):
-            os.system('mv ' + game_dir + '/Game/game.exe ' + game_dir + '/Game/game.exe.original')
+            os.system('mv "' + game_dir + '/Game/game.exe" "' + game_dir + '/Game/game.exe.original"')
 
         selected_resolution = self.combobox_resolution.get_active_text()
-        os.system('cp ' + game_dir + '/res_patch/' + selected_resolution + '/game.exe ' +
-        game_dir + '/Game')
+        os.system('cp "' + game_dir + '/res_patch/' + selected_resolution + '/game.exe" "' + game_dir + '/Game"')
 
         config_file = current_dir + '/settings.ini'
         config_parser = ConfigParser()

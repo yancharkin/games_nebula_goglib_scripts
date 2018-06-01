@@ -184,7 +184,7 @@ class GUI:
         settings_dat = current_dir + '/game/data.pak'
 
         if not os.path.exists(settings_dat + '.bak'):
-            os.system('cp ' + settings_dat + ' ' + settings_dat + '.bak')
+            os.system('cp "' + settings_dat + '" "' + settings_dat + '.bak"')
 
         settings_file = open(settings_dat, 'r+b')
         settings_file.seek(width_offset)

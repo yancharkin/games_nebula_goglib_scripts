@@ -59,7 +59,7 @@ current_dir = sys.path[0]
 download_dir = os.getenv('DOWNLOAD_DIR')
 install_dir = os.getenv('INSTALL_DIR')
 game_dir = install_dir + '/the_temple_of_elemental_evil/game'
-os.system('mkdir -p ' + download_dir + '/_distr/the_temple_of_elemental_evil')
+os.system('mkdir -p "' + download_dir + '/_distr/the_temple_of_elemental_evil"')
 
 std_addons_dir = current_dir + '/game/addons/Circle of Eight Modpack 8.1.0 Standard'
 bg_portraits_installed = os.path.exists(std_addons_dir + '/' + tpp_bg_portraits_std)
@@ -460,8 +460,8 @@ class GUI:
         while Gtk.events_pending():
             Gtk.main_iteration()
 
-        os.system('cd ' + current_dir + '/game && ' +
-        current_dir + '/jre/bin/java -jar ./TFE-X.jar' )
+        os.system('cd "' + current_dir + '/game" && "' +
+        current_dir + '/jre/bin/java" -jar ./TFE-X.jar' )
 
         self.main_window.show()
 
@@ -797,8 +797,8 @@ class GUI:
 
             if process_name == 'extracting std':
 
-                os.system('mv ' + game_dir + '/tmp/app/* ' + game_dir)
-                os.system('rm -R ' + game_dir + '/tmp')
+                os.system('mv "' + game_dir + '/tmp/app/"* "' + game_dir + '"')
+                os.system('rm -R "' + game_dir + '/tmp"')
 
                 self.co8_std_window.hide()
                 self.main_window.show()
@@ -809,8 +809,8 @@ class GUI:
 
             if process_name == 'extracting nc':
 
-                os.system('mv ' + game_dir + '/tmp/app/* ' + game_dir)
-                os.system('rm -R ' + game_dir + '/tmp')
+                os.system('mv "' + game_dir + '/tmp/app/"* "' + game_dir + '"')
+                os.system('rm -R "' + game_dir + '/tmp"')
 
                 self.co8_nc_window.hide()
                 self.main_window.show()
@@ -821,8 +821,8 @@ class GUI:
 
             if process_name == 'extracting kob':
 
-                os.system('mv ' + game_dir + '/tmp/app/* ' + game_dir)
-                os.system('rm -R ' + game_dir + '/tmp')
+                os.system('mv "' + game_dir + '/tmp/app/"* "' + game_dir + '"')
+                os.system('rm -R "' + game_dir + '/tmp"')
 
                 self.co8_kob_window.hide()
                 self.main_window.show()
@@ -849,8 +849,8 @@ class GUI:
 
                 if self.n_extract_commands == 0:
 
-                    os.system('cp -r ' + game_dir + '/tmp/app/* ' + game_dir)
-                    os.system('rm -R ' + game_dir + '/tmp')
+                    os.system('cp -r "' + game_dir + '/tmp/app/"* "' + game_dir + '"')
+                    os.system('rm -R "' + game_dir + '/tmp"')
 
                     self.progressbar_portraits.set_visible(False)
                     self.portraits_window.hide()

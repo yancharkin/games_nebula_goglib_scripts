@@ -131,7 +131,7 @@ class GUI:
         while Gtk.events_pending():
             Gtk.main_iteration()
 
-        os.system('cd "' + current_dir + '/game" && ' + wineloader + ' "./ConfigUtil.exe"')
+        os.system('cd "' + current_dir + '/game" && "' + wineloader + ' ./ConfigUtil.exe"')
 
         self.config_load()
         self.entry_custom_width.set_text(self.custom_width)

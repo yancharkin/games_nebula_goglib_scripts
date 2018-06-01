@@ -26,7 +26,7 @@ game_dir = install_dir + '/konung_legend_of_the_north/game'
 patch_path = download_dir + '/_distr/konung_legend_of_the_north/konung_widescreen_v2_co.7z'
 link_patch = 'http://www.wsgf.org/dr/konung-legends-north/en'
 
-os.system('mkdir -p ' + download_dir + '/_distr/konung_legend_of_the_north')
+os.system('mkdir -p "' + download_dir + '/_distr/konung_legend_of_the_north"')
 
 is_english_version = os.path.exists(game_dir + '/MUSIC')
 
@@ -41,7 +41,7 @@ class GUI:
         else:
             if os.path.exists(patch_path):
                 if not os.path.exists(game_dir + '/res_patch'):
-                    os.system('7z x -aoa -o' + game_dir + '/res_patch ' + patch_path)
+                    os.system('7z x -aoa -o"' + game_dir + '/res_patch" "' + patch_path + '"')
                 self.create_set_res_window()
                 self.set_res_window.show_all()
             else:
@@ -267,7 +267,7 @@ class GUI:
             self.download_window.show()
 
         else:
-            os.system('7z x -aoa -o' + game_dir + '/res_patch ' + patch_path)
+            os.system('7z x -aoa -o"' + game_dir + '/res_patch" "' + patch_path + '"')
 
             while Gtk.events_pending():
                 Gtk.main_iteration()
@@ -291,10 +291,10 @@ class GUI:
         else:
 
             if not os.path.exists(game_dir + '/konung.exe.original'):
-                os.system('mv ' + game_dir + '/konung.exe ' + game_dir + '/konung.exe.original')
+                os.system('mv "' + game_dir + '/konung.exe" "' + game_dir + '/konung.exe.original"')
 
             selected_resolution = self.combobox_resolution.get_active_text()
-            os.system('cp ' + game_dir + '/res_patch/' + selected_resolution + '/* ' + game_dir)
+            os.system('cp "' + game_dir + '/res_patch/' + selected_resolution + '"/* "' + game_dir + '"')
 
             config_parser.set('Settings', 'resolution', str(self.resolution))
 

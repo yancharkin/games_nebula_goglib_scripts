@@ -25,14 +25,14 @@ class GUI:
 
     def __init__(self):
 
-        self.popres_exe = current_dir + '/game/popres.exe'
+        self.popres_exe = '"' + current_dir + '/game/popres.exe"'
 
         self.config_load()
         self.create_main_window()
 
     def config_load(self):
 
-        config_file = current_dir + '/settings.ini'
+        config_file = '"' + current_dir + '/settings.ini"'
         config_parser = ConfigParser()
         config_parser.read(config_file)
 

@@ -171,7 +171,7 @@ class GUI:
         exe_path = current_dir + '/game/Battle_Realms_F.exe'
 
         if not os.path.exists(exe_path + '.bak'):
-            os.system('cp ' + exe_path + ' ' + exe_path + '.bak')
+            os.system('cp "' + exe_path + '" "' + exe_path + '.bak"')
 
         width = int(self.custom_width)
         height = int(self.custom_height)

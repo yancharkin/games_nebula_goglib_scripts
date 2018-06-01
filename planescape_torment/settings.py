@@ -831,8 +831,8 @@ class GUI:
 
             if (self.width != self.old_width) or (self.height != self.old_height):
 
-                os.system('rm -R ' + current_dir + '/game/cache')
-                os.system('ln -s ' + current_dir + '/game/data ' + current_dir + '/game/cache')
+                os.system('rm -R "' + current_dir + '/game/cache"')
+                os.system('ln -s "' + current_dir + '/game/data" "' + current_dir + '/game/cache"')
 
                 if not self.widescreen_applied:
                     command = "printf '0\nn\n1\n" + self.width + "\n" + self.height + \
@@ -1160,7 +1160,7 @@ class GUI:
         for command in commands:
             tmp_file.write(command + '\n')
         tmp_file.close()
-        os.system('chmod +x ' + tmp_file_path)
+        os.system('chmod +x "' + tmp_file_path + '"')
 
         self.progressbar_window.show_all()
         self.main_window.hide()
@@ -1186,8 +1186,8 @@ class GUI:
 
         if condition is GLib.IO_HUP:
 
-            os.system('rm ' + current_dir + '/game/cache')
-            os.system('mkdir -p ' + current_dir + '/game/cache')
+            os.system('rm "' + current_dir + '/game/cache"')
+            os.system('mkdir -p "' + current_dir + '/game/cache"')
 
             self.config_save()
             Gtk.main_quit()
