@@ -1,4 +1,4 @@
-# Scripts for ['Games Nebula'](https://github.com/yancharkin/games_nebula) (GOG games)
+# Scripts for 'Games Nebula' (GOG games)
 
 All linux native games, ScummVM and DOSBox wrappers, as well as some windows games should work out of the box. For games that doesn't work or require additional components there are two solutions in 'Games Nebula':  **autosetup.ini** and **bash scripts**.
 
