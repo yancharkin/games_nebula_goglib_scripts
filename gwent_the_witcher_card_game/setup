@@ -1,0 +1,28 @@
+#!/bin/bash
+
+source "$NEBULA_DIR/scripts/shell_functions.sh"
+export WINEPREFIX="$INSTALL_DIR/$GAME_NAME/wine_prefix/"
+
+get_from_mega 'GalaxyRedist.exe' \
+'https://mega.nz/#!K8YExYAB!T5mQomtGHSfX5MbYlvRa3s7Tzg_cdXXUA_fMmvHyWIc'
+
+rm -R "$INSTALL_DIR/$GAME_NAME/game/"
+mkdir -p "$INSTALL_DIR/$GAME_NAME/wine_prefix/drive_c/Program Files/GOG Galaxy/Games/Gwent"
+ln -s "$INSTALL_DIR/$GAME_NAME/wine_prefix/drive_c/Program Files/GOG Galaxy/Games/Gwent" \
+"$INSTALL_DIR/$GAME_NAME/game"
+mkdir -p "$INSTALL_DIR/$GAME_NAME/installers"
+cp "$DOWNLOAD_DIR/$GAME_NAME/setup"* "$INSTALL_DIR/$GAME_NAME/installers/"
+cp "$DOWNLOAD_DIR/_distr/$GAME_NAME/GalaxyRedist.exe" "$INSTALL_DIR/$GAME_NAME/installers/"
+
+INSTALLER=$(ls "$INSTALL_DIR/$GAME_NAME/installers/setup"*)
+wine "$INSTALLER" /VERYSILENT /SUPPRESSMSGBOXES
+wine "$INSTALL_DIR/$GAME_NAME/installers/GalaxyRedist.exe"
+
+echo -e '#!/bin/bash
+if [ ! -f "$INSTALL_DIR/$GAME_NAME/game/Gwent.exe" ]; then
+    INSTALLER=$(ls "$INSTALL_DIR/$GAME_NAME/installers/setup"*)
+    export WINEPREFIX="$INSTALL_DIR/$GAME_NAME/wine_prefix/"
+    wine "$INSTALLER"
+else
+    python "$NEBULA_DIR/launcher_wine.py" gwent_the_witcher_card_game "Gwent.exe"
+fi'  > "$START_FILE"
