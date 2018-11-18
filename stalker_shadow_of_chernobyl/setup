@@ -1,0 +1,29 @@
+#!/bin/bash
+
+echo '$app_data_root$		= true|		false|	C:\Games\stalker_shadow_of_chernobyl\userdata
+$game_data$   		= false|	true|	$fs_root$|		gamedata\
+$game_ai$    		= true|		false|	$game_data$|		ai\
+$game_spawn$    	= true|		false|	$game_data$|		spawns\
+$game_anims$   		= true|		true|	$game_data$|		anims\
+$game_levels$   	= true|		false|	$game_data$|		levels\
+$game_meshes$    	= true|		true|	$game_data$|		meshes\
+$game_dm$    		= true|		true|	$game_data$|		meshes\
+$game_shaders$    	= true|		true|	$game_data$|		shaders\
+$game_sounds$    	= true|		true|	$game_data$|		sounds\
+$game_textures$    	= true|		true|	$game_data$|		textures\
+$game_scripts$    	= true|		false|	$game_data$|		scripts\
+$game_config$    	= true|		false|	$game_data$|		config\
+$level$      		= false|	false|	$game_levels$
+$game_saves$    	= true|		false|	$app_data_root$|	savedgames\
+$logs$      		= true|		false|	$app_data_root$|	logs\
+$screenshots$    	= true|		false|	$app_data_root$|	screenshots\' > \
+"$INSTALL_DIR/$GAME_NAME/game/fsgame.ltx"
+
+if [ -d "$INSTALL_DIR/$GAME_NAME/game/support/userdocs" ]; then
+    cp -r "$INSTALL_DIR/$GAME_NAME/game/support/userdocs" \
+        "$INSTALL_DIR/$GAME_NAME/game/userdata"
+elif [ -d "$INSTALL_DIR/$GAME_NAME/game/userdocs/Stalker-SHOC" ]; then
+    cp -r "$INSTALL_DIR/$GAME_NAME/game/userdocs/Stalker-SHOC" \
+        "$INSTALL_DIR/$GAME_NAME/game/userdata"
+fi
+
