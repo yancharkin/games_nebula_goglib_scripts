@@ -1,8 +1,0 @@
-#!/bin/bash
-
-if [ -f "$DOWNLOAD_DIR/$GAME_NAME/dlc/hard_west_scars_of_freedom/gog_hard_west_scars_of_freedom_dlc"* ]; then
-unzip "$DOWNLOAD_DIR/$GAME_NAME/dlc/hard_west_scars_of_freedom/gog_hard_west_scars_of_freedom_dlc"* \
--d "$INSTALL_DIR/$GAME_NAME/tmp/"
-mv "$INSTALL_DIR/$GAME_NAME/tmp/data/noarch/game/"* "$INSTALL_DIR/$GAME_NAME/game/"
-rm -r -f "$INSTALL_DIR/$GAME_NAME/tmp/"
-fi
